@@ -52,6 +52,10 @@ export function HeroVideoGL({ src }: { src: string }) {
     const gl = canvas.getContext("webgl")
     if (!gl) return
 
+    // null チェック済みの参照（クロージャ内でTS型エラー回避）
+    const vid = video
+    const cvs = canvas
+
     // シェーダーコンパイル
     function compile(type: number, src: string) {
       const s = gl!.createShader(type)!
@@ -95,9 +99,9 @@ export function HeroVideoGL({ src }: { src: string }) {
 
     // object-fit: cover 相当のUV計算
     function updateCover() {
-      if (!video.videoWidth) return
-      const va = video.videoWidth / video.videoHeight
-      const ca = canvas!.width / canvas!.height
+      if (!vid.videoWidth) return
+      const va = vid.videoWidth / vid.videoHeight
+      const ca = cvs.width / cvs.height
       let su = 1, sv = 1, ou = 0, ov = 0
       if (ca > va) { sv = va / ca; ov = (1 - sv) / 2 }
       else         { su = ca / va; ou = (1 - su) / 2 }
@@ -108,9 +112,9 @@ export function HeroVideoGL({ src }: { src: string }) {
     // リサイズ
     function resize() {
       const dpr = window.devicePixelRatio || 1
-      canvas!.width  = canvas!.offsetWidth  * dpr
-      canvas!.height = canvas!.offsetHeight * dpr
-      gl!.viewport(0, 0, canvas!.width, canvas!.height)
+      cvs.width  = cvs.offsetWidth  * dpr
+      cvs.height = cvs.offsetHeight * dpr
+      gl!.viewport(0, 0, cvs.width, cvs.height)
       updateCover()
     }
 
@@ -118,9 +122,9 @@ export function HeroVideoGL({ src }: { src: string }) {
     let active = true
     function render() {
       if (!active) return
-      if (video.readyState >= 2) {
+      if (vid.readyState >= 2) {
         gl!.pixelStorei(gl!.UNPACK_FLIP_Y_WEBGL, true)
-        gl!.texImage2D(gl!.TEXTURE_2D, 0, gl!.RGBA, gl!.RGBA, gl!.UNSIGNED_BYTE, video)
+        gl!.texImage2D(gl!.TEXTURE_2D, 0, gl!.RGBA, gl!.RGBA, gl!.UNSIGNED_BYTE, vid)
       }
       const s = smooth.current, t = mouse.current
       s.x += (t.x - s.x) * 0.055
@@ -131,9 +135,9 @@ export function HeroVideoGL({ src }: { src: string }) {
     }
 
     // マウスイベントは親要素から取得（canvasはpointer-events:none）
-    const parent = canvas.parentElement!
+    const parent = cvs.parentElement!
     const onMove = (e: MouseEvent) => {
-      const r = canvas.getBoundingClientRect()
+      const r = cvs.getBoundingClientRect()
       mouse.current = {
         x: (e.clientX - r.left) / r.width,
         y: 1 - (e.clientY - r.top) / r.height,
@@ -145,8 +149,8 @@ export function HeroVideoGL({ src }: { src: string }) {
     parent.addEventListener("mouseleave", onLeave)
     window.addEventListener("resize", resize)
 
-    video.addEventListener("loadedmetadata", updateCover)
-    video.play().catch(() => {})
+    vid.addEventListener("loadedmetadata", updateCover)
+    vid.play().catch(() => {})
 
     resize()
     render()

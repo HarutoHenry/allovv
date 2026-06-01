@@ -4,10 +4,10 @@ import { useEffect, useState, useRef } from "react"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 
 const stats = [
-  { value: 500, suffix: "+", label: "支援実績" },
-  { value: 94, suffix: "%", label: "AI導入成功率" },
-  { value: 67, suffix: "%", label: "コスト削減率" },
-  { value: 2026, suffix: "", label: "創業" }
+  { prefix: "最大", value: 90, suffix: "%", label: "返信工数削減" },
+  { prefix: "最短", value: 3, suffix: "日", label: "導入期間" },
+  { prefix: "", value: 24, suffix: "h", label: "AI対応時間" },
+  { prefix: "", value: 2026, suffix: "", label: "創業" }
 ]
 
 function useCountUp(end: number, duration: number = 1500, start: boolean = false) {
@@ -45,21 +45,23 @@ function useCountUp(end: number, duration: number = 1500, start: boolean = false
   return count
 }
 
-function StatItem({ value, suffix, label, isVisible, delay }: { 
+function StatItem({ prefix, value, suffix, label, isVisible, delay }: {
+  prefix: string
   value: number
   suffix: string
   label: string
   isVisible: boolean
-  delay: number 
+  delay: number
 }) {
   const count = useCountUp(value, 1500, isVisible)
 
   return (
-    <div 
+    <div
       className={`text-center transition-all duration-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
       <p className="font-display font-bold text-4xl md:text-5xl text-navy mb-2">
+        {prefix && <span className="text-base font-medium text-navy/50 mr-0.5">{prefix}</span>}
         {count}{suffix}
       </p>
       <div className="w-8 h-0.5 mx-auto mb-3" style={{ background: "#4cbfa0" }} />
@@ -78,6 +80,7 @@ export function NumbersSection() {
           {stats.map((stat, index) => (
             <StatItem
               key={stat.label}
+              prefix={stat.prefix}
               value={stat.value}
               suffix={stat.suffix}
               label={stat.label}

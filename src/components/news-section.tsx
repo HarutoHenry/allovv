@@ -2,27 +2,7 @@
 
 import Link from "next/link"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
-
-const newsItems = [
-  {
-    date: "2025.06.01",
-    category: "プレスリリース",
-    categoryColor: "bg-accent-pink/10 text-accent-pink",
-    title: "Allovv株式会社、正式サービス開始のお知らせ"
-  },
-  {
-    date: "2025.05.15",
-    category: "お知らせ",
-    categoryColor: "bg-accent-purple/10 text-accent-purple",
-    title: "AI導入コンサルティングサービスを正式開始"
-  },
-  {
-    date: "2025.04.10",
-    category: "メディア掲載",
-    categoryColor: "bg-navy/10 text-navy",
-    title: "〇〇ビジネスメディアにAllovvが掲載"
-  }
-]
+import { newsItems } from "@/lib/news-data"
 
 export function NewsSection() {
   const { ref, isVisible } = useScrollAnimation()
@@ -44,8 +24,8 @@ export function NewsSection() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {newsItems.map((item, index) => (
             <Link
-              key={item.title}
-              href="#"
+              key={item.slug}
+              href={`/news/${item.slug}`}
               className={`glass-card p-6 text-left transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl group block ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
               style={{ transitionDelay: `${200 + index * 120}ms` }}
             >
@@ -69,7 +49,7 @@ export function NewsSection() {
 
         {/* CTA Button */}
         <Link
-          href="#"
+          href="/news"
           className={`inline-flex items-center gap-2 px-8 py-4 bg-white text-navy font-medium rounded-full transition-all hover:-translate-y-0.5 hover:shadow-lg ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
           style={{ transitionDelay: '500ms' }}
         >

@@ -68,18 +68,22 @@ export function HeroSection() {
         {/* Stats Bar */}
         <div className="animate-fade-in-up-delay-3 flex flex-wrap justify-center gap-6 md:gap-12">
           <div className="text-center">
-            <p className="font-display font-bold text-2xl md:text-3xl text-navy">500社+</p>
-            <p className="text-navy/50 text-sm">支援実績</p>
+            <p className="font-display font-bold text-2xl md:text-3xl text-navy">
+              <span className="text-sm font-medium text-navy/50 mr-0.5">最大</span>90%
+            </p>
+            <p className="text-navy/50 text-sm">返信工数削減</p>
           </div>
           <div className="hidden sm:block w-px h-12 bg-navy/20" />
           <div className="text-center">
-            <p className="font-display font-bold text-2xl md:text-3xl text-navy">94%</p>
-            <p className="text-navy/50 text-sm">AI導入成功率</p>
+            <p className="font-display font-bold text-2xl md:text-3xl text-navy">
+              <span className="text-sm font-medium text-navy/50 mr-0.5">最短</span>3日
+            </p>
+            <p className="text-navy/50 text-sm">導入期間</p>
           </div>
           <div className="hidden sm:block w-px h-12 bg-navy/20" />
           <div className="text-center">
-            <p className="font-display font-bold text-2xl md:text-3xl text-navy">67%</p>
-            <p className="text-navy/50 text-sm">コスト削減率</p>
+            <p className="font-display font-bold text-2xl md:text-3xl text-navy">24h</p>
+            <p className="text-navy/50 text-sm">AI対応時間</p>
           </div>
         </div>
       </div>

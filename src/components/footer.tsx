@@ -49,7 +49,7 @@ export function Footer() {
         <div className="border-t border-white/10 pt-8">
           {/* Bottom Links */}
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-white/40 text-xs">
-            <span>&copy; 2025 Allovv Inc.</span>
+            <span>&copy; 2026 Allovv合同会社</span>
             <Link href="#" className="hover:text-white/60 transition-colors">
               プライバシーポリシー
             </Link>

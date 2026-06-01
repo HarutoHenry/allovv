@@ -7,7 +7,7 @@ const stats = [
   { value: 500, suffix: "+", label: "支援実績" },
   { value: 94, suffix: "%", label: "AI導入成功率" },
   { value: 67, suffix: "%", label: "コスト削減率" },
-  { value: 2024, suffix: "", label: "創業" }
+  { value: 2026, suffix: "", label: "創業" }
 ]
 
 function useCountUp(end: number, duration: number = 1500, start: boolean = false) {

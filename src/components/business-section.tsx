@@ -9,21 +9,27 @@ const businessCards = [
     tagColor: "bg-[#ffe4ef] text-[#d4788a]",
     category: "Platform",
     title: "AIにおまかせ起業",
-    description: "起業に必要な手続き・書類作成・専門家連携をAIが自動化。誰でも確実に起業を完走できるプラットフォームを提供します。"
+    description: "起業に必要な手続き・書類作成・専門家連携をAIが自動化。誰でも確実に起業を完走できるプラットフォームを提供します。",
+    href: "https://ainiomakasekigyou.com",
+    external: true
   },
   {
     tag: "法人向け",
     tagColor: "bg-[#e0f7f4] text-[#5fb8ab]",
     category: "Consulting",
     title: "AI導入コンサルティング",
-    description: "業務フロー分析からAIツール選定・導入・定着まで伴走。中小企業・スタートアップのAI活用を最短距離で実現します。"
+    description: "業務フロー分析からAIツール選定・導入・定着まで伴走。中小企業・スタートアップのAI活用を最短距離で実現します。",
+    href: "#contact",
+    external: false
   },
   {
     tag: "法人向け",
     tagColor: "bg-[#e0f7f4] text-[#5fb8ab]",
     category: "Creative",
     title: "AIクリエイティブ制作",
-    description: "画像・動画・広告コピーなど、AIを活用したクリエイティブ制作をワンストップで提供。高品質なコンテンツを短期間・低コストで実現します。"
+    description: "画像・動画・広告コピーなど、AIを活用したクリエイティブ制作をワンストップで提供。高品質なコンテンツを短期間・低コストで実現します。",
+    href: "#contact",
+    external: false
   }
 ]
 
@@ -73,8 +79,9 @@ export function BusinessSection() {
               </p>
 
               {/* Link */}
-              <Link 
-                href="#" 
+              <Link
+                href={card.href}
+                {...(card.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className="inline-flex items-center gap-2 text-[#7dd8ca] text-sm font-medium group-hover:gap-3 transition-all"
               >
                 詳しく見る

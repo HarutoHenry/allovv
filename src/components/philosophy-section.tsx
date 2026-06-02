@@ -71,7 +71,7 @@ export function PhilosophySection() {
             style={{ fontSize: "clamp(1.5rem, 3.5vw, 2.75rem)" }}
           >
             AIを与える。時間を与える。<br />
-            可能性を与える。それがAllovvだ。
+            可能性を与える。それがAllovvです。
           </h2>
         </div>
 

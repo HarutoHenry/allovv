@@ -21,18 +21,17 @@ export function HeroSection() {
         <h1
           className="animate-fade-in-up-delay-1 text-navy leading-tight mb-8"
           style={{
-            fontSize: "clamp(2rem, 6vw, 4.5rem)",
+            fontSize: "clamp(1.75rem, 5.5vw, 4.5rem)",
             letterSpacing: "-0.02em"
           }}
         >
           AIで、日本の<br />
-          <span className="gradient-text">ビジネスインフラ</span>を変える。
+          <span className="whitespace-nowrap"><span className="gradient-text">ビジネスインフラ</span>を変える。</span>
         </h1>
 
         <p className="animate-fade-in-up-delay-2 text-navy/70 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto mb-10 px-2 md:px-0">
           Allovvは、人工知能の力を事業の推進力に変えるAIカンパニーです。<br className="hidden md:block" />
-          起業支援・AI導入・システム開発を通じて、<br className="hidden md:block" />
-          あらゆる挑戦の障壁を取り除きます。
+          起業支援・AI導入・システム開発を通じて、あらゆる挑戦の障壁を取り除きます。
         </p>
 
         <div className="animate-fade-in-up-delay-3 flex flex-col sm:flex-row gap-4 justify-center mb-12 md:mb-16">

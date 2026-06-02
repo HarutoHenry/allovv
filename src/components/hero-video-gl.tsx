@@ -152,6 +152,10 @@ export function HeroVideoGL({ src }: { src: string }) {
     vid.addEventListener("loadedmetadata", updateCover)
     vid.play().catch(() => {})
 
+    // モバイルでは最初のタッチで再生を試みる（iOS Safariのフォールバック）
+    const onTouch = () => { vid.play().catch(() => {}) }
+    document.addEventListener("touchstart", onTouch, { once: true })
+
     resize()
     render()
 
@@ -161,6 +165,7 @@ export function HeroVideoGL({ src }: { src: string }) {
       parent.removeEventListener("mousemove", onMove)
       parent.removeEventListener("mouseleave", onLeave)
       window.removeEventListener("resize", resize)
+      document.removeEventListener("touchstart", onTouch)
     }
   }, [src])
 
@@ -173,8 +178,8 @@ export function HeroVideoGL({ src }: { src: string }) {
         loop
         muted
         playsInline
-        className="absolute opacity-0 pointer-events-none"
-        style={{ width: 1, height: 1 }}
+        preload="auto"
+        className="absolute inset-0 w-full h-full opacity-0 pointer-events-none"
       />
       <canvas
         ref={canvasRef}

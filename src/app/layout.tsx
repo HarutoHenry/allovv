@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP, DM_Sans } from "next/font/google";
+import { ScrollTop } from "@/components/scroll-top";
 import "./globals.css";
 
 const notoSansJP = Noto_Sans_JP({
@@ -27,6 +28,7 @@ export default function RootLayout({
   return (
     <html lang="ja" className={`${notoSansJP.variable} ${dmSans.variable} scroll-smooth`}>
       <body className="font-sans antialiased bg-white text-navy">
+        <ScrollTop />
         {children}
       </body>
     </html>

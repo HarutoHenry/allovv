@@ -21,9 +21,9 @@ const businessCards = [
   {
     tag: "法人向け",
     tagColor: "bg-[#e0f7f4] text-[#5fb8ab]",
-    category: "Development",
+    category: "Creative",
     title: "AIクリエイティブ制作",
-    description: "業務自動化・社内AI・チャットボットなど、貴社専用のAIシステムをゼロから設計・開発します。"
+    description: "画像・動画・広告コピーなど、AIを活用したクリエイティブ制作をワンストップで提供。高品質なコンテンツを短期間・低コストで実現します。"
   }
 ]
 

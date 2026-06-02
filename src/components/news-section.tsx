@@ -8,7 +8,7 @@ export function NewsSection() {
   const { ref, isVisible } = useScrollAnimation()
 
   return (
-    <section id="news" className="py-28 md:py-36 bg-lavender-bg">
+    <section id="news" className="py-20 md:py-36 bg-lavender-bg">
       <div ref={ref} className="max-w-[900px] mx-auto px-5 text-center">
         {/* Section Label */}
         <p className={`font-display font-light text-xs tracking-[0.2em] uppercase text-accent-purple mb-6 transition-all duration-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -16,12 +16,12 @@ export function NewsSection() {
         </p>
 
         {/* Heading */}
-        <h2 className={`text-navy text-2xl md:text-3xl leading-relaxed mb-16 transition-all duration-600 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <h2 className={`text-navy text-xl md:text-3xl leading-relaxed mb-10 md:mb-16 transition-all duration-600 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           最新のお知らせ
         </h2>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-10 md:mb-12">
           {newsItems.map((item, index) => (
             <Link
               key={item.slug}

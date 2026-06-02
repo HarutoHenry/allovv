@@ -13,7 +13,7 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-white/40 pointer-events-none" />
 
       {/* Content */}
-      <div className="relative z-10 max-w-4xl mx-auto px-5 text-center pt-40">
+      <div className="relative z-10 max-w-4xl mx-auto px-5 text-center pt-28 md:pt-40">
         <p className="animate-fade-in-up font-display font-light text-xs tracking-[0.2em] uppercase text-navy/50 mb-6">
           AI Company — Tokyo, Japan
         </p>
@@ -21,21 +21,21 @@ export function HeroSection() {
         <h1
           className="animate-fade-in-up-delay-1 text-navy leading-tight mb-8"
           style={{
-            fontSize: "clamp(2.8rem, 5.5vw, 4.5rem)",
+            fontSize: "clamp(2rem, 6vw, 4.5rem)",
             letterSpacing: "-0.02em"
           }}
         >
           AIで、日本の<br />
-          <span className="whitespace-nowrap"><span className="gradient-text">ビジネスインフラ</span>を変える。</span>
+          <span className="gradient-text">ビジネスインフラ</span>を変える。
         </h1>
 
-        <p className="animate-fade-in-up-delay-2 text-navy/70 text-base md:text-lg leading-relaxed max-w-2xl mx-auto mb-10">
+        <p className="animate-fade-in-up-delay-2 text-navy/70 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto mb-10 px-2 md:px-0">
           Allovvは、人工知能の力を事業の推進力に変えるAIカンパニーです。<br className="hidden md:block" />
           起業支援・AI導入・システム開発を通じて、<br className="hidden md:block" />
           あらゆる挑戦の障壁を取り除きます。
         </p>
 
-        <div className="animate-fade-in-up-delay-3 flex flex-col sm:flex-row gap-4 justify-center mb-16">
+        <div className="animate-fade-in-up-delay-3 flex flex-col sm:flex-row gap-4 justify-center mb-12 md:mb-16">
           <Link
             href="#business"
             className="gradient-btn px-8 py-4 font-medium rounded-full transition-all inline-flex items-center justify-center gap-2"

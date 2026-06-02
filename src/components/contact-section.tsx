@@ -28,7 +28,7 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-28 md:py-36 bg-soft-bg">
+    <section id="contact" className="py-20 md:py-36 bg-soft-bg">
       <div ref={ref} className="max-w-[640px] mx-auto px-5">
         {/* Section Label */}
         <p className={`font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-6 text-center transition-all duration-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -36,7 +36,7 @@ export function ContactSection() {
         </p>
 
         {/* Heading */}
-        <h2 className={`text-navy text-2xl md:text-3xl leading-relaxed mb-16 text-center transition-all duration-600 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <h2 className={`text-navy text-xl md:text-3xl leading-relaxed mb-10 md:mb-16 text-center transition-all duration-600 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           お問い合わせ
         </h2>
 

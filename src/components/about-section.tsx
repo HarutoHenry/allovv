@@ -14,7 +14,7 @@ export function AboutSection() {
   const { ref, isVisible } = useScrollAnimation()
 
   return (
-    <section id="about" className="py-28 md:py-36 bg-white">
+    <section id="about" className="py-20 md:py-36 bg-white">
       <div ref={ref} className="max-w-[900px] mx-auto px-5">
         {/* Section Label */}
         <p className={`font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-6 text-center transition-all duration-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>

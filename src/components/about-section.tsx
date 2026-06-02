@@ -6,7 +6,7 @@ const companyInfo = [
   { label: "社名", value: "Allovv合同会社" },
   { label: "設立", value: "2026年6月" },
   { label: "所在地", value: "神奈川県横浜市" },
-  { label: "代表者", value: "三沼 春斗" },
+  { label: "代表", value: "三沼 春斗" },
   { label: "事業内容", value: "AIクリエイティブ制作、AI導入コンサルティング、AIシステム開発" },
 ]
 

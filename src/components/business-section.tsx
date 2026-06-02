@@ -27,7 +27,7 @@ const businessCards = [
     tagColor: "bg-[#e0f7f4] text-[#5fb8ab]",
     category: "Creative",
     title: "AIクリエイティブ制作",
-    description: "画像・動画・広告コピーなど、AIを活用したクリエイティブ制作をワンストップで提供。高品質なコンテンツを短期間・低コストで実現します。",
+    description: "画像・動画・広告コピーなど、AIを活用したクリエイティブ制作を提供。様々なパターンに対応しておりますのでまずはご相談ください。",
     href: "#contact",
     external: false
   }

@@ -14,9 +14,14 @@ export function HeroSection() {
 
       {/* Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-5 text-center pt-28 md:pt-40">
-        <p className="animate-fade-in-up font-display font-light text-xs tracking-[0.2em] uppercase text-navy/50 mb-6">
-          AI Company — Tokyo, Japan
-        </p>
+        <div className="animate-fade-in-up mb-8">
+          <p className="font-display font-medium text-sm md:text-base tracking-[0.05em] text-navy/80 mb-1">
+            Give more. Allow more.
+          </p>
+          <p className="font-display font-light text-xs tracking-[0.2em] uppercase text-navy/40">
+            AI Company — Tokyo, Japan
+          </p>
+        </div>
 
         <h1
           className="animate-fade-in-up-delay-1 text-navy leading-tight mb-8"

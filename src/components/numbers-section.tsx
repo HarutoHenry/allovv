@@ -74,7 +74,7 @@ export function NumbersSection() {
   const { ref, isVisible } = useScrollAnimation(0.3)
 
   return (
-    <section className="py-16 md:py-36" style={{ background: "linear-gradient(135deg, #a8edd8 0%, #c5f5e8 100%)" }}>
+    <section className="py-28 md:py-36" style={{ background: "linear-gradient(135deg, #a8edd8 0%, #c5f5e8 100%)" }}>
       <div ref={ref} className="max-w-[900px] mx-auto px-5">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-8">
           {stats.map((stat, index) => (

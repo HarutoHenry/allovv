@@ -31,7 +31,7 @@ export function BusinessSection() {
   const { ref, isVisible } = useScrollAnimation()
 
   return (
-    <section id="business" className="py-20 md:py-36 bg-white">
+    <section id="business" className="py-28 md:py-36 bg-white">
       <div ref={ref} className="max-w-[900px] mx-auto px-5 text-center">
         {/* Section Label */}
         <p className={`font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-6 transition-all duration-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
@@ -39,17 +39,17 @@ export function BusinessSection() {
         </p>
 
         {/* Heading */}
-        <h2 className={`text-navy text-xl md:text-3xl leading-relaxed mb-10 md:mb-16 transition-all duration-600 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <h2 className={`text-navy text-2xl md:text-3xl leading-relaxed mb-16 transition-all duration-600 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           Allovvは3つの領域で<br className="md:hidden" />
           AIを社会に実装します。
         </h2>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {businessCards.map((card, index) => (
             <div
               key={card.title}
-              className={`glass-card p-6 md:p-8 text-left transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl group ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              className={`glass-card p-8 text-left transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl group ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
               style={{ transitionDelay: `${200 + index * 120}ms` }}
             >
               {/* Tag */}

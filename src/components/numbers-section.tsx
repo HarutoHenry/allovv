@@ -74,9 +74,36 @@ export function NumbersSection() {
   const { ref, isVisible } = useScrollAnimation(0.3)
 
   return (
-    <section className="py-28 md:py-36" style={{ background: "linear-gradient(135deg, #a8edd8 0%, #c5f5e8 100%)" }}>
-      <div ref={ref} className="max-w-[900px] mx-auto px-5">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-8">
+    <section className="py-28 md:py-36 relative overflow-hidden">
+
+      {/* 背景動画 */}
+      <div
+        className="absolute inset-0"
+        style={{
+          transform: isVisible ? "scale(1)" : "scale(1.08)",
+          transition: "transform 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+        }}
+      >
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 w-full h-full object-cover"
+          src="/videos/image-section-bg.mp4"
+        />
+      </div>
+
+      {/* オーバーレイ */}
+      <div
+        className="absolute inset-0"
+        style={{ background: "linear-gradient(135deg, rgba(168,237,216,0.65) 0%, rgba(197,245,232,0.60) 100%)" }}
+      />
+
+      {/* コンテンツ */}
+      <div ref={ref} className="relative z-10 max-w-[900px] mx-auto px-5">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
             <StatItem
               key={stat.label}

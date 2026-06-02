@@ -2,7 +2,6 @@ import { Navigation } from "@/components/navigation"
 import { HeroSection } from "@/components/hero-section"
 import { PhilosophySection } from "@/components/philosophy-section"
 import { BusinessSection } from "@/components/business-section"
-import { ImageSection } from "@/components/image-section"
 import { NumbersSection } from "@/components/numbers-section"
 import { NewsSection } from "@/components/news-section"
 import { AboutSection } from "@/components/about-section"
@@ -18,7 +17,6 @@ export default function Home() {
         <HeroSection />
         <PhilosophySection />
         <BusinessSection />
-        <ImageSection />
         <NumbersSection />
         <NewsSection />
         <AboutSection />

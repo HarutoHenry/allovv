@@ -69,6 +69,8 @@ export function AboutSection() {
                 width={320}
                 height={107}
                 className="w-full max-w-[280px] h-auto object-contain"
+                placeholder="empty"
+                unoptimized
               />
             </div>
           </div>

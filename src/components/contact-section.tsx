@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
+import { LiquidButton } from "@/components/liquid-button"
 
 export function ContactSection() {
   const { ref, isVisible } = useScrollAnimation()
@@ -147,12 +148,9 @@ export function ContactSection() {
           </div>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="gradient-btn w-full py-4 font-medium rounded-full transition-all"
-          >
+          <LiquidButton type="submit" className="w-full py-4 text-base">
             送信する
-          </button>
+          </LiquidButton>
         </form>
       </div>
     </section>

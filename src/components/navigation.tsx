@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { LiquidButton } from "@/components/liquid-button"
 
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false)
@@ -57,12 +58,11 @@ export function Navigation() {
         </div>
 
         {/* CTA Button */}
-        <button
-          onClick={() => scrollTo("#contact")}
-          className="hidden md:inline-flex px-5 py-2.5 gradient-btn font-medium text-sm rounded-full transition-all"
-        >
-          お問い合わせ
-        </button>
+        <div className="hidden md:block">
+          <LiquidButton onClick={() => scrollTo("#contact")}>
+            お問い合わせ
+          </LiquidButton>
+        </div>
 
         {/* Mobile Menu Button */}
         <button
@@ -108,12 +108,9 @@ export function Navigation() {
                 {link.label}
               </button>
             ))}
-            <button
-              onClick={() => scrollTo("#contact")}
-              className="block w-full text-center px-5 py-2.5 gradient-btn font-medium text-sm rounded-full"
-            >
+            <LiquidButton onClick={() => scrollTo("#contact")} className="w-full justify-center">
               お問い合わせ
-            </button>
+            </LiquidButton>
           </div>
         </div>
       )}

@@ -35,7 +35,7 @@ export function Navigation() {
     <nav
       className="fixed top-0 left-0 right-0 z-50"
     >
-      <div className="max-w-7xl mx-auto px-8 pt-[22px] pb-3 flex items-end">
+      <div className="max-w-7xl mx-auto px-8 pt-[22px] pb-3 flex items-end translate-x-[20px]">
         {/* Logo — 左1/3 */}
         <div className="flex-1 flex items-center pl-[63px] md:pl-[60px] lg:pl-[73px]">
           <Link href="/" className="flex items-center translate-y-[8px] lg:translate-y-[10px]">

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { LiquidNavItem } from "@/components/liquid-nav-item"
 
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false)
@@ -46,13 +47,11 @@ export function Navigation() {
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-10">
           {navLinks.map((link) => (
-            <button
+            <LiquidNavItem
               key={link.href}
+              label={link.label}
               onClick={() => scrollTo(link.href)}
-              className={`font-display font-light text-xs tracking-[0.15em] transition-colors ${scrolled ? 'text-navy/70 hover:text-navy' : 'text-navy/70 hover:text-navy'}`}
-            >
-              {link.label}
-            </button>
+            />
           ))}
         </div>
 

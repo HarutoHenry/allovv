@@ -16,12 +16,18 @@ export function Navigation() {
   }, [])
 
   const navLinks = [
-    { href: "#business", label: "事業内容" },
-    { href: "#about", label: "会社概要" },
-    { href: "#news", label: "ニュース" },
-    { href: "#pricing", label: "料金システム" },
-    { href: "#faq", label: "よくある質問" },
+    { href: "#business", label: "SERVICES" },
+    { href: "#philosophy", label: "PHILOSOPHY" },
+    { href: "#news", label: "NEWS" },
+    { href: "#about", label: "COMPANY" },
   ]
+
+  const scrollTo = (id: string) => {
+    setMobileMenuOpen(false)
+    setTimeout(() => {
+      document.getElementById(id.replace("#", ""))?.scrollIntoView({ behavior: "smooth" })
+    }, 50)
+  }
 
   return (
     <nav
@@ -38,25 +44,25 @@ export function Navigation() {
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-14">
+        <div className="hidden md:flex items-center gap-10">
           {navLinks.map((link) => (
-            <Link
+            <button
               key={link.href}
-              href={link.href}
-              className={`text-base font-medium transition-colors ${scrolled ? 'text-navy/80 hover:text-navy' : 'text-navy/80 hover:text-navy'}`}
+              onClick={() => scrollTo(link.href)}
+              className={`font-display font-light text-xs tracking-[0.15em] transition-colors ${scrolled ? 'text-navy/70 hover:text-navy' : 'text-navy/70 hover:text-navy'}`}
             >
               {link.label}
-            </Link>
+            </button>
           ))}
         </div>
 
         {/* CTA Button */}
-        <Link
-          href="#contact"
+        <button
+          onClick={() => scrollTo("#contact")}
           className="hidden md:inline-flex px-5 py-2.5 gradient-btn font-medium text-sm rounded-full transition-all"
         >
           お問い合わせ
-        </Link>
+        </button>
 
         {/* Mobile Menu Button */}
         <button
@@ -94,22 +100,20 @@ export function Navigation() {
         <div className="md:hidden bg-white/95 backdrop-blur-[16px] border-t border-navy/10">
           <div className="px-5 py-4 space-y-4">
             {navLinks.map((link) => (
-              <Link
+              <button
                 key={link.href}
-                href={link.href}
-                className="block text-navy/80 hover:text-navy text-base font-medium transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={() => scrollTo(link.href)}
+                className="block text-navy/70 hover:text-navy font-display font-light text-xs tracking-[0.15em] transition-colors"
               >
                 {link.label}
-              </Link>
+              </button>
             ))}
-            <Link
-              href="#contact"
+            <button
+              onClick={() => scrollTo("#contact")}
               className="block w-full text-center px-5 py-2.5 gradient-btn font-medium text-sm rounded-full"
-              onClick={() => setMobileMenuOpen(false)}
             >
               お問い合わせ
-            </Link>
+            </button>
           </div>
         </div>
       )}

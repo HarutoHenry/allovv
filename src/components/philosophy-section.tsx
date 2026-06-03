@@ -26,7 +26,7 @@ export function PhilosophySection() {
   const videoRef = useVideoAutoplay()
 
   return (
-    <section className="py-28 md:py-36 relative overflow-hidden">
+    <section id="philosophy" className="py-28 md:py-36 relative overflow-hidden">
 
       {/* ── 背景動画（飛び出すスケール演出） ── */}
       <div

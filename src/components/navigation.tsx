@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { LiquidNavItem } from "@/components/liquid-nav-item"
 
 export function Navigation() {
@@ -40,8 +41,15 @@ export function Navigation() {
     >
       <div className="max-w-7xl mx-auto px-8 py-5 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className={`font-display font-bold text-xl tracking-tight transition-colors ${scrolled ? 'text-navy' : 'text-navy'}`}>
-          Allovv
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/logo.png"
+            alt="Allovv"
+            width={120}
+            height={40}
+            className="h-9 w-auto object-contain"
+            priority
+          />
         </Link>
 
         {/* Desktop Nav */}

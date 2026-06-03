@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 
 const companyInfo = [
@@ -54,18 +55,21 @@ export function AboutSection() {
             </table>
           </div>
 
-          {/* Office Image Placeholder */}
+          {/* Logo Image */}
           <div className={`transition-all duration-600 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div 
-              className="glass-card h-full min-h-[300px] flex items-center justify-center"
+            <div
+              className="glass-card h-full min-h-[300px] flex items-center justify-center p-12"
               style={{
-                background: "linear-gradient(135deg, rgba(252,228,236,0.3) 0%, rgba(237,231,246,0.3) 100%)"
+                background: "linear-gradient(135deg, rgba(197,245,232,0.25) 0%, rgba(237,231,246,0.25) 100%)"
               }}
             >
-              {/* IMAGE_PLACEHOLDER_OFFICE */}
-              <p className="text-navy/30 text-sm font-display tracking-wider">
-                OFFICE IMAGE
-              </p>
+              <Image
+                src="/logo.png"
+                alt="Allovv"
+                width={320}
+                height={107}
+                className="w-full max-w-[280px] h-auto object-contain"
+              />
             </div>
           </div>
         </div>

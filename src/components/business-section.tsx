@@ -37,8 +37,32 @@ export function BusinessSection() {
   const { ref, isVisible } = useScrollAnimation()
 
   return (
-    <section id="business" className="py-28 md:py-36 bg-white">
-      <div ref={ref} className="max-w-[900px] mx-auto px-5 text-center">
+    <section id="business" className="py-28 md:py-36 relative overflow-hidden">
+
+      {/* 背景動画 */}
+      <div
+        className="absolute inset-0"
+        style={{
+          transform: isVisible ? "scale(1)" : "scale(1.06)",
+          transition: "transform 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+        }}
+      >
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 w-full h-full object-cover"
+          src="/videos/business-bg.mp4"
+        />
+      </div>
+
+      {/* オーバーレイ */}
+      <div className="absolute inset-0 bg-white/78" />
+
+      {/* コンテンツ */}
+      <div ref={ref} className="relative z-10 max-w-[900px] mx-auto px-5 text-center">
         {/* Section Label */}
         <p className={`font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-6 transition-all duration-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           BUSINESS

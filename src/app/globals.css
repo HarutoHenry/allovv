@@ -171,31 +171,18 @@
 }
 
 .feature-card {
-  position: relative;
-  border: 1px solid transparent !important;
-  background-clip: padding-box;
+  border: 1px solid rgba(184, 240, 232, 0.55) !important;
   box-shadow:
-    0 0 0 1px rgba(197, 245, 232, 0.45),
-    0 4px 24px rgba(184, 240, 232, 0.18);
-  transition: box-shadow 0.35s ease, transform 0.35s ease;
-}
-.feature-card::before {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: 20px;
-  background: linear-gradient(135deg, rgba(197, 245, 232, 0.7) 0%, rgba(255, 228, 239, 0.55) 100%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  z-index: 0;
+    0 4px 24px rgba(184, 240, 232, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.5) inset;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease !important;
 }
 .feature-card:hover {
+  border-color: rgba(184, 240, 232, 0.85) !important;
   box-shadow:
-    0 0 0 1.5px rgba(197, 245, 232, 0.7),
-    0 8px 36px rgba(184, 240, 232, 0.3),
-    0 2px 12px rgba(255, 214, 231, 0.2);
+    0 8px 36px rgba(184, 240, 232, 0.35),
+    0 2px 12px rgba(255, 214, 231, 0.25),
+    0 1px 0 rgba(255, 255, 255, 0.6) inset;
 }
 
 .gradient-text {

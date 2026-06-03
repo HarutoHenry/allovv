@@ -82,7 +82,7 @@ export function BusinessSection() {
           {businessCards.map((card, index) => (
             <div
               key={card.title}
-              className={`glass-card p-8 text-left transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl group ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              className={`glass-card feature-card p-8 text-left transition-all duration-500 hover:-translate-y-1.5 group ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
               style={{
                 transitionDelay: `${200 + index * 120}ms`,
                 background: "rgba(255, 255, 255, 0.25)",

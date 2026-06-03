@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { HeroVideoGL } from "@/components/hero-video-gl"
-import { LiquidButton } from "@/components/liquid-button"
 
 export function HeroSection() {
   return (
@@ -41,12 +40,15 @@ export function HeroSection() {
         </p>
 
         <div className="animate-fade-in-up-delay-3 flex flex-col sm:flex-row gap-4 justify-center mb-12 md:mb-16">
-          <LiquidButton
-            onClick={() => document.getElementById("business")?.scrollIntoView({ behavior: "smooth" })}
-            className="px-8 py-4 text-base"
+          <Link
+            href="#business"
+            className="gradient-btn px-8 py-4 font-medium rounded-full transition-all inline-flex items-center justify-center gap-2"
           >
             事業内容を見る
-          </LiquidButton>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </Link>
         </div>
 
         <div className="animate-fade-in-up-delay-3 flex flex-wrap justify-center gap-6 md:gap-12">

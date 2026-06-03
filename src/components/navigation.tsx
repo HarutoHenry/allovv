@@ -39,41 +39,44 @@ export function Navigation() {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-8 pt-[22px] pb-3 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center ml-[60px]">
-          <Image
-            src="/logo.png"
-            alt="Allovv"
-            width={200}
-            height={67}
-            className="h-14 w-auto object-contain"
-            style={{ background: "transparent" }}
-            placeholder="empty"
-            priority
-            unoptimized
-          />
-        </Link>
+      <div className="max-w-7xl mx-auto px-8 pt-[22px] pb-3 flex items-center">
+        {/* Logo — 左1/3 */}
+        <div className="flex-1 flex items-center pl-[60px]">
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/logo.png"
+              alt="Allovv"
+              width={200}
+              height={67}
+              className="h-14 w-auto object-contain"
+              style={{ background: "transparent" }}
+              placeholder="empty"
+              priority
+              unoptimized
+            />
+          </Link>
+        </div>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center justify-center" style={{ gap: 0, minWidth: 0 }}>
+        {/* Desktop Nav — 中央1/3 */}
+        <div className="hidden md:flex items-center justify-center gap-8">
           {navLinks.map((link) => (
-            <div key={link.href} className="flex justify-center" style={{ width: "7rem" }}>
-              <LiquidNavItem
-                label={link.label}
-                onClick={() => scrollTo(link.href)}
-              />
-            </div>
+            <LiquidNavItem
+              key={link.href}
+              label={link.label}
+              onClick={() => scrollTo(link.href)}
+            />
           ))}
         </div>
 
-        {/* CTA Button */}
-        <button
-          onClick={() => scrollTo("#contact")}
-          className="hidden md:inline-flex px-6 py-2.5 gradient-btn font-medium text-sm rounded-full transition-all mr-[60px]"
-        >
-          お問い合わせ
-        </button>
+        {/* CTA Button — 右1/3 */}
+        <div className="flex-1 hidden md:flex items-center justify-end pr-[60px]">
+          <button
+            onClick={() => scrollTo("#contact")}
+            className="px-6 py-2.5 gradient-btn font-medium text-sm rounded-full transition-all"
+          >
+            お問い合わせ
+          </button>
+        </div>
 
         {/* Mobile Menu Button */}
         <button

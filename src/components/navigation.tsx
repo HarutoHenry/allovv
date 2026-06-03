@@ -39,7 +39,7 @@ export function Navigation() {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-8 pt-[22px] pb-[17px] flex items-end">
+      <div className="max-w-7xl mx-auto px-8 pt-[22px] pb-3 flex items-end">
         {/* Logo — 左1/3 */}
         <div className="flex-1 flex items-center pl-[57px] md:pl-[60px]">
           <Link href="/" className="flex items-center translate-y-[8px]">
@@ -108,6 +108,7 @@ export function Navigation() {
           </svg>
         </button>
       </div>
+      <div aria-hidden="true" className="h-[5px]" />
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (

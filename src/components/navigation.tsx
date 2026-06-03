@@ -58,7 +58,7 @@ export function Navigation() {
         </div>
 
         {/* Desktop Nav — 中央1/3 */}
-        <div className="hidden md:flex items-center justify-center gap-8">
+        <div className="hidden md:flex items-center justify-center gap-[35px]">
           {navLinks.map((link) => (
             <LiquidNavItem
               key={link.href}

@@ -197,7 +197,7 @@
 .liquid-nav-btn {
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
   font-weight: 800;
-  font-size: 0.82rem;
+  font-size: 0.95rem;
   letter-spacing: 0.12em;
   /* グラジエント文字 */
   background: linear-gradient(135deg, #4ecdc0 0%, #9b78d4 55%, #ff8fb8 100%);

@@ -65,7 +65,7 @@ export function Navigation() {
         </div>
 
         {/* CTA Button — 右1/3 */}
-        <div className="flex-1 hidden md:flex items-center justify-end pr-[60px] lg:pr-[96px] 2xl:pr-[60px] translate-y-[8px] lg:translate-y-[13px]">
+        <div className="flex-1 hidden md:flex items-center justify-end pr-[60px] lg:pr-[106px] 2xl:pr-[60px] translate-y-[8px] lg:translate-y-[13px]">
           <button
             onClick={() => scrollTo("#contact")}
             className="px-6 py-2.5 gradient-btn font-medium text-sm rounded-full transition-all"

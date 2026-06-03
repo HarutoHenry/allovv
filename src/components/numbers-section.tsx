@@ -92,7 +92,7 @@ export function NumbersSection() {
           loop
           muted
           playsInline
-          preload="auto"
+          preload="metadata"
           className="absolute inset-0 w-full h-full object-cover"
           src="/videos/image-section-bg.mp4"
         />

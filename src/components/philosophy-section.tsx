@@ -42,7 +42,7 @@ export function PhilosophySection() {
           loop
           muted
           playsInline
-          preload="auto"
+          preload="metadata"
           className="absolute inset-0 w-full h-full object-cover"
           src="/videos/philosophy-bg.mp4"
         />

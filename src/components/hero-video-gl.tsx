@@ -24,14 +24,12 @@ const FRAG = `
   void main() {
     vec2 uv = v_uv;
 
-    // カーソルからの距離でディスプレイスメント
     vec2 diff = uv - u_mouse;
     float dist = length(diff);
     float falloff = smoothstep(u_radius, 0.0, dist);
     vec2 dir = dist > 0.001 ? normalize(diff) : vec2(0.0);
     uv -= dir * falloff * u_strength;
 
-    // object-fit: cover と同等のUV変換
     vec2 texUV = clamp(uv * u_scale + u_offset, 0.0, 1.0);
     gl_FragColor = texture2D(u_tex, texUV);
   }
@@ -43,6 +41,7 @@ export function HeroVideoGL({ src }: { src: string }) {
   const mouse = useRef({ x: 0.5, y: 0.5 })
   const smooth = useRef({ x: 0.5, y: 0.5 })
   const rafRef = useRef<number>(0)
+  const visibleRef = useRef(true)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -52,11 +51,9 @@ export function HeroVideoGL({ src }: { src: string }) {
     const gl = canvas.getContext("webgl")
     if (!gl) return
 
-    // null チェック済みの参照（クロージャ内でTS型エラー回避）
     const vid = video
     const cvs = canvas
 
-    // シェーダーコンパイル
     function compile(type: number, src: string) {
       const s = gl!.createShader(type)!
       gl!.shaderSource(s, src)
@@ -69,7 +66,6 @@ export function HeroVideoGL({ src }: { src: string }) {
     gl.linkProgram(prog)
     gl.useProgram(prog)
 
-    // フルスクリーンクワッド
     const buf = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, buf)
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW)
@@ -77,7 +73,6 @@ export function HeroVideoGL({ src }: { src: string }) {
     gl.enableVertexAttribArray(loc)
     gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0)
 
-    // テクスチャ
     const tex = gl.createTexture()!
     gl.bindTexture(gl.TEXTURE_2D, tex)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
@@ -85,7 +80,6 @@ export function HeroVideoGL({ src }: { src: string }) {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
 
-    // Uniform locations
     const uMouse    = gl.getUniformLocation(prog, "u_mouse")
     const uStrength = gl.getUniformLocation(prog, "u_strength")
     const uRadius   = gl.getUniformLocation(prog, "u_radius")
@@ -97,7 +91,6 @@ export function HeroVideoGL({ src }: { src: string }) {
     gl.uniform2f(uScale, 1, 1)
     gl.uniform2f(uOffset, 0, 0)
 
-    // object-fit: cover 相当のUV計算
     function updateCover() {
       if (!vid.videoWidth) return
       const va = vid.videoWidth / vid.videoHeight
@@ -109,20 +102,25 @@ export function HeroVideoGL({ src }: { src: string }) {
       gl!.uniform2f(uOffset, ou, ov)
     }
 
-    // リサイズ
     function resize() {
-      const dpr = window.devicePixelRatio || 1
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
       cvs.width  = cvs.offsetWidth  * dpr
       cvs.height = cvs.offsetHeight * dpr
       gl!.viewport(0, 0, cvs.width, cvs.height)
       updateCover()
     }
 
-    // レンダーループ（常時起動）
     let active = true
+    let lastVideoTime = -1
+
     function render() {
-      if (!active) return
-      if (vid.readyState >= 2) {
+      if (!active || !visibleRef.current) {
+        rafRef.current = 0
+        return
+      }
+      // テクスチャはビデオフレームが進んだ時だけ更新（GPU負荷削減）
+      if (vid.readyState >= 2 && vid.currentTime !== lastVideoTime) {
+        lastVideoTime = vid.currentTime
         gl!.pixelStorei(gl!.UNPACK_FLIP_Y_WEBGL, true)
         gl!.texImage2D(gl!.TEXTURE_2D, 0, gl!.RGBA, gl!.RGBA, gl!.UNSIGNED_BYTE, vid)
       }
@@ -134,7 +132,6 @@ export function HeroVideoGL({ src }: { src: string }) {
       rafRef.current = requestAnimationFrame(render)
     }
 
-    // マウスイベントは親要素から取得（canvasはpointer-events:none）
     const parent = cvs.parentElement!
     const onMove = (e: MouseEvent) => {
       const r = cvs.getBoundingClientRect()
@@ -148,24 +145,28 @@ export function HeroVideoGL({ src }: { src: string }) {
     parent.addEventListener("mousemove", onMove)
     parent.addEventListener("mouseleave", onLeave)
     window.addEventListener("resize", resize)
-
     vid.addEventListener("loadedmetadata", updateCover)
 
-    // 再生を確実に開始させる（iOS Safariはページ読み込み直後にplay()が失敗することがある）
     const tryPlay = () => vid.play().catch(() => {})
     vid.addEventListener("canplay", tryPlay)
     vid.addEventListener("loadeddata", tryPlay)
     tryPlay()
 
-    // バックグラウンドから復帰した時・タッチ・クリックでも再生
     const onVisibility = () => { if (!document.hidden) tryPlay() }
     document.addEventListener("visibilitychange", onVisibility)
     const onInteraction = () => tryPlay()
     document.addEventListener("touchstart", onInteraction, { once: true })
     document.addEventListener("click", onInteraction, { once: true })
-
-    // 停止した場合は自動再開
     vid.addEventListener("pause", tryPlay)
+
+    // ヒーローが画面外に出たらRAFを停止し、戻ったら再開
+    const ioCanvas = new IntersectionObserver(([entry]) => {
+      visibleRef.current = entry.isIntersecting
+      if (entry.isIntersecting && !rafRef.current) {
+        rafRef.current = requestAnimationFrame(render)
+      }
+    }, { threshold: 0 })
+    ioCanvas.observe(cvs)
 
     resize()
     render()
@@ -173,6 +174,8 @@ export function HeroVideoGL({ src }: { src: string }) {
     return () => {
       active = false
       cancelAnimationFrame(rafRef.current)
+      rafRef.current = 0
+      ioCanvas.disconnect()
       parent.removeEventListener("mousemove", onMove)
       parent.removeEventListener("mouseleave", onLeave)
       window.removeEventListener("resize", resize)

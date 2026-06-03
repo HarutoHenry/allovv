@@ -41,7 +41,7 @@ export function Navigation() {
     >
       <div className="max-w-7xl mx-auto px-8 py-5 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center ml-[10px]">
+        <Link href="/" className="flex items-center ml-[20px]">
           <Image
             src="/logo.png"
             alt="Allovv"
@@ -69,7 +69,7 @@ export function Navigation() {
         {/* CTA Button */}
         <button
           onClick={() => scrollTo("#contact")}
-          className="hidden md:inline-flex px-5 py-2.5 gradient-btn font-medium text-sm rounded-full transition-all mr-[10px]"
+          className="hidden md:inline-flex px-5 py-2.5 gradient-btn font-medium text-sm rounded-full transition-all mr-[20px]"
         >
           お問い合わせ
         </button>

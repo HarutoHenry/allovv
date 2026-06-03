@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useRef } from "react"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 
 const philosophyCards = [
@@ -22,6 +23,16 @@ const philosophyCards = [
 
 export function PhilosophySection() {
   const { ref, isVisible } = useScrollAnimation()
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const vid = videoRef.current
+    if (!vid) return
+    vid.play().catch(() => {})
+    const onPause = () => vid.play().catch(() => {})
+    vid.addEventListener("pause", onPause)
+    return () => vid.removeEventListener("pause", onPause)
+  }, [])
 
   return (
     <section className="py-28 md:py-36 relative overflow-hidden">
@@ -35,6 +46,7 @@ export function PhilosophySection() {
         }}
       >
         <video
+          ref={videoRef}
           autoPlay
           loop
           muted

@@ -42,7 +42,7 @@ export function Navigation() {
       <div className="max-w-7xl mx-auto px-8 pt-[22px] pb-3 flex items-end">
         {/* Logo — 左1/3 */}
         <div className="flex-1 flex items-center pl-[60px]">
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center translate-y-[8px]">
             <Image
               src="/logo.png"
               alt="Allovv"
@@ -69,7 +69,7 @@ export function Navigation() {
         </div>
 
         {/* CTA Button — 右1/3 */}
-        <div className="flex-1 hidden md:flex items-center justify-end pr-[60px]">
+        <div className="flex-1 hidden md:flex items-center justify-end pr-[60px] translate-y-[3px]">
           <button
             onClick={() => scrollTo("#contact")}
             className="px-6 py-2.5 gradient-btn font-medium text-sm rounded-full transition-all"

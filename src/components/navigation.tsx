@@ -54,7 +54,7 @@ export function Navigation() {
         </div>
 
         {/* Desktop Nav — 中央1/3 */}
-        <div className="hidden md:flex items-center justify-center gap-[38px]">
+        <div className="hidden md:flex items-center justify-center gap-[38px] translate-y-[2px]">
           {navLinks.map((link) => (
             <LiquidNavItem
               key={link.href}
@@ -65,7 +65,7 @@ export function Navigation() {
         </div>
 
         {/* CTA Button — 右1/3 */}
-        <div className="flex-1 hidden md:flex items-center justify-end pr-[60px] translate-y-[3px]">
+        <div className="flex-1 hidden md:flex items-center justify-end pr-[60px] translate-y-[7px]">
           <button
             onClick={() => scrollTo("#contact")}
             className="px-6 py-2.5 gradient-btn font-medium text-sm rounded-full transition-all"

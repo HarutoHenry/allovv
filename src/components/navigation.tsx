@@ -76,7 +76,7 @@ export function Navigation() {
 
         {/* Mobile Menu Button */}
         <button
-          className={`md:hidden p-2 transition-colors ${scrolled ? 'text-navy' : 'text-navy'}`}
+          className={`md:hidden p-2 transition-colors translate-y-[5px] ${scrolled ? 'text-navy' : 'text-navy'}`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label="メニューを開く"
         >

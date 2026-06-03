@@ -44,7 +44,7 @@ export function Navigation() {
               alt="Allovv"
               width={200}
               height={67}
-              className="h-11 md:h-[34px] lg:h-[40px] xl:h-14 w-auto object-contain"
+              className="h-11 md:h-[34px] lg:h-[40px] 2xl:h-14 w-auto object-contain"
               style={{ background: "transparent" }}
               placeholder="empty"
               priority
@@ -65,7 +65,7 @@ export function Navigation() {
         </div>
 
         {/* CTA Button — 右1/3 */}
-        <div className="flex-1 hidden md:flex items-center justify-end pr-[60px] lg:pr-[68px] xl:pr-[60px] translate-y-[8px]">
+        <div className="flex-1 hidden md:flex items-center justify-end pr-[60px] lg:pr-[68px] 2xl:pr-[60px] translate-y-[8px]">
           <button
             onClick={() => scrollTo("#contact")}
             className="px-6 py-2.5 gradient-btn font-medium text-sm rounded-full transition-all"

@@ -36,9 +36,14 @@ export function ContactSection() {
         </p>
 
         {/* Heading */}
-        <h2 className={`text-navy text-2xl md:text-3xl leading-relaxed mb-16 text-center transition-all duration-600 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          お問い合わせ
+        <h2 className={`text-navy text-2xl md:text-4xl font-bold leading-snug mb-4 text-center transition-all duration-600 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          まず、話してみませんか。
         </h2>
+
+        {/* Sub */}
+        <p className={`text-navy/60 text-sm md:text-base text-center mb-14 transition-all duration-600 delay-150 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          事業のご相談・取材・採用、いずれも無料でお受けしています。
+        </p>
 
         {/* Form */}
         <form 

@@ -5,7 +5,6 @@ import { BusinessSection } from "@/components/business-section"
 import { NumbersSection } from "@/components/numbers-section"
 import { NewsSection } from "@/components/news-section"
 import { AboutSection } from "@/components/about-section"
-import { CTABanner } from "@/components/cta-banner"
 import { ContactSection } from "@/components/contact-section"
 import { Footer } from "@/components/footer"
 
@@ -20,7 +19,6 @@ export default function Home() {
         <NumbersSection />
         <NewsSection />
         <AboutSection />
-        <CTABanner />
         <ContactSection />
       </main>
       <Footer />

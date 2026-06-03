@@ -59,7 +59,7 @@ export function BusinessSection() {
       </div>
 
       {/* オーバーレイ */}
-      <div className="absolute inset-0 bg-white/78" />
+      <div className="absolute inset-0 bg-white/55" />
 
       {/* コンテンツ */}
       <div ref={ref} className="relative z-10 max-w-[900px] mx-auto px-5 text-center">
@@ -82,7 +82,7 @@ export function BusinessSection() {
               className={`glass-card p-8 text-left transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl group ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
               style={{
                 transitionDelay: `${200 + index * 120}ms`,
-                background: "rgba(255, 255, 255, 0.45)",
+                background: "rgba(255, 255, 255, 0.25)",
                 backdropFilter: "blur(12px)",
                 WebkitBackdropFilter: "blur(12px)",
               }}

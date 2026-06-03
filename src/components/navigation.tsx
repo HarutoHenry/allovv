@@ -33,11 +33,7 @@ export function Navigation() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-white/90 backdrop-blur-[16px] shadow-sm"
-          : "bg-transparent"
-      }`}
+      className="fixed top-0 left-0 right-0 z-50"
     >
       <div className="max-w-7xl mx-auto px-8 pt-[22px] pb-3 flex items-end">
         {/* Logo — 左1/3 */}

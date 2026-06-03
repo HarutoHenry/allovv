@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 import { useVideoAutoplay } from "@/hooks/use-video-autoplay"
 

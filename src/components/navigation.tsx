@@ -108,7 +108,6 @@ export function Navigation() {
           </svg>
         </button>
       </div>
-      <div aria-hidden="true" className="h-[5px]" />
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (

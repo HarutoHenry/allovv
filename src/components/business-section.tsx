@@ -80,7 +80,12 @@ export function BusinessSection() {
             <div
               key={card.title}
               className={`glass-card p-8 text-left transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl group ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-              style={{ transitionDelay: `${200 + index * 120}ms` }}
+              style={{
+                transitionDelay: `${200 + index * 120}ms`,
+                background: "rgba(255, 255, 255, 0.45)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+              }}
             >
               {/* Tag */}
               <span className={`inline-block px-3 py-1 text-xs font-medium rounded-full mb-4 ${card.tagColor}`}>

@@ -39,15 +39,15 @@ export function Navigation() {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-8 py-3 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-8 pt-[22px] pb-3 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center ml-[60px]">
           <Image
             src="/logo.png"
             alt="Allovv"
-            width={180}
-            height={60}
-            className="h-12 w-auto object-contain"
+            width={200}
+            height={67}
+            className="h-14 w-auto object-contain"
             style={{ background: "transparent" }}
             placeholder="empty"
             priority
@@ -56,13 +56,14 @@ export function Navigation() {
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden md:flex items-center justify-center" style={{ gap: 0, minWidth: 0 }}>
           {navLinks.map((link) => (
-            <LiquidNavItem
-              key={link.href}
-              label={link.label}
-              onClick={() => scrollTo(link.href)}
-            />
+            <div key={link.href} className="flex justify-center" style={{ width: "7rem" }}>
+              <LiquidNavItem
+                label={link.label}
+                onClick={() => scrollTo(link.href)}
+              />
+            </div>
           ))}
         </div>
 

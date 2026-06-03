@@ -1,7 +1,8 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useState } from "react"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
+import { useVideoAutoplay } from "@/hooks/use-video-autoplay"
 
 const stats = [
   { prefix: "最大", value: 90, suffix: "%", label: "返信工数削減" },
@@ -72,16 +73,7 @@ function StatItem({ prefix, value, suffix, label, isVisible, delay }: {
 
 export function NumbersSection() {
   const { ref, isVisible } = useScrollAnimation(0.3)
-  const videoRef = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const vid = videoRef.current
-    if (!vid) return
-    vid.play().catch(() => {})
-    const onPause = () => vid.play().catch(() => {})
-    vid.addEventListener("pause", onPause)
-    return () => vid.removeEventListener("pause", onPause)
-  }, [])
+  const videoRef = useVideoAutoplay()
 
   return (
     <section className="py-28 md:py-36 relative overflow-hidden">

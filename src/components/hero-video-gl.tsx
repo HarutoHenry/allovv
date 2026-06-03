@@ -150,11 +150,22 @@ export function HeroVideoGL({ src }: { src: string }) {
     window.addEventListener("resize", resize)
 
     vid.addEventListener("loadedmetadata", updateCover)
-    vid.play().catch(() => {})
 
-    // モバイルでは最初のタッチで再生を試みる（iOS Safariのフォールバック）
-    const onTouch = () => { vid.play().catch(() => {}) }
-    document.addEventListener("touchstart", onTouch, { once: true })
+    // 再生を確実に開始させる（iOS Safariはページ読み込み直後にplay()が失敗することがある）
+    const tryPlay = () => vid.play().catch(() => {})
+    vid.addEventListener("canplay", tryPlay)
+    vid.addEventListener("loadeddata", tryPlay)
+    tryPlay()
+
+    // バックグラウンドから復帰した時・タッチ・クリックでも再生
+    const onVisibility = () => { if (!document.hidden) tryPlay() }
+    document.addEventListener("visibilitychange", onVisibility)
+    const onInteraction = () => tryPlay()
+    document.addEventListener("touchstart", onInteraction, { once: true })
+    document.addEventListener("click", onInteraction, { once: true })
+
+    // 停止した場合は自動再開
+    vid.addEventListener("pause", tryPlay)
 
     resize()
     render()
@@ -165,7 +176,12 @@ export function HeroVideoGL({ src }: { src: string }) {
       parent.removeEventListener("mousemove", onMove)
       parent.removeEventListener("mouseleave", onLeave)
       window.removeEventListener("resize", resize)
-      document.removeEventListener("touchstart", onTouch)
+      vid.removeEventListener("canplay", tryPlay)
+      vid.removeEventListener("loadeddata", tryPlay)
+      vid.removeEventListener("pause", tryPlay)
+      document.removeEventListener("visibilitychange", onVisibility)
+      document.removeEventListener("touchstart", onInteraction)
+      document.removeEventListener("click", onInteraction)
     }
   }, [src])
 

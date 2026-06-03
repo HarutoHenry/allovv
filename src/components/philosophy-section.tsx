@@ -1,7 +1,7 @@
 "use client"
 
-import { useEffect, useRef } from "react"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
+import { useVideoAutoplay } from "@/hooks/use-video-autoplay"
 
 const philosophyCards = [
   {
@@ -23,16 +23,7 @@ const philosophyCards = [
 
 export function PhilosophySection() {
   const { ref, isVisible } = useScrollAnimation()
-  const videoRef = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const vid = videoRef.current
-    if (!vid) return
-    vid.play().catch(() => {})
-    const onPause = () => vid.play().catch(() => {})
-    vid.addEventListener("pause", onPause)
-    return () => vid.removeEventListener("pause", onPause)
-  }, [])
+  const videoRef = useVideoAutoplay()
 
   return (
     <section className="py-28 md:py-36 relative overflow-hidden">
@@ -93,7 +84,12 @@ export function PhilosophySection() {
             <div
               key={card.title}
               className={`glass-card p-8 text-left transition-all duration-500 hover:-translate-y-1.5 hover:shadow-xl ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-              style={{ transitionDelay: `${200 + index * 120}ms` }}
+              style={{
+                transitionDelay: `${200 + index * 120}ms`,
+                background: "rgba(255, 255, 255, 0.25)",
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+              }}
             >
               <p className="font-display font-light text-xs tracking-[0.15em] uppercase text-[#7dd8ca] mb-2">
                 {card.en}

@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useRef } from "react"
 import Link from "next/link"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
+import { useVideoAutoplay } from "@/hooks/use-video-autoplay"
 
 const businessCards = [
   {
@@ -36,16 +36,7 @@ const businessCards = [
 
 export function BusinessSection() {
   const { ref, isVisible } = useScrollAnimation()
-  const videoRef = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const vid = videoRef.current
-    if (!vid) return
-    vid.play().catch(() => {})
-    const onPause = () => vid.play().catch(() => {})
-    vid.addEventListener("pause", onPause)
-    return () => vid.removeEventListener("pause", onPause)
-  }, [])
+  const videoRef = useVideoAutoplay()
 
   return (
     <section id="business" className="py-28 md:py-36 relative overflow-hidden">

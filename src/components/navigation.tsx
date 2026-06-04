@@ -44,7 +44,7 @@ export function Navigation() {
               alt="Allovv"
               width={200}
               height={67}
-              className="h-11 md:h-[34px] lg:h-[47px] 2xl:h-[51px] w-auto object-contain"
+              className="h-11 md:h-[34px] lg:h-[47px] 2xl:h-[45px] w-auto object-contain"
               style={{ background: "transparent" }}
               placeholder="empty"
               priority

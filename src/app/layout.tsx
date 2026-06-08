@@ -20,6 +20,10 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: "Allovv株式会社 | AIで、日本のビジネスインフラを変える",
   description: "Allovvは、人工知能の力を事業の推進力に変えるAIカンパニーです。起業支援・AI導入・システム開発を通じて、あらゆる挑戦の障壁を取り除きます。",
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
 };
 
 export default function RootLayout({

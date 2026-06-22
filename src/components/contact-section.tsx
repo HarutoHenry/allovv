@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
 export function ContactSection() {
   const { ref, isVisible } = useScrollAnimation()
   const [formData, setFormData] = useState({
@@ -12,10 +14,30 @@ export function ContactSection() {
     type: "",
     message: ""
   })
+  const [errors, setErrors] = useState<Record<string, string>>({})
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle")
+
+  const validate = () => {
+    const next: Record<string, string> = {}
+    if (!formData.name.trim()) next.name = "お名前を入力してください"
+    if (!formData.email.trim()) {
+      next.email = "メールアドレスを入力してください"
+    } else if (!EMAIL_RE.test(formData.email)) {
+      next.email = "正しい形式のメールアドレスを入力してください"
+    }
+    if (!formData.type) next.type = "お問い合わせ種別を選択してください"
+    if (!formData.message.trim()) next.message = "メッセージを入力してください"
+    return next
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const next = validate()
+    if (Object.keys(next).length > 0) {
+      setErrors(next)
+      return
+    }
+    setErrors({})
     setStatus("sending")
     try {
       const res = await fetch("/api/contact", {
@@ -32,10 +54,9 @@ export function ContactSection() {
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }))
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: "" }))
   }
 
   return (
@@ -57,8 +78,9 @@ export function ContactSection() {
         </p>
 
         {/* Form */}
-        <form 
+        <form
           onSubmit={handleSubmit}
+          noValidate
           className={`space-y-6 transition-all duration-600 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
         >
           {/* Name */}
@@ -70,12 +92,12 @@ export function ContactSection() {
               type="text"
               id="name"
               name="name"
-              required
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-white/80 border border-white/60 rounded-xl text-navy placeholder:text-navy/30 focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 focus:border-[#9fe8dc]/60 transition-all"
+              className={`w-full px-4 py-3 bg-white/80 border rounded-xl text-navy placeholder:text-navy/30 focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 transition-all ${errors.name ? 'border-[#ffadc9]' : 'border-white/60 focus:border-[#9fe8dc]/60'}`}
               placeholder="山田 太郎"
             />
+            {errors.name && <p className="mt-1.5 text-xs text-[#ffadc9]">{errors.name}</p>}
           </div>
 
           {/* Company */}
@@ -103,12 +125,12 @@ export function ContactSection() {
               type="email"
               id="email"
               name="email"
-              required
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-white/80 border border-white/60 rounded-xl text-navy placeholder:text-navy/30 focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 focus:border-[#9fe8dc]/60 transition-all"
+              className={`w-full px-4 py-3 bg-white/80 border rounded-xl text-navy placeholder:text-navy/30 focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 transition-all ${errors.email ? 'border-[#ffadc9]' : 'border-white/60 focus:border-[#9fe8dc]/60'}`}
               placeholder="example@company.com"
             />
+            {errors.email && <p className="mt-1.5 text-xs text-[#ffadc9]">{errors.email}</p>}
           </div>
 
           {/* Type */}
@@ -119,10 +141,9 @@ export function ContactSection() {
             <select
               id="type"
               name="type"
-              required
               value={formData.type}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-white/80 border border-white/60 rounded-xl text-navy focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 focus:border-[#9fe8dc]/60 transition-all appearance-none cursor-pointer"
+              className={`w-full px-4 py-3 bg-white/80 border rounded-xl text-navy focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 transition-all appearance-none cursor-pointer ${errors.type ? 'border-[#ffadc9]' : 'border-white/60 focus:border-[#9fe8dc]/60'}`}
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%231a2e35'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                 backgroundRepeat: "no-repeat",
@@ -138,6 +159,7 @@ export function ContactSection() {
               <option value="career">採用について</option>
               <option value="other">その他</option>
             </select>
+            {errors.type && <p className="mt-1.5 text-xs text-[#ffadc9]">{errors.type}</p>}
           </div>
 
           {/* Message */}
@@ -148,13 +170,13 @@ export function ContactSection() {
             <textarea
               id="message"
               name="message"
-              required
               rows={5}
               value={formData.message}
               onChange={handleChange}
-              className="w-full px-4 py-3 bg-white/80 border border-white/60 rounded-xl text-navy placeholder:text-navy/30 focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 focus:border-[#9fe8dc]/60 transition-all resize-none"
+              className={`w-full px-4 py-3 bg-white/80 border rounded-xl text-navy placeholder:text-navy/30 focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 transition-all resize-none ${errors.message ? 'border-[#ffadc9]' : 'border-white/60 focus:border-[#9fe8dc]/60'}`}
               placeholder="お問い合わせ内容をご記入ください"
             />
+            {errors.message && <p className="mt-1.5 text-xs text-[#ffadc9]">{errors.message}</p>}
           </div>
 
           {/* Submit Button */}

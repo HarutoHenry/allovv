@@ -12,12 +12,23 @@ export function ContactSection() {
     type: "",
     message: ""
   })
+  const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle")
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission
-    console.log("Form submitted:", formData)
-    alert("お問い合わせありがとうございます。内容を確認の上、担当者よりご連絡いたします。")
+    setStatus("sending")
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      })
+      if (!res.ok) throw new Error()
+      setStatus("done")
+      setFormData({ name: "", company: "", email: "", type: "", message: "" })
+    } catch {
+      setStatus("error")
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -149,10 +160,22 @@ export function ContactSection() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="gradient-btn w-full py-4 font-medium rounded-full transition-all"
+            disabled={status === "sending"}
+            className="gradient-btn w-full py-4 font-medium rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            送信する
+            {status === "sending" ? "送信中..." : "送信する"}
           </button>
+
+          {status === "done" && (
+            <p className="text-center text-sm text-[#7dd8ca] pt-2">
+              お問い合わせありがとうございます。担当者よりご連絡いたします。
+            </p>
+          )}
+          {status === "error" && (
+            <p className="text-center text-sm text-[#ffadc9] pt-2">
+              送信に失敗しました。時間をおいて再度お試しください。
+            </p>
+          )}
         </form>
       </div>
     </section>

@@ -5,7 +5,7 @@ import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 import { useVideoAutoplay } from "@/hooks/use-video-autoplay"
 
 const stats = [
-  { prefix: "最大", value: 90, suffix: "%", label: "返信工数削減" },
+  { prefix: "最大", value: 90, suffix: "%", label: "作業工数削減" },
   { prefix: "最短", value: 3, suffix: "日", label: "導入期間" },
   { prefix: "", value: 24, suffix: "h", label: "AI対応時間" },
   { prefix: "", value: 2026, suffix: "", label: "創業" }

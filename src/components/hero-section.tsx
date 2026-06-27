@@ -42,7 +42,7 @@ export function HeroSection() {
         <div className="animate-fade-in-up-delay-3 flex flex-col sm:flex-row gap-4 justify-center mb-12 md:mb-16">
           <Link
             href="#business"
-            className="gradient-btn px-8 py-4 font-medium rounded-full transition-all inline-flex items-center justify-center gap-2"
+            className="gradient-btn px-8 py-4 font-medium rounded-full transition-all inline-flex items-center justify-center gap-2 w-full sm:w-auto"
           >
             事業内容を見る
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,7 +56,7 @@ export function HeroSection() {
             <p className="font-display font-bold text-2xl md:text-3xl text-navy">
               <span className="text-sm font-medium text-navy/50 mr-0.5">最大</span>90%
             </p>
-            <p className="text-navy/50 text-sm">返信工数削減</p>
+            <p className="text-navy/50 text-sm">作業工数削減</p>
           </div>
           <div className="hidden sm:block w-px h-12 bg-navy/20" />
           <div className="text-center">

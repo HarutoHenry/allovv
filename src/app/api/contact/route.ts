@@ -22,7 +22,7 @@ export async function POST(req: Request) {
   const typeLabel = TYPE_LABELS[type] ?? type
 
   const { error } = await resend.emails.send({
-    from: "Allovv Contact <onboarding@resend.dev>",
+    from: "Allovv Contact <noreply@allovv.com>",
     to: process.env.CONTACT_TO_EMAIL!,
     replyTo: email,
     subject: `【お問い合わせ】${typeLabel} - ${name}`,

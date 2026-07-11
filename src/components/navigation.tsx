@@ -3,11 +3,15 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname, useRouter } from "next/navigation"
 import { LiquidNavItem } from "@/components/liquid-nav-item"
 
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const pathname = usePathname()
+  const router = useRouter()
+  const isTop = pathname === "/"
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,16 +28,25 @@ export function Navigation() {
     { href: "#about", label: "COMPANY" },
   ]
 
-  const scrollTo = (id: string) => {
+  const handleNav = (id: string) => {
     setMobileMenuOpen(false)
-    setTimeout(() => {
-      document.getElementById(id.replace("#", ""))?.scrollIntoView({ behavior: "smooth" })
-    }, 50)
+    const anchor = id.replace("#", "")
+    if (isTop) {
+      setTimeout(() => {
+        document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth" })
+      }, 50)
+    } else {
+      router.push(`/#${anchor}`)
+    }
   }
 
   return (
     <nav
-      className="fixed top-0 left-0 right-0 z-50"
+      className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,box-shadow,backdrop-filter] duration-300 ${
+        scrolled || mobileMenuOpen
+          ? "bg-white/70 backdrop-blur-xl shadow-[0_1px_0_rgba(26,46,53,0.06),0_8px_32px_rgba(26,46,53,0.05)]"
+          : "bg-transparent"
+      }`}
     >
       <div className="max-w-7xl mx-auto px-8 pt-[22px] pb-3 flex items-end translate-x-[20px]">
         {/* Logo — 左1/3 */}
@@ -59,7 +72,7 @@ export function Navigation() {
             <LiquidNavItem
               key={link.href}
               label={link.label}
-              onClick={() => scrollTo(link.href)}
+              onClick={() => handleNav(link.href)}
             />
           ))}
         </div>
@@ -67,7 +80,7 @@ export function Navigation() {
         {/* CTA Button — 右1/3 */}
         <div className="flex-1 hidden md:flex items-center justify-end pr-[60px] lg:pr-[124px] 2xl:pr-[65px] translate-y-[8px] lg:translate-y-[13px] 2xl:translate-y-[8px]">
           <button
-            onClick={() => scrollTo("#contact")}
+            onClick={() => handleNav("#contact")}
             className="px-6 py-2.5 gradient-btn font-medium text-sm rounded-full transition-all"
           >
             お問い合わせ
@@ -76,9 +89,11 @@ export function Navigation() {
 
         {/* Mobile Menu Button */}
         <button
-          className={`md:hidden p-2 transition-colors translate-y-[10px] -translate-x-[13px] ${scrolled ? 'text-navy' : 'text-navy'}`}
+          className="md:hidden p-2 text-navy transition-colors translate-y-[10px] -translate-x-[13px]"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          aria-label="メニューを開く"
+          aria-label={mobileMenuOpen ? "メニューを閉じる" : "メニューを開く"}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-menu"
         >
           <svg
             className="w-6 h-6"
@@ -107,19 +122,19 @@ export function Navigation() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-[16px] border-t border-navy/10">
+        <div id="mobile-menu" className="md:hidden bg-white/95 backdrop-blur-[16px] border-t border-navy/10 animate-menu-in">
           <div className="px-5 py-4 space-y-4">
             {navLinks.map((link) => (
               <button
                 key={link.href}
-                onClick={() => scrollTo(link.href)}
+                onClick={() => handleNav(link.href)}
                 className="block text-navy/70 hover:text-navy font-display font-light text-xs tracking-[0.15em] transition-colors"
               >
                 {link.label}
               </button>
             ))}
             <button
-              onClick={() => scrollTo("#contact")}
+              onClick={() => handleNav("#contact")}
               className="block w-full text-center px-5 py-2.5 gradient-btn font-medium text-sm rounded-full"
             >
               お問い合わせ

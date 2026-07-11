@@ -12,9 +12,9 @@ export const newsItems: NewsItem[] = [
     slug: "service-launch-2026",
     date: "2026.06.01",
     category: "プレスリリース",
-    categoryColor: "bg-accent-pink/10 text-accent-pink",
+    categoryColor: "bg-accent-pink/30 text-[#c25e7d]",
     title: "Allovv、返信自動作成AIサービスを正式提供開始",
-    body: `Allovv合同会社（代表：三沼 春斗、所在地：神奈川県横浜市、以下「当社」）は、本日2026年6月1日より、AIを活用した返信文章自動作成・メール一斉送信サービスの正式提供を開始いたしました。
+    body: `Allovvは、本日2026年6月1日より、AIを活用した返信文章自動作成・メール一斉送信サービスの正式提供を開始いたしました。
 
 ## サービス概要
 
@@ -43,7 +43,7 @@ export const newsItems: NewsItem[] = [
     slug: "opportunity-loss-report-2026",
     date: "2026.06.01",
     category: "お知らせ",
-    categoryColor: "bg-accent-purple/10 text-accent-purple",
+    categoryColor: "bg-accent-purple/15 text-[#7a6ba8]",
     title: "返信遅延が招く機会損失とAIによる解決策",
     body: `顧客からの問い合わせへの返信が遅れることで、どれほどの売上機会が失われているかご存じでしょうか。複数の調査・研究データをもとに、返信遅延が事業に与える影響と、その解決策をご紹介します。
 
@@ -88,7 +88,7 @@ https://www.chusho.meti.go.jp/pamflet/hakusyo/`
     slug: "it-subsidy-support-2026",
     date: "2026.06.01",
     category: "お知らせ",
-    categoryColor: "bg-navy/10 text-navy",
+    categoryColor: "bg-accent-purple/15 text-[#7a6ba8]",
     title: "AI導入に活用できる補助金のご案内",
     body: `AIツールの導入を検討している企業様に向けて、国が実施している補助金制度をご紹介します。うまく活用することで、導入コストを大幅に抑えることが可能です。
 

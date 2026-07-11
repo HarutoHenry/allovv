@@ -5,7 +5,7 @@ import { HeroVideoGL } from "@/components/hero-video-gl"
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
       {/* 流体動画 + WebGLカーソル効果 */}
       <HeroVideoGL src="/videos/hero-bg.mp4" />
 
@@ -24,7 +24,7 @@ export function HeroSection() {
         </div>
 
         <h1
-          className="animate-fade-in-up-delay-1 text-navy leading-tight mb-8"
+          className="animate-fade-in-up-delay-1 text-navy font-bold leading-[1.25] mb-8"
           style={{
             fontSize: "clamp(1.75rem, 5.5vw, 4.5rem)",
             letterSpacing: "-0.02em"
@@ -53,21 +53,21 @@ export function HeroSection() {
 
         <div className="animate-fade-in-up-delay-3 flex flex-wrap justify-center gap-6 md:gap-12">
           <div className="text-center">
-            <p className="font-display font-bold text-2xl md:text-3xl text-navy">
+            <p className="font-display font-bold text-2xl md:text-3xl text-navy tabular-nums">
               <span className="text-sm font-medium text-navy/50 mr-0.5">最大</span>90%
             </p>
             <p className="text-navy/50 text-sm">作業工数削減</p>
           </div>
-          <div className="hidden sm:block w-px h-12 bg-navy/20" />
+          <div className="hidden sm:block w-px h-12 bg-navy/20" aria-hidden="true" />
           <div className="text-center">
-            <p className="font-display font-bold text-2xl md:text-3xl text-navy">
+            <p className="font-display font-bold text-2xl md:text-3xl text-navy tabular-nums">
               <span className="text-sm font-medium text-navy/50 mr-0.5">最短</span>3日
             </p>
             <p className="text-navy/50 text-sm">導入期間</p>
           </div>
-          <div className="hidden sm:block w-px h-12 bg-navy/20" />
+          <div className="hidden sm:block w-px h-12 bg-navy/20" aria-hidden="true" />
           <div className="text-center">
-            <p className="font-display font-bold text-2xl md:text-3xl text-navy">24h</p>
+            <p className="font-display font-bold text-2xl md:text-3xl text-navy tabular-nums">24h</p>
             <p className="text-navy/50 text-sm">AI対応時間</p>
           </div>
         </div>

@@ -69,7 +69,7 @@ export function ContactSection() {
 
         {/* Heading */}
         <h2 className={`text-navy text-2xl md:text-4xl font-bold leading-snug mb-4 text-center transition-all duration-600 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          まず、話してみませんか。
+          お問い合わせ
         </h2>
 
         {/* Sub */}
@@ -86,7 +86,7 @@ export function ContactSection() {
           {/* Name */}
           <div>
             <label htmlFor="name" className="block text-navy text-sm font-medium mb-2">
-              お名前 <span className="text-[#ffadc9]">*</span>
+              お名前 <span className="text-[#d6456b]">*</span>
             </label>
             <input
               type="text"
@@ -94,10 +94,13 @@ export function ContactSection() {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className={`w-full px-4 py-3 bg-white/80 border rounded-xl text-navy placeholder:text-navy/30 focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 transition-all ${errors.name ? 'border-[#ffadc9]' : 'border-white/60 focus:border-[#9fe8dc]/60'}`}
+              autoComplete="name"
+              aria-invalid={!!errors.name}
+              aria-describedby={errors.name ? "name-error" : undefined}
+              className={`w-full px-4 py-3 bg-white/80 border rounded-xl text-navy placeholder:text-navy/30 focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 transition-all ${errors.name ? 'border-[#e8879f]' : 'border-white/60 focus:border-[#9fe8dc]/60'}`}
               placeholder="山田 太郎"
             />
-            {errors.name && <p className="mt-1.5 text-xs text-[#ffadc9]">{errors.name}</p>}
+            {errors.name && <p id="name-error" className="mt-1.5 text-xs text-[#d6456b]">{errors.name}</p>}
           </div>
 
           {/* Company */}
@@ -119,7 +122,7 @@ export function ContactSection() {
           {/* Email */}
           <div>
             <label htmlFor="email" className="block text-navy text-sm font-medium mb-2">
-              メールアドレス <span className="text-[#ffadc9]">*</span>
+              メールアドレス <span className="text-[#d6456b]">*</span>
             </label>
             <input
               type="email"
@@ -127,23 +130,28 @@ export function ContactSection() {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className={`w-full px-4 py-3 bg-white/80 border rounded-xl text-navy placeholder:text-navy/30 focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 transition-all ${errors.email ? 'border-[#ffadc9]' : 'border-white/60 focus:border-[#9fe8dc]/60'}`}
+              autoComplete="email"
+              aria-invalid={!!errors.email}
+              aria-describedby={errors.email ? "email-error" : undefined}
+              className={`w-full px-4 py-3 bg-white/80 border rounded-xl text-navy placeholder:text-navy/30 focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 transition-all ${errors.email ? 'border-[#e8879f]' : 'border-white/60 focus:border-[#9fe8dc]/60'}`}
               placeholder="example@company.com"
             />
-            {errors.email && <p className="mt-1.5 text-xs text-[#ffadc9]">{errors.email}</p>}
+            {errors.email && <p id="email-error" className="mt-1.5 text-xs text-[#d6456b]">{errors.email}</p>}
           </div>
 
           {/* Type */}
           <div>
             <label htmlFor="type" className="block text-navy text-sm font-medium mb-2">
-              お問い合わせ種別 <span className="text-[#ffadc9]">*</span>
+              お問い合わせ種別 <span className="text-[#d6456b]">*</span>
             </label>
             <select
               id="type"
               name="type"
               value={formData.type}
               onChange={handleChange}
-              className={`w-full px-4 py-3 bg-white/80 border rounded-xl text-navy focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 transition-all appearance-none cursor-pointer ${errors.type ? 'border-[#ffadc9]' : 'border-white/60 focus:border-[#9fe8dc]/60'}`}
+              aria-invalid={!!errors.type}
+              aria-describedby={errors.type ? "type-error" : undefined}
+              className={`w-full px-4 py-3 bg-white/80 border rounded-xl text-navy focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 transition-all appearance-none cursor-pointer ${errors.type ? 'border-[#e8879f]' : 'border-white/60 focus:border-[#9fe8dc]/60'}`}
               style={{
                 backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%231a2e35'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                 backgroundRepeat: "no-repeat",
@@ -154,18 +162,19 @@ export function ContactSection() {
               <option value="">選択してください</option>
               <option value="service">サービスについて</option>
               <option value="consulting">AI導入のご相談</option>
+              <option value="creative">AIクリエイティブ制作</option>
               <option value="partnership">業務提携について</option>
               <option value="media">取材・メディア掲載</option>
               <option value="career">採用について</option>
               <option value="other">その他</option>
             </select>
-            {errors.type && <p className="mt-1.5 text-xs text-[#ffadc9]">{errors.type}</p>}
+            {errors.type && <p id="type-error" className="mt-1.5 text-xs text-[#d6456b]">{errors.type}</p>}
           </div>
 
           {/* Message */}
           <div>
             <label htmlFor="message" className="block text-navy text-sm font-medium mb-2">
-              メッセージ <span className="text-[#ffadc9]">*</span>
+              メッセージ <span className="text-[#d6456b]">*</span>
             </label>
             <textarea
               id="message"
@@ -173,10 +182,12 @@ export function ContactSection() {
               rows={5}
               value={formData.message}
               onChange={handleChange}
-              className={`w-full px-4 py-3 bg-white/80 border rounded-xl text-navy placeholder:text-navy/30 focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 transition-all resize-none ${errors.message ? 'border-[#ffadc9]' : 'border-white/60 focus:border-[#9fe8dc]/60'}`}
+              aria-invalid={!!errors.message}
+              aria-describedby={errors.message ? "message-error" : undefined}
+              className={`w-full px-4 py-3 bg-white/80 border rounded-xl text-navy placeholder:text-navy/30 focus:outline-none focus:ring-2 focus:ring-[#9fe8dc]/50 transition-all resize-none ${errors.message ? 'border-[#e8879f]' : 'border-white/60 focus:border-[#9fe8dc]/60'}`}
               placeholder="お問い合わせ内容をご記入ください"
             />
-            {errors.message && <p className="mt-1.5 text-xs text-[#ffadc9]">{errors.message}</p>}
+            {errors.message && <p id="message-error" className="mt-1.5 text-xs text-[#d6456b]">{errors.message}</p>}
           </div>
 
           {/* Submit Button */}
@@ -189,12 +200,15 @@ export function ContactSection() {
           </button>
 
           {status === "done" && (
-            <p className="text-center text-sm text-[#7dd8ca] pt-2">
+            <p role="status" className="flex items-center justify-center gap-2 text-center text-sm text-[#3ba08f] pt-2">
+              <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
               お問い合わせありがとうございます。担当者よりご連絡いたします。
             </p>
           )}
           {status === "error" && (
-            <p className="text-center text-sm text-[#ffadc9] pt-2">
+            <p role="alert" className="text-center text-sm text-[#d6456b] pt-2">
               送信に失敗しました。時間をおいて再度お試しください。
             </p>
           )}

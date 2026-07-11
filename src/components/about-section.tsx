@@ -4,9 +4,10 @@ import Image from "next/image"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 
 const companyInfo = [
-  { label: "社名", value: "Allovv合同会社" },
+  { label: "会社名", value: "Allovv（アロー）" },
   { label: "設立", value: "2026年6月" },
   { label: "代表", value: "三沼 春斗" },
+  { label: "所在地", value: "神奈川県横浜市" },
   { label: "事業内容", value: "起業支援、AI導入コンサルティング、AIクリエイティブ制作" },
 ]
 
@@ -22,7 +23,7 @@ export function AboutSection() {
         </p>
 
         {/* Heading */}
-        <h2 className={`text-navy text-2xl md:text-3xl leading-relaxed mb-16 text-center transition-all duration-600 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <h2 className={`text-navy font-bold text-2xl md:text-3xl leading-relaxed mb-16 text-center transition-all duration-600 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           会社概要
         </h2>
 
@@ -32,7 +33,7 @@ export function AboutSection() {
           <div className={`transition-all duration-600 delay-200 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <table className="w-full">
               <tbody>
-                {companyInfo.map((item, index) => (
+                {companyInfo.map((item) => (
                   <tr key={item.label} className="border-b border-navy/10">
                     <th className="py-4 text-left text-navy/50 text-sm font-medium w-28 align-top">
                       {item.label}
@@ -74,6 +75,7 @@ export function AboutSection() {
             </div>
           </div>
         </div>
+
       </div>
     </section>
   )

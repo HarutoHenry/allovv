@@ -12,7 +12,8 @@ const businessCards = [
     title: "AIにおまかせ起業",
     description: "起業に必要な手続き・書類作成・専門家連携をAIが自動化。誰でも確実に起業を完走できるプラットフォームを提供します。",
     href: "https://ainiomakasekigyou.com",
-    external: true
+    external: true,
+    linkLabel: "詳しく見る"
   },
   {
     tag: "法人向け",
@@ -20,8 +21,9 @@ const businessCards = [
     category: "Consulting",
     title: "AI導入コンサルティング",
     description: "業務フロー分析からAIツール選定・導入・定着まで伴走。中小企業・スタートアップのAI活用を最短距離で実現します。",
-    href: "#contact",
-    external: false
+    href: "/services/ai-consulting",
+    external: false,
+    linkLabel: "料金詳細"
   },
   {
     tag: "法人向け",
@@ -30,7 +32,8 @@ const businessCards = [
     title: "AIクリエイティブ制作",
     description: "画像・動画・広告コピーなど、AIを活用したクリエイティブ制作を提供。様々なパターンに対応しておりますのでまずはご相談ください。",
     href: "#contact",
-    external: false
+    external: false,
+    linkLabel: "詳しく見る"
   }
 ]
 
@@ -72,7 +75,7 @@ export function BusinessSection() {
         </p>
 
         {/* Heading */}
-        <h2 className={`text-navy text-2xl md:text-3xl leading-relaxed mb-16 transition-all duration-600 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <h2 className={`text-navy font-bold text-2xl md:text-3xl leading-relaxed mb-16 transition-all duration-600 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           Allovvは3つの領域で<br className="md:hidden" />
           AIを社会に実装します。
         </h2>
@@ -82,7 +85,7 @@ export function BusinessSection() {
           {businessCards.map((card, index) => (
             <div
               key={card.title}
-              className={`glass-card feature-card p-8 text-left transition-all duration-500 hover:-translate-y-1.5 group ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+              className={`glass-card feature-card p-8 text-left flex flex-col transition-all duration-500 hover:-translate-y-1.5 group ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
               style={{
                 transitionDelay: `${200 + index * 120}ms`,
                 background: "rgba(255, 255, 255, 0.25)",
@@ -114,9 +117,9 @@ export function BusinessSection() {
               <Link
                 href={card.href}
                 {...(card.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="inline-flex items-center gap-2 text-[#7dd8ca] text-sm font-medium group-hover:gap-3 transition-all"
+                className="mt-auto inline-flex items-center gap-2 text-[#5fb8ab] text-sm font-medium group-hover:gap-3 transition-all"
               >
-                詳しく見る
+                {card.linkLabel}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>

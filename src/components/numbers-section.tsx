@@ -61,7 +61,7 @@ function StatItem({ prefix, value, suffix, label, isVisible, delay }: {
       className={`text-center transition-all duration-600 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
       style={{ transitionDelay: `${delay}ms` }}
     >
-      <p className="font-display font-bold text-4xl md:text-5xl text-navy mb-2">
+      <p className="font-display font-bold text-4xl md:text-5xl text-navy mb-2 tabular-nums">
         {prefix && <span className="text-base font-medium text-navy/50 mr-0.5">{prefix}</span>}
         {count}{suffix}
       </p>

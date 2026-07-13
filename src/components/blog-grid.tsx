@@ -36,7 +36,7 @@ export function BlogGrid({ articles }: { articles: NoteArticle[] }) {
               href={article.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="glass-card feature-card blog-card group flex h-full flex-col overflow-hidden text-left transition-transform duration-500 hover:-translate-y-1.5"
+              className="glass-card feature-card group flex h-full flex-col overflow-hidden text-left transition-transform duration-500 hover:-translate-y-1.5"
             >
               {/* Eyecatch */}
               <div className="relative aspect-[1.91/1] w-full overflow-hidden bg-mint-light">

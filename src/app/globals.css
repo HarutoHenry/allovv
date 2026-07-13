@@ -222,11 +222,6 @@
     0 1px 0 rgba(255, 255, 255, 0.6) inset;
 }
 
-/* ブログカードは角を落としてエッジを立たせる */
-.blog-card {
-  border-radius: 2px;
-}
-
 .gradient-text {
   background: linear-gradient(135deg, #5dcfbe 0%, #ff8fb8 100%);
   -webkit-background-clip: text;

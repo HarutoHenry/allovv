@@ -94,7 +94,7 @@ export function BusinessSection() {
               }}
             >
               {/* Tag */}
-              <span className={`inline-block px-3 py-1 text-xs font-medium rounded-full mb-4 ${card.tagColor}`}>
+              <span className={`inline-block self-start px-3 py-1 text-xs font-medium rounded-full mb-4 ${card.tagColor}`}>
                 {card.tag}
               </span>
               
@@ -117,7 +117,7 @@ export function BusinessSection() {
               <Link
                 href={card.href}
                 {...(card.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="mt-auto inline-flex items-center gap-2 text-[#5fb8ab] text-sm font-medium group-hover:gap-3 transition-all"
+                className="mt-auto self-start inline-flex items-center gap-2 text-[#5fb8ab] text-sm font-medium group-hover:gap-3 transition-all"
               >
                 {card.linkLabel}
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

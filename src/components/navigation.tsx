@@ -25,6 +25,7 @@ export function Navigation() {
     { href: "#business", label: "SERVICES" },
     { href: "#philosophy", label: "PHILOSOPHY" },
     { href: "#news", label: "NEWS" },
+    { href: "#blog", label: "BLOG" },
     { href: "#about", label: "COMPANY" },
   ]
 
@@ -50,14 +51,14 @@ export function Navigation() {
     >
       <div className="max-w-7xl mx-auto px-8 pt-[22px] pb-3 flex items-end translate-x-[20px]">
         {/* Logo — 左1/3 */}
-        <div className="flex-1 flex items-center pl-[53px] md:pl-[60px] lg:pl-[73px] 2xl:pl-[55px]">
+        <div className="flex-1 flex items-center pl-[53px] lg:pl-[24px] xl:pl-[73px] 2xl:pl-[55px]">
           <Link href="/" className="flex items-center translate-y-[8px] lg:translate-y-[10px] 2xl:translate-y-[8px]">
             <Image
               src="/logo.png"
               alt="Allovv"
               width={200}
               height={67}
-              className="h-11 md:h-[34px] lg:h-[42px] 2xl:h-[45px] w-auto object-contain"
+              className="h-11 lg:h-[42px] 2xl:h-[45px] w-auto object-contain"
               style={{ background: "transparent" }}
               placeholder="empty"
               priority
@@ -67,7 +68,7 @@ export function Navigation() {
         </div>
 
         {/* Desktop Nav — 中央1/3 */}
-        <div className="hidden md:flex items-center justify-center gap-[38px] translate-y-[3px] lg:translate-y-[8px] 2xl:translate-y-[3px] 2xl:-translate-x-[8px]">
+        <div className="hidden lg:flex items-center justify-center gap-6 xl:gap-[38px] translate-y-[3px] lg:translate-y-[8px] 2xl:translate-y-[3px] 2xl:-translate-x-[8px]">
           {navLinks.map((link) => (
             <LiquidNavItem
               key={link.href}
@@ -78,7 +79,7 @@ export function Navigation() {
         </div>
 
         {/* CTA Button — 右1/3 */}
-        <div className="flex-1 hidden md:flex items-center justify-end pr-[60px] lg:pr-[124px] 2xl:pr-[65px] translate-y-[8px] lg:translate-y-[13px] 2xl:translate-y-[8px]">
+        <div className="flex-1 hidden lg:flex items-center justify-end pr-[24px] xl:pr-[124px] 2xl:pr-[65px] translate-y-[8px] lg:translate-y-[13px] 2xl:translate-y-[8px]">
           <button
             onClick={() => handleNav("#contact")}
             className="px-6 py-2.5 gradient-btn font-medium text-sm rounded-full transition-all"
@@ -89,7 +90,7 @@ export function Navigation() {
 
         {/* Mobile Menu Button */}
         <button
-          className="md:hidden p-2 text-navy transition-colors translate-y-[10px] -translate-x-[13px]"
+          className="lg:hidden p-2 text-navy transition-colors translate-y-[10px] -translate-x-[13px]"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label={mobileMenuOpen ? "メニューを閉じる" : "メニューを開く"}
           aria-expanded={mobileMenuOpen}
@@ -122,7 +123,7 @@ export function Navigation() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div id="mobile-menu" className="md:hidden bg-white/95 backdrop-blur-[16px] border-t border-navy/10 animate-menu-in">
+        <div id="mobile-menu" className="lg:hidden bg-white/95 backdrop-blur-[16px] border-t border-navy/10 animate-menu-in">
           <div className="px-5 py-4 space-y-4">
             {navLinks.map((link) => (
               <button

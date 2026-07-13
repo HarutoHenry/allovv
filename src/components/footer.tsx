@@ -6,6 +6,7 @@ const footerLinks = [
   { href: "/faq", label: "よくあるご質問" },
   { href: "/#about", label: "会社概要" },
   { href: "/#news", label: "ニュース" },
+  { href: "/#blog", label: "ブログ" },
   { href: "/#contact", label: "お問い合わせ" },
 ]
 

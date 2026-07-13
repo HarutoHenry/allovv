@@ -4,6 +4,7 @@ import { PhilosophySection } from "@/components/philosophy-section"
 import { BusinessSection } from "@/components/business-section"
 import { NumbersSection } from "@/components/numbers-section"
 import { NewsSection } from "@/components/news-section"
+import { BlogSection } from "@/components/blog-section"
 import { AboutSection } from "@/components/about-section"
 import { ContactSection } from "@/components/contact-section"
 import { Footer } from "@/components/footer"
@@ -18,6 +19,7 @@ export default function Home() {
         <PhilosophySection />
         <NumbersSection />
         <NewsSection />
+        <BlogSection />
         <AboutSection />
         <ContactSection />
       </main>

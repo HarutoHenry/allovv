@@ -378,6 +378,37 @@ export default function AiConsultingPage() {
               </div>
             </div>
 
+            {/* できること */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-14">
+              {[
+                {
+                  icon: "📈",
+                  title: "使うほど貴社らしく育つ",
+                  desc: "実際の返信を見ながら言い回しやトーンを学習させ、下書きの精度をどんどん上げていけます。導入して終わりではありません。",
+                },
+                {
+                  icon: "🔀",
+                  title: "問い合わせ別に返し分け",
+                  desc: "料金のご質問には料金案内、日程のご相談には調整のご案内など、内容に応じて返信パターンを自動で切り替えます。",
+                },
+                {
+                  icon: "📎",
+                  title: "リンク・資料添付も対応",
+                  desc: "料金ページへのリンクを添えたり、特定のお問い合わせに資料PDFを自動で添付するなど、貴社の営業フローに合わせて設計します。",
+                },
+              ].map((f) => (
+                <div
+                  key={f.title}
+                  className="rounded-2xl p-6"
+                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
+                >
+                  <div className="text-2xl mb-3">{f.icon}</div>
+                  <h3 className="text-white font-bold text-sm mb-2">{f.title}</h3>
+                  <p className="text-white/45 text-xs leading-relaxed">{f.desc}</p>
+                </div>
+              ))}
+            </div>
+
             <p className="text-center text-white/30 text-xs mt-10">
               ※ 画面はイメージです。返信文は貴社の文面・トーンに合わせて調整します。
             </p>

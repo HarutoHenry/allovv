@@ -307,12 +307,24 @@ export default function AiConsultingPage() {
                   <span className="text-white/35 text-[11px]">10:02 受信</span>
                 </div>
                 <div className="bg-white p-5">
-                  <p className="text-[#1a2e35] text-sm font-bold mb-1">料金についてのお問い合わせ</p>
-                  <p className="text-[#1a2e35]/50 text-xs mb-3">お客様 &lt;customer@example.com&gt;</p>
-                  <p className="text-[#1a2e35]/75 text-[13px] leading-relaxed">
-                    はじめまして。ホームページで御社のサービスを知り、ご連絡いたしました。
-                    導入にかかる料金と期間、また専門知識がなくても運用できるかを教えていただけますでしょうか。
-                  </p>
+                  <p className="text-[#1a2e35] text-sm font-bold mb-3">料金についてのお問い合わせ</p>
+                  <div className="text-[11px] text-[#1a2e35]/55 border-b border-[#1a2e35]/10 pb-2.5 mb-3 space-y-0.5">
+                    <p><span className="inline-block w-10 text-[#1a2e35]/40">差出人</span>佐藤 様 &lt;sato@example.com&gt;</p>
+                    <p><span className="inline-block w-10 text-[#1a2e35]/40">宛先</span>info@allovv.com</p>
+                  </div>
+                  <div className="text-[#1a2e35]/75 text-[13px] leading-relaxed space-y-3">
+                    <p>Allovv ご担当者様</p>
+                    <p>
+                      はじめまして。佐藤と申します。
+                      ホームページで御社のサービスを知り、ご連絡いたしました。
+                    </p>
+                    <p>
+                      導入にかかる料金と期間、また専門知識がなくても運用できるかを
+                      教えていただけますでしょうか。
+                    </p>
+                    <p>お忙しいところ恐れ入りますが、よろしくお願いいたします。</p>
+                    <p>佐藤</p>
+                  </div>
                 </div>
               </div>
 
@@ -333,14 +345,29 @@ export default function AiConsultingPage() {
                 </div>
                 <div className="bg-white p-5">
                   <p className="text-[#1a2e35] text-sm font-bold mb-3">Re: 料金についてのお問い合わせ</p>
-                  <p className="text-[#1a2e35]/75 text-[13px] leading-relaxed">
-                    お問い合わせいただき誠にありがとうございます。
-                    導入費用は¥198,000（税別）の一度きりで、最短2営業日で導入いただけます。
-                    構築から操作レクチャーまで弊社が行いますので、専門知識は不要です。
-                    <br />
-                    <br />
-                    正確なお見積りのため、一度オンラインでお話しさせていただけますと幸いです。
-                  </p>
+                  <div className="text-[11px] text-[#1a2e35]/55 border-b border-[#1a2e35]/10 pb-2.5 mb-3 space-y-0.5">
+                    <p><span className="inline-block w-10 text-[#1a2e35]/40">差出人</span>info@allovv.com</p>
+                    <p><span className="inline-block w-10 text-[#1a2e35]/40">宛先</span>佐藤 様 &lt;sato@example.com&gt;</p>
+                  </div>
+                  <div className="text-[#1a2e35]/75 text-[13px] leading-relaxed space-y-3">
+                    <p>佐藤様</p>
+                    <p>お問い合わせいただき、誠にありがとうございます。</p>
+                    <p>
+                      導入費用は¥198,000（税別）の一度きりで、最短2営業日で導入いただけます。
+                      構築から操作レクチャーまで弊社が行いますので、専門知識は不要です。
+                    </p>
+                    <p>
+                      正確なお見積りのため、一度オンラインでお話しさせて
+                      いただけたらと思います。ご都合のよい日時をお知らせください。
+                    </p>
+                    <p>何卒、よろしくお願いいたします。</p>
+                    <div className="text-[12px] text-[#1a2e35]/60 border-t border-[#1a2e35]/10 pt-2.5 leading-relaxed">
+                      <p>Allovv（アロー）</p>
+                      <p>担当：三沼 春斗</p>
+                      <p>メール：minuma.haruto@allovv.com</p>
+                      <p>https://allovv.com</p>
+                    </div>
+                  </div>
                   <div className="mt-4 flex items-center gap-2">
                     <span className="px-4 py-1.5 rounded-full text-xs font-bold text-white" style={{ background: "#1a73e8" }}>
                       送信

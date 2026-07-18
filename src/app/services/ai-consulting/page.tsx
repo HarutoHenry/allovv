@@ -257,6 +257,106 @@ export default function AiConsultingPage() {
           </p>
         </div>
 
+        {/* How it works */}
+        <div className="border-t border-white/5 pt-24 pb-28 px-5">
+          <div className="max-w-[1100px] mx-auto">
+            <p className="font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-5 text-center">
+              How it works
+            </p>
+            <h2 className="text-white text-2xl md:text-4xl font-bold text-center mb-4">
+              導入後、メール対応はこう変わります
+            </h2>
+            <p className="text-white/50 text-sm md:text-base text-center max-w-xl mx-auto leading-relaxed mb-16">
+              AIメール自動化パックの実際の流れです。
+              <br className="hidden md:block" />
+              AIが作るのは「下書き」まで。送信は必ず人が確認するので、誤送信の心配はありません。
+            </p>
+
+            {/* 4 Steps */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-16">
+              {[
+                { icon: "📩", title: "お問い合わせが届く", desc: "お客様からのメールをシステムが自動で検知します" },
+                { icon: "🤖", title: "AIが内容を読む", desc: "質問の内容・お名前に合わせて返信文を組み立てます" },
+                { icon: "📝", title: "下書きに自動保存", desc: "受信から数分で、そのまま送れる品質の下書きが完成" },
+                { icon: "✅", title: "確認して送信", desc: "最終確認と送信は人が行います。AIが勝手に送ることはありません" },
+              ].map((step, i) => (
+                <div
+                  key={step.title}
+                  className="relative rounded-2xl p-6 text-center"
+                  style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
+                >
+                  <span
+                    className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-[11px] font-semibold"
+                    style={{ background: "linear-gradient(135deg, #7dd8ca 0%, #9fe8dc 100%)", color: "#0f1e24" }}
+                  >
+                    STEP {i + 1}
+                  </span>
+                  <div className="text-3xl mt-3 mb-3">{step.icon}</div>
+                  <h3 className="text-white font-bold text-sm mb-2">{step.title}</h3>
+                  <p className="text-white/45 text-xs leading-relaxed">{step.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Before / After mock */}
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center gap-6">
+              {/* 受信メール */}
+              <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
+                <div className="flex items-center justify-between px-4 py-2.5" style={{ background: "rgba(255,255,255,0.06)" }}>
+                  <span className="text-white/60 text-xs font-semibold">📩 届いたお問い合わせ</span>
+                  <span className="text-white/35 text-[11px]">10:02 受信</span>
+                </div>
+                <div className="bg-white p-5">
+                  <p className="text-[#1a2e35] text-sm font-bold mb-1">料金についてのお問い合わせ</p>
+                  <p className="text-[#1a2e35]/50 text-xs mb-3">お客様 &lt;customer@example.com&gt;</p>
+                  <p className="text-[#1a2e35]/75 text-[13px] leading-relaxed">
+                    はじめまして。ホームページで御社のサービスを知り、ご連絡いたしました。
+                    導入にかかる料金と期間、また専門知識がなくても運用できるかを教えていただけますでしょうか。
+                  </p>
+                </div>
+              </div>
+
+              {/* Arrow */}
+              <div className="text-center">
+                <div className="text-[#7dd8ca] text-3xl md:text-4xl font-bold rotate-90 md:rotate-0">→</div>
+                <p className="text-[#7dd8ca]/70 text-[11px] font-semibold mt-1 whitespace-nowrap">AIが自動作成<br />（数分後）</p>
+              </div>
+
+              {/* AI下書き */}
+              <div
+                className="rounded-2xl overflow-hidden"
+                style={{ border: "1px solid rgba(125,216,202,0.5)", boxShadow: "0 0 32px rgba(125,216,202,0.15)" }}
+              >
+                <div className="flex items-center justify-between px-4 py-2.5" style={{ background: "rgba(125,216,202,0.15)" }}>
+                  <span className="text-[#7dd8ca] text-xs font-semibold">📝 AIが作成した返信下書き</span>
+                  <span className="text-white/35 text-[11px]">10:05 完成</span>
+                </div>
+                <div className="bg-white p-5">
+                  <p className="text-[#1a2e35] text-sm font-bold mb-3">Re: 料金についてのお問い合わせ</p>
+                  <p className="text-[#1a2e35]/75 text-[13px] leading-relaxed">
+                    お問い合わせいただき誠にありがとうございます。
+                    導入費用は¥198,000（税別）の一度きりで、最短2営業日で導入いただけます。
+                    構築から操作レクチャーまで弊社が行いますので、専門知識は不要です。
+                    <br />
+                    <br />
+                    正確なお見積りのため、一度オンラインでお話しさせていただけますと幸いです。
+                  </p>
+                  <div className="mt-4 flex items-center gap-2">
+                    <span className="px-4 py-1.5 rounded-full text-xs font-bold text-white" style={{ background: "#1a73e8" }}>
+                      送信
+                    </span>
+                    <span className="text-[#1a2e35]/40 text-[11px]">← 確認して押すだけ</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p className="text-center text-white/30 text-xs mt-10">
+              ※ 画面はイメージです。返信文は貴社の文面・トーンに合わせて調整します。
+            </p>
+          </div>
+        </div>
+
         {/* Contact CTA */}
         <div className="border-t border-white/5 py-24 text-center px-5">
           <p className="font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-5">

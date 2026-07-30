@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { PricingExampleToggle } from "@/components/services/pricing-example-toggle"
+import { CaseExampleSwitcher, type CaseExample } from "@/components/services/case-example-switcher"
 
 export const metadata = {
   title: "AI導入コンサルティング 料金プラン | Allovv",
@@ -97,6 +98,121 @@ const plans = [
   },
 ]
 
+const caseExamples: CaseExample[] = [
+  {
+    key: "pricing",
+    icon: "💰",
+    label: "料金について",
+    subject: "料金についてのお問い合わせ",
+    customerName: "佐藤",
+    customerEmail: "sato@example.com",
+    customerBody: [
+      "Allovv ご担当者様",
+      "はじめまして。佐藤と申します。ホームページで御社のサービスを知り、ご連絡いたしました。",
+      "導入にかかる料金と期間、また専門知識がなくても運用できるかを教えていただけますでしょうか。",
+      "お忙しいところ恐れ入りますが、よろしくお願いいたします。",
+      "佐藤",
+    ],
+    replySubject: "Re: 料金についてのお問い合わせ",
+    aiBody: [
+      "佐藤様",
+      "お問い合わせいただき、誠にありがとうございます。",
+      "導入費用は¥198,000（税別）の一度きりで、最短2営業日で導入いただけます。構築から操作レクチャーまで弊社が行いますので、専門知識は不要です。",
+      "正確なお見積りのため、一度オンラインでお話しさせていただけたらと思います。ご都合のよい日時をお知らせください。",
+      "何卒、よろしくお願いいたします。",
+    ],
+  },
+  {
+    key: "schedule",
+    icon: "⏱️",
+    label: "導入期間について",
+    subject: "導入までの期間について",
+    customerName: "中村",
+    customerEmail: "nakamura@example.com",
+    customerBody: [
+      "Allovv ご担当者様",
+      "はじめまして。中村と申します。貴社のAIメール自動化に興味があり、ご連絡いたしました。",
+      "現在、問い合わせ対応に追われており、できるだけ早く導入したいと考えています。お申し込みから実際に使えるようになるまで、どのくらいの期間がかかりますでしょうか。",
+      "よろしくお願いいたします。",
+      "中村",
+    ],
+    replySubject: "Re: 導入までの期間について",
+    aiBody: [
+      "中村様",
+      "お問い合わせいただき、誠にありがとうございます。",
+      "導入期間は、お申し込みから最短2営業日です。初回の打ち合わせで業務フローと課題をお伺いした後、設定・テスト運用を弊社側で行いますので、お客様側での特別な準備は必要ございません。",
+      "ご都合のよい日時が決まりましたら、オンラインでの打ち合わせを設定させていただきます。",
+      "何卒、よろしくお願いいたします。",
+    ],
+  },
+  {
+    key: "support",
+    icon: "🛟",
+    label: "サポート体制について",
+    subject: "導入後のサポートについて",
+    customerName: "高橋",
+    customerEmail: "takahashi@example.com",
+    customerBody: [
+      "Allovv ご担当者様",
+      "高橋と申します。ホームページを拝見し、ご連絡いたしました。",
+      "AIに任せることに少し不安があり、導入後のサポート体制について詳しく教えていただけますでしょうか。",
+      "よろしくお願いいたします。",
+      "高橋",
+    ],
+    replySubject: "Re: 導入後のサポートについて",
+    aiBody: [
+      "高橋様",
+      "お問い合わせいただき、誠にありがとうございます。",
+      "導入時には操作レクチャーを行い、その後も月額サポート（¥30,000/月）で月1回の改善打ち合わせと、メール・チャットでの質問対応をいたします。設定の変更やチューニングも都度対応いたしますので、ご安心ください。",
+      "ご不明点があれば、遠慮なくお申し付けください。",
+    ],
+  },
+  {
+    key: "difference",
+    icon: "🔍",
+    label: "他社との違い",
+    subject: "他社サービスとの違いについて",
+    customerName: "山本",
+    customerEmail: "yamamoto@example.com",
+    customerBody: [
+      "Allovv ご担当者様",
+      "山本と申します。AIメール自動化のサービスを比較しており、貴社にもご連絡いたしました。",
+      "他社のツールとの違いや、貴社ならではの強みがあれば教えていただけますでしょうか。",
+      "よろしくお願いいたします。",
+      "山本",
+    ],
+    replySubject: "Re: 他社サービスとの違いについて",
+    aiBody: [
+      "山本様",
+      "お問い合わせいただき、誠にありがとうございます。",
+      "弊社の強みは、代表自身が日々AIメール自動化を実際に運用しながら改善を重ねている点です。汎用ツールの提供ではなく、貴社の業務フローに合わせて一つ一つ設計・調整いたします。",
+      "導入後も伴走してチューニングを続けますので、「導入して終わり」にはならないサービスです。",
+    ],
+  },
+  {
+    key: "quote",
+    icon: "📎",
+    label: "資料・見積もり請求",
+    subject: "サービス資料のご請求",
+    customerName: "田中",
+    customerEmail: "tanaka@example.com",
+    customerBody: [
+      "Allovv ご担当者様",
+      "田中と申します。社内で導入を検討するにあたり、サービス資料と概算のお見積りをいただくことは可能でしょうか。",
+      "よろしくお願いいたします。",
+      "田中",
+    ],
+    replySubject: "Re: サービス資料のご請求",
+    aiBody: [
+      "田中様",
+      "お問い合わせいただき、誠にありがとうございます。",
+      "サービス資料と概算のお見積りを添付いたします。貴社の業務内容に応じて金額が変動する場合がございますので、正式なお見積りは簡単なヒアリングの後にご提示いたします。",
+      "ご都合のよい日時がございましたら、オンラインでご案内いたします。",
+    ],
+    attachment: "Allovv_サービス資料.pdf",
+  },
+]
+
 function CheckIcon() {
   return (
     <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,7 +244,7 @@ export default function AiConsultingPage() {
           </p>
 
           <h1 className="text-white text-3xl md:text-5xl font-bold leading-tight mb-6">
-            料金プラン
+            AI導入コンサルティング
           </h1>
 
           <p className="text-white/50 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
@@ -300,85 +416,8 @@ export default function AiConsultingPage() {
               ))}
             </div>
 
-            {/* Before / After mock */}
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-center gap-6">
-              {/* 受信メール */}
-              <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
-                <div className="flex items-center justify-between px-4 py-2.5" style={{ background: "rgba(255,255,255,0.06)" }}>
-                  <span className="text-white/60 text-xs font-semibold">📩 届いたお問い合わせ</span>
-                  <span className="text-white/35 text-[11px]">10:02 受信</span>
-                </div>
-                <div className="bg-white p-5">
-                  <p className="text-[#1a2e35] text-sm font-bold mb-3">料金についてのお問い合わせ</p>
-                  <div className="text-[11px] text-[#1a2e35]/55 border-b border-[#1a2e35]/10 pb-2.5 mb-3 space-y-0.5">
-                    <p><span className="inline-block w-10 text-[#1a2e35]/40">差出人</span>佐藤 様 &lt;sato@example.com&gt;</p>
-                    <p><span className="inline-block w-10 text-[#1a2e35]/40">宛先</span>info@allovv.com</p>
-                  </div>
-                  <div className="text-[#1a2e35]/75 text-[13px] leading-relaxed space-y-3">
-                    <p>Allovv ご担当者様</p>
-                    <p>
-                      はじめまして。佐藤と申します。
-                      ホームページで御社のサービスを知り、ご連絡いたしました。
-                    </p>
-                    <p>
-                      導入にかかる料金と期間、また専門知識がなくても運用できるかを
-                      教えていただけますでしょうか。
-                    </p>
-                    <p>お忙しいところ恐れ入りますが、よろしくお願いいたします。</p>
-                    <p>佐藤</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Arrow */}
-              <div className="text-center">
-                <div className="text-[#7dd8ca] text-3xl md:text-4xl font-bold rotate-90 md:rotate-0">→</div>
-                <p className="text-[#7dd8ca]/70 text-[11px] font-semibold mt-1 whitespace-nowrap">AIが自動作成<br />（数分後）</p>
-              </div>
-
-              {/* AI下書き */}
-              <div
-                className="rounded-2xl overflow-hidden"
-                style={{ border: "1px solid rgba(125,216,202,0.5)", boxShadow: "0 0 32px rgba(125,216,202,0.15)" }}
-              >
-                <div className="flex items-center justify-between px-4 py-2.5" style={{ background: "rgba(125,216,202,0.15)" }}>
-                  <span className="text-[#7dd8ca] text-xs font-semibold">📝 AIが作成した返信下書き</span>
-                  <span className="text-white/35 text-[11px]">10:05 完成</span>
-                </div>
-                <div className="bg-white p-5">
-                  <p className="text-[#1a2e35] text-sm font-bold mb-3">Re: 料金についてのお問い合わせ</p>
-                  <div className="text-[11px] text-[#1a2e35]/55 border-b border-[#1a2e35]/10 pb-2.5 mb-3 space-y-0.5">
-                    <p><span className="inline-block w-10 text-[#1a2e35]/40">差出人</span>info@allovv.com</p>
-                    <p><span className="inline-block w-10 text-[#1a2e35]/40">宛先</span>佐藤 様 &lt;sato@example.com&gt;</p>
-                  </div>
-                  <div className="text-[#1a2e35]/75 text-[13px] leading-relaxed space-y-3">
-                    <p>佐藤様</p>
-                    <p>お問い合わせいただき、誠にありがとうございます。</p>
-                    <p>
-                      導入費用は¥198,000（税別）の一度きりで、最短2営業日で導入いただけます。
-                      構築から操作レクチャーまで弊社が行いますので、専門知識は不要です。
-                    </p>
-                    <p>
-                      正確なお見積りのため、一度オンラインでお話しさせて
-                      いただけたらと思います。ご都合のよい日時をお知らせください。
-                    </p>
-                    <p>何卒、よろしくお願いいたします。</p>
-                    <div className="text-[12px] text-[#1a2e35]/60 border-t border-[#1a2e35]/10 pt-2.5 leading-relaxed">
-                      <p>Allovv（アロー）</p>
-                      <p>担当：三沼 春斗</p>
-                      <p>メール：minuma.haruto@allovv.com</p>
-                      <p>https://allovv.com</p>
-                    </div>
-                  </div>
-                  <div className="mt-4 flex items-center gap-2">
-                    <span className="px-4 py-1.5 rounded-full text-xs font-bold text-white" style={{ background: "#1a73e8" }}>
-                      送信
-                    </span>
-                    <span className="text-[#1a2e35]/40 text-[11px]">← 確認して押すだけ</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {/* Before / After mock（カテゴリ切替） */}
+            <CaseExampleSwitcher examples={caseExamples} />
 
             {/* できること */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-14">

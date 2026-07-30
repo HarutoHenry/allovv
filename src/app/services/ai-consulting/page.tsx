@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
+import { PricingExampleToggle } from "@/components/services/pricing-example-toggle"
 
 export const metadata = {
   title: "AI導入コンサルティング 料金プラン | Allovv",
@@ -136,8 +137,10 @@ export default function AiConsultingPage() {
           </p>
         </div>
 
-        {/* Pricing Cards */}
-        <div className="max-w-[1100px] mx-auto px-5 pb-28">
+        {/* Pricing & Examples toggle */}
+        <PricingExampleToggle
+          pricingContent={
+            <div className="max-w-[1100px] mx-auto px-5 pb-28">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
             {plans.map((plan) => (
               <div
@@ -255,11 +258,10 @@ export default function AiConsultingPage() {
               よくあるご質問（セキュリティ・導入期間・費用）はこちら
             </Link>
           </p>
-        </div>
-
-        {/* How it works */}
-        <div className="border-t border-white/5 pt-24 pb-28 px-5">
-          <div className="max-w-[1100px] mx-auto">
+            </div>
+          }
+          examplesContent={
+            <div className="max-w-[1100px] mx-auto px-5 pb-28">
             <p className="font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-5 text-center">
               How it works
             </p>
@@ -412,8 +414,9 @@ export default function AiConsultingPage() {
             <p className="text-center text-white/30 text-xs mt-10">
               ※ 画面はイメージです。返信文は貴社の文面・トーンに合わせて調整します。
             </p>
-          </div>
-        </div>
+            </div>
+          }
+        />
 
         {/* Contact CTA */}
         <div className="border-t border-white/5 py-24 text-center px-5">

@@ -23,7 +23,7 @@ const businessCards = [
     description: "業務フロー分析からAIツール選定・導入・定着まで伴走。中小企業・スタートアップのAI活用を最短距離で実現します。",
     href: "/services/ai-consulting",
     external: false,
-    linkLabel: "料金詳細"
+    linkLabel: "詳細を見る"
   },
   {
     tag: "法人向け",

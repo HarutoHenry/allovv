@@ -453,6 +453,50 @@ export default function AiConsultingPage() {
             <p className="text-center text-white/30 text-xs mt-10">
               ※ 画面はイメージです。返信文は貴社の文面・トーンに合わせて調整します。
             </p>
+
+            {/* 業界別 活用事例 */}
+            <div className="mt-20 pt-16 border-t border-white/5">
+              <p className="font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-5 text-center">
+                Industry Cases
+              </p>
+              <h2 className="text-white text-2xl md:text-4xl font-bold text-center mb-4">
+                業界ではAI活用でこう変わっています
+              </h2>
+              <p className="text-white/50 text-sm md:text-base text-center max-w-xl mx-auto leading-relaxed mb-16">
+                メール対応はほんの入り口です。同じ考え方で、
+                <br className="hidden md:block" />
+                業種ごとの定型業務をまるごと仕組み化できます。
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[
+                  { icon: "🏛️", field: "士業（税理士・行政書士）", desc: "顧客からの質問への回答ドラフト作成で、1件60分の対応が15分に。空いた時間で顧問先が1.4倍に増えた事例も。" },
+                  { icon: "🏠", field: "不動産", desc: "ポータル掲載文の作成が1物件20分→3分。掲載スピードが上がり、反響数も向上。" },
+                  { icon: "🏗️", field: "建設・工務店", desc: "打ち合わせの議事録起こしと見積更新を自動化し、設計担当1人あたり週8〜12時間を削減。" },
+                  { icon: "🏭", field: "製造・金属加工", desc: "図面と過去データから見積ドラフトを自動生成。1件30分かかっていた作業が3分に。" },
+                  { icon: "🛒", field: "小売・EC", desc: "商品説明文の作成が1点30分→5分。掲載できる商品数が大きく増加。" },
+                  { icon: "🍶", field: "飲食店", desc: "シフト作成やメニュー考案をAIが下支えし、店長の作成時間を最大90%削減。" },
+                  { icon: "🎨", field: "広告・デザイン", desc: "企画書の初稿づくりが6〜8時間から2〜3時間に。提案できる件数が1.4倍に。" },
+                  { icon: "💇", field: "美容・サロン", desc: "SNS投稿づくりを内製化し、投稿頻度アップで新規客が41%増えた事例も。" },
+                  { icon: "🧸", field: "介護・保育", desc: "介護記録や連絡帳の作成をAIが補助し、1日90分の記録が25分に。残業ゼロ化の例も。" },
+                  { icon: "🚚", field: "物流・運送", desc: "配車計画の作成が1日3時間→40分。ルート最適化で燃料コストも圧縮。" },
+                ].map((c) => (
+                  <div
+                    key={c.field}
+                    className="rounded-2xl p-6"
+                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}
+                  >
+                    <div className="text-2xl mb-3">{c.icon}</div>
+                    <h3 className="text-white font-bold text-sm mb-2">{c.field}</h3>
+                    <p className="text-white/45 text-xs leading-relaxed">{c.desc}</p>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-center text-white/30 text-xs mt-10 max-w-2xl mx-auto leading-relaxed">
+                ※ 上記は各種公開事例をもとにした業界の一般的な成果であり、特定の導入結果を保証するものではありません。
+              </p>
+            </div>
             </div>
           }
         />

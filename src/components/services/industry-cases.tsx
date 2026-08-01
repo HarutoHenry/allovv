@@ -26,7 +26,7 @@ const industries: Industry[] = [
     label: "士業",
     sublabel: "税理士・行政書士・司法書士・社労士",
     cases: [
-      { task: "顧客の質問への回答ドラフト作成", before: "1件 60分", after: "15分", extra: "空いた時間で顧問先が1.4倍に" },
+      { task: "顧客の質問への回答ドラフト作成", before: "1件 25分", after: "5分", extra: "空いた時間で顧問先が1.4倍に" },
       { task: "契約書・就業規則のレビュー", metric: "月20〜25時間 削減" },
       { task: "記帳・月次決算の下ごしらえ", metric: "入力作業 80%削減" },
     ],
@@ -146,7 +146,9 @@ export function IndustryCases() {
       <p className="text-white/50 text-sm md:text-base text-center max-w-xl mx-auto leading-relaxed mb-12">
         気になる業種を選ぶと、実際に出ている効果が表示されます。
         <br className="hidden md:block" />
-        メール対応はほんの入り口。同じ考え方で、業種ごとの定型業務を仕組み化できます。
+        メール対応はほんの入り口。同じ考え方で、業種ごとの定型業務を
+        <br className="hidden md:block" />
+        仕組み化できます。
       </p>
 
       {/* 業種セレクタ */}

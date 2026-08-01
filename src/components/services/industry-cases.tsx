@@ -71,7 +71,7 @@ const industries: Industry[] = [
     sublabel: "ネットショップ・店舗販売",
     cases: [
       { task: "商品説明文の作成", before: "1点 30分", after: "5分", extra: "掲載できる商品数が大幅増" },
-      { task: "需要予測による発注最適化", metric: "食品廃棄 38%削減", extra: "年間コスト約180万円圧縮" },
+      { task: "在庫・発注管理の最適化", metric: "週15時間削減", extra: "過剰在庫の改善にも" },
       { task: "問い合わせチャットボット", metric: "転換率 1.8倍", extra: "対応コスト月12万円削減" },
     ],
   },

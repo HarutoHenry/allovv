@@ -50,27 +50,6 @@ export function HeroSection() {
             </svg>
           </Link>
         </div>
-
-        <div className="animate-fade-in-up-delay-3 flex flex-wrap justify-center gap-6 md:gap-12">
-          <div className="text-center">
-            <p className="font-display font-bold text-2xl md:text-3xl text-navy tabular-nums">
-              <span className="text-sm font-medium text-navy/50 mr-0.5">最大</span>90%
-            </p>
-            <p className="text-navy/50 text-sm">作業工数削減</p>
-          </div>
-          <div className="hidden sm:block w-px h-12 bg-navy/20" aria-hidden="true" />
-          <div className="text-center">
-            <p className="font-display font-bold text-2xl md:text-3xl text-navy tabular-nums">
-              <span className="text-sm font-medium text-navy/50 mr-0.5">最短</span>3日
-            </p>
-            <p className="text-navy/50 text-sm">導入期間</p>
-          </div>
-          <div className="hidden sm:block w-px h-12 bg-navy/20" aria-hidden="true" />
-          <div className="text-center">
-            <p className="font-display font-bold text-2xl md:text-3xl text-navy tabular-nums">24h</p>
-            <p className="text-navy/50 text-sm">AI対応時間</p>
-          </div>
-        </div>
       </div>
 
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce pointer-events-none lg:hidden 2xl:block">

@@ -155,27 +155,22 @@ export function CreativeSection() {
   return (
     <section id="creative" className="bg-soft-bg">
       {/* ── 見出し ── */}
-      <div ref={headRef} className="max-w-[1180px] mx-auto px-5 pt-28 md:pt-36 pb-10 md:pb-14">
+      <div
+        ref={headRef}
+        className="max-w-[1180px] mx-auto px-5 pt-28 md:pt-36 pb-10 md:pb-14 text-center"
+      >
         <p
-          className={`font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-6 transition-all duration-600 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+          className={`font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-5 transition-all duration-600 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
         >
           CREATIVE
         </p>
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
-          <h2
-            className={`text-navy font-bold leading-snug transition-all duration-600 delay-100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-            style={{ fontSize: "clamp(1.5rem, 3.5vw, 2.75rem)" }}
-          >
-            つくれる画の幅が、<br className="sm:hidden" />
-            そのまま企画の幅になる。
-          </h2>
-          <p
-            className={`text-navy/70 text-sm leading-relaxed max-w-[420px] transition-all duration-600 delay-200 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-          >
-            アニメーションから実写と見分けのつかない映像まで、AIで一貫して制作します。
-            撮影・キャスティングを前提にしないので、企画から納品までが短く済みます。
-          </p>
-        </div>
+        {/* 短い一文なので、字間を少し開けて見出しとしての重心を持たせる */}
+        <h2
+          className={`text-navy font-bold leading-tight tracking-[0.04em] transition-all duration-600 delay-100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+          style={{ fontSize: "clamp(1.75rem, 4.5vw, 3.25rem)" }}
+        >
+          想像を映像に
+        </h2>
       </div>
 
       {/* ── 横スライド ── */}

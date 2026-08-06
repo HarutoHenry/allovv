@@ -180,7 +180,8 @@ export function CreativeSection() {
 
       {/* ── 横スライド ── */}
       <div ref={wrapperRef} className="relative">
-        <div className={pinned ? "sticky top-0 h-screen flex flex-col justify-center" : ""}>
+        {/* pt-16 は固定ナビの分。中央寄せのままだと上が詰まって見え、下に余白が余る */}
+        <div className={pinned ? "sticky top-0 h-screen flex flex-col justify-center pt-16" : ""}>
           <div
             ref={viewportRef}
             onScroll={onViewportScroll}
@@ -205,7 +206,7 @@ export function CreativeSection() {
                       ref={(el) => {
                         videoRefs.current[index] = el
                       }}
-                      className="block aspect-video w-full lg:w-auto lg:h-[min(56svh,520px)] object-cover"
+                      className="block aspect-video w-full lg:w-auto lg:h-[min(62svh,600px)] object-cover"
                       src={work.src}
                       poster={work.poster}
                       muted
@@ -252,7 +253,10 @@ export function CreativeSection() {
       </div>
 
       {/* ── CTA ── */}
-      <div className="max-w-[1180px] mx-auto px-5 pt-14 pb-28 md:pb-36 text-center">
+      {/* ピン留め中は sticky（h-screen）の下側に余白が残るので、その分だけ上を詰める */}
+      <div
+        className={`max-w-[1180px] mx-auto px-5 pb-20 md:pb-24 text-center ${pinned ? "" : "pt-14"}`}
+      >
         <p className="text-navy/70 text-sm leading-relaxed mb-6">
           用途・尺・納期に合わせて構成からご提案します。まずはご相談ください。
         </p>

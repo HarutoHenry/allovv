@@ -1,6 +1,7 @@
 import { Navigation } from "@/components/navigation"
 import { HeroSection } from "@/components/hero-section"
 import { PhilosophySection } from "@/components/philosophy-section"
+import { CreativeSection } from "@/components/creative-section"
 import { BusinessSection } from "@/components/business-section"
 import { NewsSection } from "@/components/news-section"
 import { BlogSection } from "@/components/blog-section"
@@ -16,6 +17,7 @@ export default function Home() {
         <HeroSection />
         <BusinessSection />
         <PhilosophySection />
+        <CreativeSection />
         <NewsSection />
         <BlogSection />
         <AboutSection />

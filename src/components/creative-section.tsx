@@ -168,7 +168,7 @@ export function CreativeSection() {
         {/* 短い一文なので、字間を少し開けて見出しとしての重心を持たせる。
             登場はドットが集まって文字になる演出（スクロールを戻すと散る） */}
         <ParticleHeading
-          text="想像を映像に"
+          text="―想像を映像に―"
           className="text-navy font-bold leading-tight tracking-[0.04em]"
           style={{ fontSize: "clamp(1.75rem, 4.5vw, 3.25rem)" }}
         />

@@ -3,7 +3,11 @@
 import Link from "next/link"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
+import { useVideoAutoplay } from "@/hooks/use-video-autoplay"
 import { ParticleHeading } from "@/components/particle-heading"
+
+/** 見出しと中身の間隔。他セクションの mb-16 に合わせる */
+const HEAD_GAP = 64
 
 const works = [
   {
@@ -34,8 +38,10 @@ const works = [
 
 export function CreativeSection() {
   const { ref: headRef, isVisible } = useScrollAnimation(0.2)
+  const bgRef = useVideoAutoplay()
 
   const wrapperRef = useRef<HTMLDivElement>(null)
+  const stickyRef = useRef<HTMLDivElement>(null)
   const viewportRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
@@ -64,14 +70,18 @@ export function CreativeSection() {
   useEffect(() => {
     if (!pinned) {
       if (trackRef.current) trackRef.current.style.transform = ""
-      if (wrapperRef.current) wrapperRef.current.style.height = ""
+      if (wrapperRef.current) {
+        wrapperRef.current.style.height = ""
+        wrapperRef.current.style.marginTop = ""
+      }
       return
     }
 
     const wrapper = wrapperRef.current
     const viewport = viewportRef.current
     const track = trackRef.current
-    if (!wrapper || !viewport || !track) return
+    const sticky = stickyRef.current
+    if (!wrapper || !viewport || !track || !sticky) return
 
     let distance = 0
     let frame = 0
@@ -79,6 +89,15 @@ export function CreativeSection() {
     const measure = () => {
       distance = Math.max(0, track.scrollWidth - viewport.clientWidth)
       wrapper.style.height = `${window.innerHeight + distance}px`
+
+      // ピン留め中は中身が画面の中央に来るので、ピン留め前の1枚目は
+      // 「sticky の上端から余白ぶん下」に置かれ、見出しとの間が開きすぎる。
+      // その余りだけラッパーを引き上げて、他セクション（mb-16）と同じ間隔にする。
+      // sticky 内での位置は動かさないので、ピン留め中の見え方は変わらない。
+      wrapper.style.marginTop = "0px"
+      const offset =
+        viewport.getBoundingClientRect().top - sticky.getBoundingClientRect().top
+      wrapper.style.marginTop = `${Math.min(0, Math.round(HEAD_GAP - offset))}px`
     }
 
     const render = () => {
@@ -154,11 +173,38 @@ export function CreativeSection() {
   }, [pinned])
 
   return (
-    <section id="creative" className="bg-soft-bg">
+    <section id="creative" className="relative bg-soft-bg">
+      {/* ── 背景動画 ──
+          セクションが画面より遥かに高いので、sticky で画面サイズに留めて引き伸ばしを防ぐ。
+          section 側に overflow-hidden は付けない（中の横スクロールの sticky が効かなくなる） */}
+      <div className="absolute inset-0" aria-hidden="true">
+        <div className="sticky top-0 h-screen w-full overflow-hidden">
+          <video
+            ref={bgRef}
+            className="w-full h-full object-cover"
+            src="/videos/creative-bg.mp4"
+            poster="/videos/creative-bg-poster.jpg"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+          />
+          {/* 素材自体が淡いので白は薄めに。上下だけ強めて、見出しと CTA の文字を読ませる */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to bottom, rgba(248,252,251,0.92) 0%, rgba(248,252,251,0.46) 9%, rgba(248,252,251,0.34) 45%, rgba(248,252,251,0.44) 78%, rgba(248,252,251,0.96) 100%)",
+            }}
+          />
+        </div>
+      </div>
+
       {/* ── 見出し ── */}
       <div
         ref={headRef}
-        className="max-w-[1180px] mx-auto px-5 pt-20 md:pt-24 pb-2 md:pb-3 text-center"
+        className="relative z-10 max-w-[1180px] mx-auto px-5 pt-20 md:pt-24 text-center"
       >
         <p
           className={`font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-5 transition-all duration-600 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -175,9 +221,12 @@ export function CreativeSection() {
       </div>
 
       {/* ── 横スライド ── */}
-      <div ref={wrapperRef} className="relative">
+      <div ref={wrapperRef} className={`relative z-10 ${pinned ? "" : "pt-16"}`}>
         {/* pt-16 は固定ナビの分。中央寄せのままだと上が詰まって見え、下に余白が余る */}
-        <div className={pinned ? "sticky top-0 h-screen flex flex-col justify-center pt-16" : ""}>
+        <div
+          ref={stickyRef}
+          className={pinned ? "sticky top-0 h-screen flex flex-col justify-center pt-16" : ""}
+        >
           <div
             ref={viewportRef}
             onScroll={onViewportScroll}
@@ -251,7 +300,7 @@ export function CreativeSection() {
       {/* ── CTA ── */}
       {/* ピン留め中は sticky（h-screen）の下側に余白が残るので、その分だけ上を詰める */}
       <div
-        className={`max-w-[1180px] mx-auto px-5 pb-20 md:pb-24 text-center ${pinned ? "" : "pt-14"}`}
+        className={`relative z-10 max-w-[1180px] mx-auto px-5 pb-20 md:pb-24 text-center ${pinned ? "" : "pt-14"}`}
       >
         <p className="text-navy/70 text-sm leading-relaxed mb-6">
           用途・尺・納期に合わせて構成からご提案します。まずはご相談ください。

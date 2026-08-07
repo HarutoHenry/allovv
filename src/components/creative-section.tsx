@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
+import { ParticleHeading } from "@/components/particle-heading"
 
 const works = [
   {
@@ -164,13 +165,13 @@ export function CreativeSection() {
         >
           CREATIVE
         </p>
-        {/* 短い一文なので、字間を少し開けて見出しとしての重心を持たせる */}
-        <h2
-          className={`text-navy font-bold leading-tight tracking-[0.04em] transition-all duration-600 delay-100 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+        {/* 短い一文なので、字間を少し開けて見出しとしての重心を持たせる。
+            登場はドットが集まって文字になる演出（スクロールを戻すと散る） */}
+        <ParticleHeading
+          text="想像を映像に"
+          className="text-navy font-bold leading-tight tracking-[0.04em]"
           style={{ fontSize: "clamp(1.75rem, 4.5vw, 3.25rem)" }}
-        >
-          想像を映像に
-        </h2>
+        />
       </div>
 
       {/* ── 横スライド ── */}

@@ -157,7 +157,7 @@ export function CreativeSection() {
       {/* ── 見出し ── */}
       <div
         ref={headRef}
-        className="max-w-[1180px] mx-auto px-5 pt-28 md:pt-36 pb-10 md:pb-14 text-center"
+        className="max-w-[1180px] mx-auto px-5 pt-20 md:pt-24 pb-2 md:pb-3 text-center"
       >
         <p
           className={`font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-5 transition-all duration-600 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
@@ -201,7 +201,7 @@ export function CreativeSection() {
                       ref={(el) => {
                         videoRefs.current[index] = el
                       }}
-                      className="block aspect-video w-full lg:w-auto lg:h-[min(62svh,600px)] object-cover"
+                      className="block aspect-video w-full lg:w-auto lg:h-[min(66svh,640px)] object-cover"
                       src={work.src}
                       poster={work.poster}
                       muted

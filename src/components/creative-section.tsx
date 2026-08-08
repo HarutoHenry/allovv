@@ -40,11 +40,15 @@ export function CreativeSection() {
   const { ref: headRef, isVisible } = useScrollAnimation(0.2)
   const bgRef = useVideoAutoplay()
 
+  const sectionRef = useRef<HTMLElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
   const stickyRef = useRef<HTMLDivElement>(null)
   const viewportRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
+  // 再生状態を今の見え方に合わせ直す関数。横スワイプ版のスクロールは window まで
+  // 上がってこないので、そちらからも呼べるよう ref 越しに公開しておく。
+  const syncPlaybackRef = useRef<() => void>(() => {})
 
   // ピン留め＋横スライドはデスクトップのみ。
   // 未判定（SSR・初回描画）は false ＝ タッチ向けの横スワイプ版で出す。
@@ -134,31 +138,125 @@ export function CreativeSection() {
     }
   }, [pinned])
 
-  // 画面に入っている1本だけ再生する（3本同時再生を避ける）
+  // 見えている動画だけを再生し続ける。
+  //
+  // play() は「まだデータが無い」「省電力モード」「タブが裏」などで簡単に拒否され、
+  // 一度こぼすとポスター画像のまま固まってしまう。なので再生状態は持たず、
+  // 「今どう見えているか」から毎回あるべき状態を出し直して合わせる方式にしてある。
+  // 合わせ直すきっかけ: スクロール・タブ復帰・読み込み完了・勝手に止まった時・読み込み失敗。
   useEffect(() => {
     const videos = videoRefs.current.filter(Boolean) as HTMLVideoElement[]
-    if (videos.length === 0) return
+    const section = sectionRef.current
+    if (videos.length === 0 || !section) return
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          const video = entry.target as HTMLVideoElement
-          if (entry.isIntersecting) video.play().catch(() => {})
-          else video.pause()
+    /** 再生させたい動画。出入りの境目でパタつかないよう、入り 0.4 / 抜け 0.2 とずらす */
+    const wanted = new Set<HTMLVideoElement>()
+    /** 勝手に止まった時の再開までの待ち。粘りすぎないよう倍にしていく */
+    const backoff = new WeakMap<HTMLVideoElement, number>()
+    /** 読み込み失敗の再試行回数 */
+    const retries = new WeakMap<HTMLVideoElement, number>()
+    const timers = new Set<number>()
+    let frame = 0
+
+    // 「見えているか」は毎回その場で測る。IntersectionObserver の通知待ちにすると、
+    // 通知が来ないまま（タブが凍っている等）ポスターで固まることがあるため。
+    const sync = () => {
+      const viewport = viewportRef.current
+      if (!viewport) return
+      const box = viewport.getBoundingClientRect()
+      const area = section.getBoundingClientRect()
+      const margin = window.innerHeight * 0.1
+      // セクションごと画面の外なら全部止める（見えない動画を回さない）
+      const near = area.bottom > -margin && area.top < window.innerHeight + margin
+
+      for (const video of videos) {
+        const rect = video.getBoundingClientRect()
+        const overlap =
+          Math.min(rect.right, box.right) - Math.max(rect.left, box.left)
+        const seen = rect.width > 0 ? overlap / rect.width : 0
+        const enough = wanted.has(video) ? seen > 0.2 : seen > 0.4
+
+        if (near && !document.hidden && enough) {
+          wanted.add(video)
+          if (video.paused) video.play().catch(() => {})
+        } else {
+          wanted.delete(video)
+          if (!video.paused) video.pause()
         }
-      },
-      { root: viewportRef.current, threshold: 0.55 }
-    )
-    videos.forEach((video) => observer.observe(video))
-
-    const onVisibility = () => {
-      if (document.hidden) videos.forEach((video) => video.pause())
+      }
     }
-    document.addEventListener("visibilitychange", onVisibility)
+    syncPlaybackRef.current = sync
+
+    const later = (wait: number, run: () => void) => {
+      const timer = window.setTimeout(() => {
+        timers.delete(timer)
+        run()
+      }, wait)
+      timers.add(timer)
+    }
+
+    // こちらが止めたのでなければ、端末側の都合で落ちている。間隔を空けて掛け直す
+    const onPause = (event: Event) => {
+      const video = event.currentTarget as HTMLVideoElement
+      if (!wanted.has(video)) return
+      const wait = backoff.get(video) ?? 300
+      backoff.set(video, Math.min(5000, wait * 2))
+      later(wait, sync)
+    }
+    // ちゃんと進んでいるなら、次に止まった時はまた短い間隔から試す
+    const onProgress = (event: Event) => backoff.delete(event.currentTarget as HTMLVideoElement)
+
+    // 読み込みに失敗したまま静止画で固まるのを防ぐ。無限に叩かないよう2回まで
+    const onError = (event: Event) => {
+      const video = event.currentTarget as HTMLVideoElement
+      const count = retries.get(video) ?? 0
+      if (count >= 2) return
+      retries.set(video, count + 1)
+      later(500 * (count + 1), () => {
+        video.load()
+        sync()
+      })
+    }
+
+    for (const video of videos) {
+      video.addEventListener("canplay", sync)
+      video.addEventListener("loadeddata", sync)
+      video.addEventListener("pause", onPause)
+      video.addEventListener("timeupdate", onProgress)
+      video.addEventListener("error", onError)
+    }
+
+    const onScroll = () => {
+      if (frame) return
+      frame = requestAnimationFrame(() => {
+        frame = 0
+        sync()
+      })
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true })
+    window.addEventListener("resize", onScroll)
+    document.addEventListener("visibilitychange", sync)
+    // iOS Safari は最初のタップまで再生を渋ることがある
+    document.addEventListener("touchstart", sync, { passive: true })
+
+    sync()
 
     return () => {
-      observer.disconnect()
-      document.removeEventListener("visibilitychange", onVisibility)
+      syncPlaybackRef.current = () => {}
+      for (const video of videos) {
+        video.removeEventListener("canplay", sync)
+        video.removeEventListener("loadeddata", sync)
+        video.removeEventListener("pause", onPause)
+        video.removeEventListener("timeupdate", onProgress)
+        video.removeEventListener("error", onError)
+      }
+      if (frame) cancelAnimationFrame(frame)
+      window.removeEventListener("scroll", onScroll)
+      window.removeEventListener("resize", onScroll)
+      document.removeEventListener("visibilitychange", sync)
+      document.removeEventListener("touchstart", sync)
+      timers.forEach((timer) => window.clearTimeout(timer))
     }
   }, [pinned])
 
@@ -170,10 +268,11 @@ export function CreativeSection() {
     const max = viewport.scrollWidth - viewport.clientWidth
     const progress = max > 0 ? viewport.scrollLeft / max : 0
     setActive(Math.min(works.length - 1, Math.round(progress * (works.length - 1))))
+    syncPlaybackRef.current()
   }, [pinned])
 
   return (
-    <section id="creative" className="relative bg-soft-bg">
+    <section ref={sectionRef} id="creative" className="relative bg-soft-bg">
       {/* ── 背景動画 ──
           セクションが画面より遥かに高いので、sticky で画面サイズに留めて引き伸ばしを防ぐ。
           section 側に overflow-hidden は付けない（中の横スクロールの sticky が効かなくなる） */}
@@ -246,6 +345,8 @@ export function CreativeSection() {
                   key={work.no}
                   className="snap-center shrink-0 w-[86vw] max-w-[980px] lg:w-auto"
                 >
+                  {/* preload: none だと再生の合図が来てから読み始めるので出だしを落としやすい。
+                      1枚目だけ auto にして、セクションに着いた時点で待たせずに動かす */}
                   <div className="relative overflow-hidden rounded-[var(--radius-lg)] bg-navy-dark shadow-[0_24px_60px_-32px_rgba(26,46,53,0.55)]">
                     <video
                       ref={(el) => {
@@ -257,7 +358,7 @@ export function CreativeSection() {
                       muted
                       loop
                       playsInline
-                      preload="none"
+                      preload={index === 0 ? "auto" : "metadata"}
                       aria-label={`${work.en}の制作事例`}
                     />
                   </div>

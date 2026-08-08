@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props) {
   const item = newsItems.find((n) => n.slug === slug)
   if (!item) return {}
   return {
-    title: `${item.title} | Allovv合同会社`,
+    title: item.title,
     description: item.body.slice(0, 120).replace(/[#*\n]/g, ""),
   }
 }

@@ -4,8 +4,8 @@ import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 
 export const metadata = {
-  title: "お知らせ | Allovv合同会社",
-  description: "Allovv合同会社からの最新のお知らせ・プレスリリースです。",
+  title: "お知らせ",
+  description: "Allovvからの最新のお知らせ・プレスリリースです。",
 }
 
 export default function NewsPage() {

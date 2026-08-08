@@ -22,20 +22,28 @@ const plans = [
       </svg>
     ),
     title: "AIによる業務効率化",
-    subtitle: "御社の課題に合わせたご提案",
-    price: "お見積り",
-    priceNote: "課題ヒアリング後にご提示",
+    subtitle: "1業務ずつ、必要な分だけ",
+    price: "¥120,000",
+    priceNote: "1業務あたり / 税別",
     featured: false,
     ctaLabel: "お問い合わせ",
     ctaHref: "/#contact",
     features: [
-      "業務フロー分析・課題ヒアリング",
-      "最適なAIツール選定・提案",
-      "導入スケジュール設計",
-      "ROI試算レポート",
-      "導入後フォローアップ",
+      "見積書の作成（過去の見積を元に下書きまで）",
+      "請求書・納品書（月末にまとめて確認するだけに）",
+      "問い合わせ返信（返信文を先に用意しておく）",
+      "日報・報告書（箇条書きのメモから文章に）",
+      "応募者への連絡（応募が来たその日に返せる）",
+      "議事録・メモ（録音から決めたことを書き出す）",
     ],
-    featureNote: null,
+    featureNote: {
+      label: "3業務目からは 1業務 ¥90,000",
+      items: [
+        "必要な業務だけを選んでいただけます",
+        "業務フローのヒアリングから構築・レクチャーまで込み",
+        "まずは1業務から始めていただけます",
+      ],
+    },
   },
   {
     id: "email",
@@ -48,13 +56,14 @@ const plans = [
       </svg>
     ),
     title: "AIメール自動化",
-    subtitle: "導入パック",
+    subtitle: "導入パック（業務2つ分）",
     price: "¥198,000",
-    priceNote: "税別 / 初期費用",
+    priceNote: "税別 / 初期費用・1業務あたり¥99,000",
     featured: true,
     ctaLabel: "お申し込み",
     ctaHref: "/#contact",
     features: [
+      "単品でそろえると¥240,000のところ、一式価格",
       "初回打ち合わせ（業務フロー・課題ヒアリング）",
       "Gmail × Claude AIシステム構築・設定",
       "テスト運用・動作確認",
@@ -366,8 +375,15 @@ export default function AiConsultingPage() {
             ))}
           </div>
 
+          {/* 料金の考え方（積み上げ式）*/}
+          <p className="text-center text-white/45 text-sm mt-12 max-w-3xl mx-auto leading-relaxed">
+            料金は、AIに任せる業務の数で決まります。<br className="hidden md:block" />
+            1業務 ¥120,000、業務2つの導入パックで ¥198,000、3業務目からは1業務 ¥90,000 で追加できます。<br className="hidden md:block" />
+            御社に必要な業務だけを選んでいただくため、最終的なお見積りはヒアリングのうえでご提示します。
+          </p>
+
           {/* Bottom Note */}
-          <p className="text-center text-white/25 text-xs mt-12">
+          <p className="text-center text-white/25 text-xs mt-8">
             すべての料金は税別です。詳細はお問い合わせください。
           </p>
           <p className="text-center text-xs mt-4">

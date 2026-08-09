@@ -18,8 +18,8 @@ export default function Home() {
       <main id="main">
         <HeroSection />
         <BusinessSection />
-        <PhilosophySection />
         <CreativeSection />
+        <PhilosophySection />
         <NewsSection />
         <BlogSection />
         <AboutSection />

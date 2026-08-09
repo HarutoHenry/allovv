@@ -8,11 +8,13 @@ import { BlogSection } from "@/components/blog-section"
 import { AboutSection } from "@/components/about-section"
 import { ContactSection } from "@/components/contact-section"
 import { Footer } from "@/components/footer"
+import { HashScroll } from "@/components/hash-scroll"
 
 export default function Home() {
   return (
     <>
       <Navigation />
+      <HashScroll />
       <main id="main">
         <HeroSection />
         <BusinessSection />

@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { LiquidNavItem } from "@/components/liquid-nav-item"
+import { SCROLL_TARGET_KEY } from "@/components/hash-scroll"
 
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false)
@@ -37,6 +38,12 @@ export function Navigation() {
         document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth" })
       }, 50)
     } else {
+      // 遷移でハッシュが落ちてもトップページ側（HashScroll）が拾えるようにしておく
+      try {
+        sessionStorage.setItem(SCROLL_TARGET_KEY, anchor)
+      } catch {
+        // sessionStorage が使えない環境では無視する
+      }
       router.push(`/#${anchor}`)
     }
   }

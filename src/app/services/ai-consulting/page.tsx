@@ -7,14 +7,43 @@ import { CaseExampleSwitcher, type CaseExample } from "@/components/services/cas
 
 export const metadata = {
   title: "AI導入コンサルティング 料金プラン | Allovv",
-  description: "AllovvのAI導入コンサルティングサービスの料金プランです。AIメール自動化・業務効率化・高機能AI導入サポートをご用意しています。",
+  description: "AllovvのAI導入コンサルティングサービスの料金プランです。AI活用研修・業務効率化・高機能AI導入サポートをご用意しています。",
 }
 
 const plans = [
   {
-    id: "efficiency",
-    badge: "業務効率化",
+    id: "training",
+    badge: "研修",
     badgeColor: "bg-[#e0f7f4] text-[#5fb8ab]",
+    icon: (
+      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+          d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.42A12.08 12.08 0 0118 15.5c0 1.02-.13 2.01-.37 2.95A11.96 11.96 0 0112 21a11.96 11.96 0 01-5.63-2.55A12.05 12.05 0 016 15.5c0-1.7.34-3.32.95-4.79L12 14z" />
+      </svg>
+    ),
+    title: "AI活用研修",
+    subtitle: "従業員向け・全10〜12時間",
+    price: "¥400,000〜",
+    priceNote: "税別 / 1社5名まで",
+    featured: false,
+    ctaLabel: "お問い合わせ",
+    ctaHref: "/#contact",
+    features: [
+      "全10〜12時間（半日×3回など、日程はご相談）",
+      "1社5名まで（人数の追加はご相談ください）",
+      "貴社の実際の業務・書類を教材に使います",
+      "生成AIの基礎と、やってはいけないこと",
+      "指示文（プロンプト）の書き方と社内の型づくり",
+      "受講後に見返せる社内マニュアルをお渡しします",
+      "オンライン・貴社への訪問どちらも対応",
+    ],
+    featuresLabel: null,
+    featureNote: null,
+  },
+  {
+    id: "efficiency",
+    badge: "人気No.1",
+    badgeColor: "bg-[#7dd8ca]/20 text-[#7dd8ca]",
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
@@ -25,9 +54,10 @@ const plans = [
     subtitle: "業務ごとの参考価格",
     price: "¥80,000〜",
     priceNote: "1業務あたりの参考価格 / 税別",
-    featured: false,
+    featured: true,
     ctaLabel: "お問い合わせ",
     ctaHref: "/#contact",
+    featuresLabel: "業務の料金例を見る",
     features: [
       "メール対応 ¥150,000（問い合わせ返信を下書きまで）",
       "見積書の作成 ¥120,000（過去の見積を元に金額入りで）",
@@ -44,41 +74,7 @@ const plans = [
         "業務の内容によって金額は変わります（上記は参考価格です）",
         "業務フローのヒアリングから構築・レクチャーまで込み",
         "まずは1業務から始めていただけます",
-      ],
-    },
-  },
-  {
-    id: "email",
-    badge: "人気No.1",
-    badgeColor: "bg-[#7dd8ca]/20 text-[#7dd8ca]",
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-      </svg>
-    ),
-    title: "AIメール自動化",
-    subtitle: "導入パック（メール対応＋議事録）",
-    price: "¥200,000",
-    priceNote: "税別 / 初期費用（一式価格）",
-    featured: true,
-    ctaLabel: "お申し込み",
-    ctaHref: "/#contact",
-    features: [
-      "単品でそろえると¥230,000のところ、一式価格",
-      "初回打ち合わせ（業務フロー・課題ヒアリング）",
-      "Gmail × Claude AIシステム構築・設定",
-      "テスト運用・動作確認",
-      "操作レクチャー（30分）",
-      "1ヶ月後フォロー打ち合わせ（調整・改善）",
-      "最短2営業日で導入完了",
-    ],
-    featureNote: {
-      label: "月額サポート ¥30,000/月",
-      items: [
-        "月1回改善打ち合わせ",
-        "設定変更・チューニング対応",
-        "メール・チャットでの質問対応",
+        "導入後も継続して改善をご希望の場合は、顧問として月額¥30,000（税別）",
       ],
     },
   },
@@ -106,6 +102,7 @@ const plans = [
       "カスタムAIエージェント構築",
       "専任エンジニアサポート",
     ],
+    featuresLabel: null,
     featureNote: null,
   },
 ]
@@ -343,17 +340,42 @@ export default function AiConsultingPage() {
                 {/* Divider */}
                 <div className="border-t border-white/10 mb-6" />
 
-                {/* Features */}
-                <ul className="space-y-3">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-3 text-white/65 text-sm">
-                      <span className={plan.featured ? "text-[#7dd8ca]" : "text-white/30"}>
-                        <CheckIcon />
-                      </span>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
+                {/* Features（featuresLabel があるプランは、長い一覧をプルダウンに畳む） */}
+                {plan.featuresLabel ? (
+                  <details className="group">
+                    <summary
+                      className="cursor-pointer list-none flex items-center justify-between gap-3 px-4 py-3 rounded-xl text-sm font-medium text-white/75 hover:text-white transition-colors"
+                      style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)" }}
+                    >
+                      <span>{plan.featuresLabel}</span>
+                      <svg className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </summary>
+                    <ul className="space-y-3 mt-5">
+                      {plan.features.map((feature) => (
+                        <li key={feature} className="flex items-start gap-3 text-white/65 text-sm">
+                          <span className={plan.featured ? "text-[#7dd8ca]" : "text-white/30"}>
+                            <CheckIcon />
+                          </span>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                ) : (
+                  <ul className="space-y-3">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-start gap-3 text-white/65 text-sm">
+                        <span className={plan.featured ? "text-[#7dd8ca]" : "text-white/30"}>
+                          <CheckIcon />
+                        </span>
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                )}
 
                 {/* Monthly support note */}
                 {plan.featureNote && (

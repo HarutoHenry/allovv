@@ -69,7 +69,7 @@ const plans = [
       "引き継ぎ資料づくり ¥250,000（ベテランの手順を手順書に）",
     ],
     featureNote: {
-      label: "2業務以上は、合計から割り引いた一式価格で",
+      label: null,
       items: [
         "業務の内容によって金額は変わります（上記は参考価格です）",
         "業務フローのヒアリングから構築・レクチャーまで込み",
@@ -380,9 +380,11 @@ export default function AiConsultingPage() {
                 {/* Monthly support note */}
                 {plan.featureNote && (
                   <div className="mt-6 pt-5 border-t border-[#7dd8ca]/20">
-                    <p className="text-[#7dd8ca] text-xs font-semibold tracking-wide mb-3">
-                      + {plan.featureNote.label}
-                    </p>
+                    {plan.featureNote.label && (
+                      <p className="text-[#7dd8ca] text-xs font-semibold tracking-wide mb-3">
+                        + {plan.featureNote.label}
+                      </p>
+                    )}
                     <ul className="space-y-3">
                       {plan.featureNote.items.map((item) => (
                         <li key={item} className="flex items-start gap-3 text-white/50 text-sm">

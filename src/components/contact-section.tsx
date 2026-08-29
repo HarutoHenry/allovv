@@ -161,7 +161,7 @@ export function ContactSection() {
             >
               <option value="">選択してください</option>
               <option value="service">サービスについて</option>
-              <option value="consulting">AI導入のご相談</option>
+              <option value="consulting">AI仕組み化のご相談</option>
               <option value="creative">AIクリエイティブ制作</option>
               <option value="partnership">業務提携について</option>
               <option value="media">取材・メディア掲載</option>

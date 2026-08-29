@@ -2,7 +2,7 @@ import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 
 export const metadata = {
-  title: "特定商取引法に基づく表記 | Allovv",
+  title: "特定商取引法に基づく表記",
   description: "Allovvの特定商取引法に基づく表記です。",
 }
 
@@ -51,7 +51,7 @@ const items = [
   {
     label: "動作環境",
     value:
-      "AI導入支援サービスのご利用には、Gmailアカウント等、対象サービスのアカウントとインターネット接続環境が必要です。",
+      "AI仕組み化サービスのご利用には、Gmailアカウント等、対象サービスのアカウントとインターネット接続環境が必要です。",
   },
 ]
 

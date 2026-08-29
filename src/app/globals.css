@@ -38,8 +38,8 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-noto-sans-jp), 'Noto Sans JP', sans-serif;
-  --font-display: var(--font-dm-sans), 'DM Sans', sans-serif;
+  --font-sans: var(--font-zen-kaku), 'Zen Kaku Gothic New', sans-serif;
+  --font-display: var(--font-jost), 'Jost', sans-serif;
 
   --color-navy: var(--navy);
   --color-navy-dark: var(--navy-dark);
@@ -83,7 +83,7 @@
   html { scroll-behavior: smooth; }
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-noto-sans-jp), 'Noto Sans JP', -apple-system, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+    font-family: var(--font-zen-kaku), 'Zen Kaku Gothic New', -apple-system, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
@@ -252,7 +252,7 @@
 
 /* ── Liquid Nav Item ── */
 .liquid-nav-btn {
-  font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
+  font-family: var(--font-jost), 'Jost', sans-serif;
   font-weight: 800;
   font-size: 18px;
   letter-spacing: 0.12em;
@@ -284,3 +284,87 @@
   outline-offset: 3px;
   border-radius: 4px;
 }
+
+/* 背景として敷いている動画から、ブラウザ標準の再生ボタンを消す。
+   iOS Safari は「自動再生を断った」時に、コントロールを付けていない動画にも
+   ▶ の起動ボタンを重ねてくる。断る条件は低電力モード・省データモード・
+   設定＞Safari の自動再生オフで、どれも端末側の事情なのでJSでは覆せない。
+   ボタンを消すと、その場合は poster（静止画）がそのまま残る＝カードは
+   デザイン通りの絵で止まるだけになる。押せるものが出てこないほうが誤解が無い。
+
+   ※3つを「,」で並べて1つの規則にしてはいけない。CSSは選択子を並べた列の中に
+     そのブラウザが知らないものが1つでも混ざると、規則ごと丸ごと捨てる。
+     この3つは対応状況がばらばらなので、必ず1つずつ別の規則で書く */
+.bg-video::-webkit-media-controls-start-playback-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+.bg-video::-webkit-media-controls-overlay-play-button {
+  display: none !important;
+  -webkit-appearance: none;
+}
+.bg-video::-webkit-media-controls {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
+/* ── Footer ──
+   ページ本体は白〜ソフトミントの明るい面が続く。フッターだけが濃紺のベタで、
+   境目が突き当たりのように切れていた。上端に光を残して「地平線」として繋ぐ。
+   低い不透明度の白い光を1枚かけると紺がただ灰色に濁るので、
+   ミントとピンクを左右から別々に差し込んで、紺そのものを色づかせる。 */
+.footer-ground {
+  background:
+    radial-gradient(78% 62% at 10% 0%, rgba(93, 207, 190, 0.26) 0%, transparent 62%),
+    radial-gradient(70% 55% at 90% 2%, rgba(255, 143, 184, 0.2) 0%, transparent 62%),
+    radial-gradient(46% 40% at 50% 0%, rgba(155, 142, 196, 0.18) 0%, transparent 70%),
+    linear-gradient(180deg, #16303a 0%, #0f1e24 58%, #0b171c 100%);
+}
+
+/* 継ぎ目。ナビの liquid-nav-btn と同じ色順（ミント→藤→ピンク）で揃える。
+   上は白に近い面なので、線を境目にまたがせてもコントラストが立たない。
+   芯は1pxのまま、滲みは暗い側へ落として「下から昇る光」として読ませる。 */
+.footer-seam {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(184, 240, 232, 0.8) 20%,
+    rgba(196, 184, 232, 0.9) 50%,
+    rgba(255, 214, 231, 0.8) 80%,
+    transparent 100%
+  );
+}
+.footer-seam::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 -14px 0;
+  background: inherit;
+  filter: blur(7px);
+  opacity: 0.9;
+}
+
+/* タグライン。濃紺の上に置くので、パステルのままだと白に見えてしまう。
+   彩度を上げて、光として読める明るさに寄せる。 */
+.footer-tagline {
+  background: linear-gradient(100deg, #7fe6d6 0%, #b9a9e8 50%, #ffa9cc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* リンクの下線は hover で左から伸びる */
+.footer-link { position: relative; }
+.footer-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: linear-gradient(90deg, #b8f0e8, #ffd6e7);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.28s ease;
+}
+.footer-link:hover::after,
+.footer-link:focus-visible::after { transform: scaleX(1); }

@@ -13,7 +13,6 @@ type Case = {
 
 type Industry = {
   key: string
-  icon: string
   label: string
   sublabel: string
   cases: Case[]
@@ -22,7 +21,6 @@ type Industry = {
 const industries: Industry[] = [
   {
     key: "shigyo",
-    icon: "🏛️",
     label: "士業",
     sublabel: "税理士・行政書士・司法書士・社労士",
     cases: [
@@ -33,7 +31,6 @@ const industries: Industry[] = [
   },
   {
     key: "fudosan",
-    icon: "🏠",
     label: "不動産",
     sublabel: "売買・賃貸仲介・管理",
     cases: [
@@ -44,7 +41,6 @@ const industries: Industry[] = [
   },
   {
     key: "kensetsu",
-    icon: "🏗️",
     label: "建設・工務店",
     sublabel: "施工・設計・リフォーム",
     cases: [
@@ -55,7 +51,6 @@ const industries: Industry[] = [
   },
   {
     key: "seizo",
-    icon: "🏭",
     label: "製造・金属加工",
     sublabel: "部品加工・金型・プレス",
     cases: [
@@ -66,7 +61,6 @@ const industries: Industry[] = [
   },
   {
     key: "kouri",
-    icon: "🛒",
     label: "小売・EC",
     sublabel: "ネットショップ・店舗販売",
     cases: [
@@ -77,7 +71,6 @@ const industries: Industry[] = [
   },
   {
     key: "inshoku",
-    icon: "🍶",
     label: "飲食店",
     sublabel: "居酒屋・レストラン・カフェ",
     cases: [
@@ -88,7 +81,6 @@ const industries: Industry[] = [
   },
   {
     key: "koukoku",
-    icon: "🎨",
     label: "広告・デザイン",
     sublabel: "制作会社・クリエイティブ",
     cases: [
@@ -99,7 +91,6 @@ const industries: Industry[] = [
   },
   {
     key: "biyou",
-    icon: "💇",
     label: "美容・サロン",
     sublabel: "美容室・エステ・ネイル",
     cases: [
@@ -109,7 +100,6 @@ const industries: Industry[] = [
   },
   {
     key: "kaigo",
-    icon: "🧸",
     label: "介護・保育",
     sublabel: "施設・グループホーム・保育園",
     cases: [
@@ -119,7 +109,6 @@ const industries: Industry[] = [
   },
   {
     key: "butsuryu",
-    icon: "🚚",
     label: "物流・運送",
     sublabel: "運送・配送・倉庫",
     cases: [
@@ -177,10 +166,9 @@ export function IndustryCases() {
                 />
               )}
               <span
-                className="relative z-10 flex items-center gap-1.5"
+                className="relative z-10"
                 style={{ color: isActive ? "#0f1e24" : "rgba(255,255,255,0.6)" }}
               >
-                <span className="text-base leading-none">{ind.icon}</span>
                 {ind.label}
               </span>
             </button>
@@ -200,18 +188,12 @@ export function IndustryCases() {
           {/* 業種ヘッダー */}
           <div className="text-center mb-10">
             <motion.div
-              initial={{ scale: 0.6, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
               transition={{ ...spring, delay: 0.05 }}
-              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4"
-              style={{
-                background: "rgba(125,216,202,0.1)",
-                border: "1px solid rgba(125,216,202,0.35)",
-                boxShadow: "0 0 32px rgba(125,216,202,0.18)",
-              }}
-            >
-              <span className="text-3xl">{active.icon}</span>
-            </motion.div>
+              className="w-10 h-px mx-auto mb-5"
+              style={{ background: "linear-gradient(90deg, transparent, #7dd8ca, transparent)" }}
+            />
             <h3 className="text-white text-xl md:text-2xl font-bold">{active.label}</h3>
             <p className="text-white/40 text-sm mt-1">{active.sublabel}</p>
           </div>

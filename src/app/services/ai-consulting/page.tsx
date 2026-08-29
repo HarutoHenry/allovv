@@ -6,8 +6,8 @@ import { IndustryCases } from "@/components/services/industry-cases"
 import { CaseExampleSwitcher, type CaseExample } from "@/components/services/case-example-switcher"
 
 export const metadata = {
-  title: "AI導入コンサルティング 料金プラン | Allovv",
-  description: "AllovvのAI導入コンサルティングサービスの料金プランです。AI活用研修・業務効率化・高機能AI導入サポートをご用意しています。",
+  title: "AI仕組み化 料金プラン",
+  description: "AllovvのAI仕組み化サービス（業務設計→AI構築→標準化）の料金プランです。AI活用研修・業務効率化・高機能AI導入サポートをご用意しています。",
 }
 
 const plans = [
@@ -63,10 +63,9 @@ const plans = [
       "見積書の作成 ¥120,000（過去の見積を元に金額入りで）",
       "シフト作成 ¥100,000（希望と人数からたたき台を）",
       "打ち合わせの議事録 ¥80,000（録音から決定事項を）",
-      "日報・作業報告書 ¥80,000（箇条書きのメモから文章に）",
       "契約書・規程のチェック ¥80,000（抜け・気になる点の洗い出し）",
       "発注予測 ¥250,000（飲食店。次に頼む量と抜けを出す）",
-      "引き継ぎ資料づくり ¥250,000（ベテランの手順を手順書に）",
+      "事業承継・引き継ぎを楽にする業務AI化 ¥250,000（ベテランの手順を手順書に）",
     ],
     featureNote: {
       label: null,
@@ -74,7 +73,7 @@ const plans = [
         "業務の内容によって金額は変わります（上記は参考価格です）",
         "業務フローのヒアリングから構築・レクチャーまで込み",
         "まずは1業務から始めていただけます",
-        "導入後も継続して改善をご希望の場合は、顧問として月額¥30,000（税別）",
+        "導入後の運用と改善をご希望の場合は、月額¥30,000（税別）からの運用契約で承ります",
       ],
     },
   },
@@ -110,7 +109,6 @@ const plans = [
 const caseExamples: CaseExample[] = [
   {
     key: "pricing",
-    icon: "💰",
     label: "料金について",
     subject: "料金についてのお問い合わせ",
     customerName: "佐藤",
@@ -133,7 +131,6 @@ const caseExamples: CaseExample[] = [
   },
   {
     key: "schedule",
-    icon: "⏱️",
     label: "導入期間について",
     subject: "導入までの期間について",
     customerName: "中村",
@@ -156,7 +153,6 @@ const caseExamples: CaseExample[] = [
   },
   {
     key: "support",
-    icon: "🛟",
     label: "サポート体制について",
     subject: "導入後のサポートについて",
     customerName: "高橋",
@@ -172,13 +168,12 @@ const caseExamples: CaseExample[] = [
     aiBody: [
       "高橋様",
       "お問い合わせいただき、誠にありがとうございます。",
-      "導入時には操作レクチャーを行い、その後も月額サポート（¥30,000/月）で月1回の改善打ち合わせと、メール・チャットでの質問対応をいたします。設定の変更やチューニングも都度対応いたしますので、ご安心ください。",
+      "導入時には操作レクチャーを行い、その後は月額¥30,000（税別）の保守プランで、設定変更とメール・チャットでの質問対応をいたします。月次レポートと月1回の改善打ち合わせをご希望でしたら、運用改善プランをご案内いたしますので、遠慮なくお申し付けください。",
       "ご不明点があれば、遠慮なくお申し付けください。",
     ],
   },
   {
     key: "difference",
-    icon: "🔍",
     label: "他社との違い",
     subject: "他社サービスとの違いについて",
     customerName: "山本",
@@ -200,7 +195,6 @@ const caseExamples: CaseExample[] = [
   },
   {
     key: "quote",
-    icon: "📎",
     label: "資料・見積もり請求",
     subject: "サービス資料のご請求",
     customerName: "田中",
@@ -249,16 +243,26 @@ export default function AiConsultingPage() {
           </Link>
 
           <p className="font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-5">
-            AI Consulting
+            Systemize
           </p>
 
-          <h1 className="text-white text-3xl md:text-5xl font-bold leading-tight mb-6">
-            AI導入コンサルティング
+          <h1 className="text-white text-3xl md:text-5xl font-bold leading-tight mb-5">
+            AI仕組み化
           </h1>
 
+          {/* 着手順そのもの。設計 → 構築 → 標準化の順でしか進まないので、矢印が意味を持つ。
+              言葉を主役にしたいので、矢印はミントを薄く敷いて後ろに下げる */}
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 mb-6
+                          text-white/85 text-sm md:text-base font-medium tracking-[0.06em]">
+            <span>業務設計</span>
+            <span aria-hidden="true" className="text-[#7dd8ca]/55">→</span>
+            <span>AI構築</span>
+            <span aria-hidden="true" className="text-[#7dd8ca]/55">→</span>
+            <span>標準化</span>
+          </div>
+
           <p className="text-white/50 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
-            業務フロー分析からAI構築・定着まで。<br />
-            貴社の課題と規模に合わせた3つのプランをご用意しています。
+            人が代わっても同じ品質で回る形にします。
           </p>
         </div>
 

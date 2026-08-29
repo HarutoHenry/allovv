@@ -5,7 +5,7 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 
 const TYPE_LABELS: Record<string, string> = {
   service: "サービスについて",
-  consulting: "AI導入のご相談",
+  consulting: "AI仕組み化のご相談",
   creative: "AIクリエイティブ制作",
   partnership: "業務提携について",
   media: "取材・メディア掲載",
@@ -94,7 +94,7 @@ Allovv（アロー）
 AIによる業務自動化を自ら実践する実務家。
 Gmail × Make × Claude AI を組み合わせたメール自動化システムを自社開発し、
 日々の業務で運用しています。「作ったことがある」ではなく「毎日動かしている」
-経験をもとに、中小企業・個人事業主のAI導入を、構築から定着まで一気通貫で支援します。
+経験をもとに、中小企業・個人事業主の業務の仕組み化を、構築から定着まで一気通貫で支援します。
 
 Web　　https://www.allovv.com
 所在地　神奈川県横浜市
@@ -125,7 +125,7 @@ Web　　https://www.allovv.com
     <p style="margin:0 0 12px;color:#475569;font-size:13px;line-height:1.85;">
       AIによる業務自動化を自ら実践する実務家。Gmail × Make × Claude AI を組み合わせた
       メール自動化システムを自社開発し、日々の業務で運用しています。「作ったことがある」ではなく
-      「毎日動かしている」経験をもとに、中小企業・個人事業主のAI導入を、構築から定着まで
+      「毎日動かしている」経験をもとに、中小企業・個人事業主の業務の仕組み化を、構築から定着まで
       一気通貫で支援します。
     </p>
     <p style="margin:0;color:#475569;font-size:13px;">

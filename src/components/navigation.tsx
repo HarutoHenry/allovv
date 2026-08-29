@@ -1,11 +1,11 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, type MouseEvent } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { usePathname, useRouter } from "next/navigation"
 import { LiquidNavItem } from "@/components/liquid-nav-item"
-import { SCROLL_TARGET_KEY } from "@/components/hash-scroll"
+import { SCROLL_TARGET_KEY, animateScrollTo } from "@/components/hash-scroll"
 
 export function Navigation() {
   const [scrolled, setScrolled] = useState(false)
@@ -30,12 +30,31 @@ export function Navigation() {
     { href: "#about", label: "COMPANY" },
   ]
 
+  const handleLogo = (e: MouseEvent<HTMLAnchorElement>) => {
+    setMobileMenuOpen(false)
+    try {
+      sessionStorage.removeItem(SCROLL_TARGET_KEY)
+    } catch {
+      // sessionStorage が使えない環境では無視する
+    }
+    // 別ページからは Link のまま「/」へ遷移させる
+    if (!isTop) return
+    // トップページ内だと同じURLへの遷移になって何も起きないので、自分で先頭へ戻す
+    e.preventDefault()
+    if (window.location.hash) {
+      history.replaceState(null, "", window.location.pathname + window.location.search)
+    }
+    // このページでは behavior:"smooth" のスクロールが進まないため instant で戻す
+    window.scrollTo({ top: 0, behavior: "instant" })
+  }
+
   const handleNav = (id: string) => {
     setMobileMenuOpen(false)
     const anchor = id.replace("#", "")
     if (isTop) {
+      // メニューが閉じてレイアウトが落ち着いてから測り始める
       setTimeout(() => {
-        document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth" })
+        animateScrollTo(anchor)
       }, 50)
     } else {
       // 遷移でハッシュが落ちてもトップページ側（HashScroll）が拾えるようにしておく
@@ -59,7 +78,12 @@ export function Navigation() {
       <div className="max-w-7xl mx-auto px-8 pt-[22px] pb-3 flex items-end translate-x-[20px]">
         {/* Logo — 左1/3 */}
         <div className="flex-1 flex items-center pl-[53px] lg:pl-[24px] xl:pl-[73px] 2xl:pl-[55px]">
-          <Link href="/" className="flex items-center translate-y-[8px] lg:translate-y-[10px] 2xl:translate-y-[8px]">
+          <Link
+            href="/"
+            aria-label="Allovv トップページへ"
+            onClick={handleLogo}
+            className="flex items-center translate-y-[8px] lg:translate-y-[10px] 2xl:translate-y-[8px]"
+          >
             <Image
               src="/logo.png"
               alt="Allovv"

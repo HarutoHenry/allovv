@@ -1,24 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { Noto_Sans_JP, DM_Sans } from "next/font/google";
+import { Zen_Kaku_Gothic_New, Jost } from "next/font/google";
 import { ScrollTop } from "@/components/scroll-top";
 import "./globals.css";
 
-const notoSansJP = Noto_Sans_JP({
-  variable: "--font-noto-sans-jp",
+const zenKaku = Zen_Kaku_Gothic_New({
+  variable: "--font-zen-kaku",
   subsets: ["latin"],
   weight: ["300", "400", "500", "700"],
   display: "swap",
 });
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const jost = Jost({
+  variable: "--font-jost",
   subsets: ["latin"],
   weight: ["300", "400", "500", "700"],
   display: "swap",
 });
 
 const siteDescription =
-  "Allovvは、人工知能の力を事業の推進力に変えるAIカンパニーです。起業支援・AI導入・システム開発を通じて、あらゆる挑戦の障壁を取り除きます。";
+  "Allovvは、人工知能の力を事業の推進力に変えるAIカンパニーです。起業支援・AI仕組み化・システム開発を通じて、あらゆる挑戦の障壁を取り除きます。";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.allovv.com"),
@@ -73,7 +73,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ja" className={`${notoSansJP.variable} ${dmSans.variable} scroll-smooth`}>
+    <html lang="ja" className={`${zenKaku.variable} ${jost.variable} scroll-smooth`}>
       <body className="font-sans antialiased bg-white text-navy">
         <a href="#main" className="skip-link">
           本文へスキップ

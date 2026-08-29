@@ -22,6 +22,104 @@ const HASH_WAIT_MS = 800
 const TICK_MS = 16
 const STABLE_TICKS = 12
 
+/**
+ * トップページ内でナビをクリックしたときのスクロール。
+ *
+ * scrollIntoView({ behavior: "smooth" }) だと、CreativeSection のように
+ * マウント後にJSで高さが決まる区画があるせいで、走っている最中に着地位置が
+ * ずれて手前で止まる。ここでは毎フレーム目的地を測り直しながら自前で動かす。
+ * ユーザーが自分でスクロールしたら即座に譲る。
+ */
+export function animateScrollTo(targetId: string, duration = 700) {
+  if (!document.getElementById(targetId)) return
+
+  const jumpTo = (id: string) => {
+    const el = document.getElementById(id)
+    if (!el) return
+    window.scrollTo({
+      top: Math.max(0, Math.round(el.getBoundingClientRect().top + window.scrollY)),
+      behavior: "instant",
+    })
+  }
+
+  // 非表示タブでは requestAnimationFrame が止まるのでアニメーションできない
+  if (document.hidden) {
+    jumpTo(targetId)
+    return
+  }
+
+  const root = document.documentElement
+  const prevScrollBehavior = root.style.scrollBehavior
+  // CSSの scroll-behavior: smooth と綱引きになると毎回やり直しになるので切る
+  root.style.scrollBehavior = "auto"
+
+  const from = window.scrollY
+  const start = performance.now()
+  let raf = 0
+  let cancelled = false
+
+  const cancel = () => {
+    cancelled = true
+  }
+  const opts = { passive: true } as const
+  window.addEventListener("wheel", cancel, opts)
+  window.addEventListener("touchstart", cancel, opts)
+
+  const cleanup = () => {
+    root.style.scrollBehavior = prevScrollBehavior
+    window.removeEventListener("wheel", cancel)
+    window.removeEventListener("touchstart", cancel)
+    cancelAnimationFrame(raf)
+  }
+
+  const measure = () => {
+    const el = document.getElementById(targetId)
+    if (!el) return null
+    const maxTop = Math.max(
+      0,
+      document.documentElement.scrollHeight - window.innerHeight
+    )
+    return Math.max(
+      0,
+      Math.min(Math.round(el.getBoundingClientRect().top + window.scrollY), maxTop)
+    )
+  }
+
+  const ease = (t: number) =>
+    t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+
+  let stableTicks = 0
+
+  const step = (now: number) => {
+    if (cancelled) return cleanup()
+    const to = measure()
+    if (to === null) return cleanup()
+
+    const elapsed = now - start
+    const t = Math.min(1, elapsed / duration)
+
+    if (t < 1) {
+      window.scrollTo({ top: Math.round(from + (to - from) * ease(t)), behavior: "instant" })
+      raf = requestAnimationFrame(step)
+      return
+    }
+
+    // 着いたあとも、下の区画が読み込まれて高さが伸びると位置がずれる。
+    // ずれなくなるまで追い続ける（HashScroll と同じ考え方）。
+    if (Math.abs(window.scrollY - to) > 2) {
+      window.scrollTo({ top: to, behavior: "instant" })
+      stableTicks = 0
+    } else {
+      stableTicks += 1
+    }
+
+    if (stableTicks >= STABLE_TICKS || elapsed > MAX_DURATION_MS) return cleanup()
+    raf = requestAnimationFrame(step)
+  }
+
+  raf = requestAnimationFrame(step)
+}
+
 export function HashScroll() {
   useEffect(() => {
     let cancelled = false

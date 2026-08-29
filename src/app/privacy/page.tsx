@@ -2,7 +2,7 @@ import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 
 export const metadata = {
-  title: "プライバシーポリシー | Allovv",
+  title: "プライバシーポリシー",
   description: "Allovvのプライバシーポリシー（個人情報保護方針）です。",
 }
 
@@ -44,7 +44,7 @@ const sections = [
   {
     heading: "5. 外部サービスの利用",
     body: [
-      "本サービスでは、お問い合わせフォームの送信処理等に外部サービスを利用しています。これらの事業者における情報の取り扱いは、各社のプライバシーポリシーに従います。また、AI導入支援サービスの構築・運用においては、お客様の同意のもと、Google（Gmail）、Make、Anthropic（Claude AI）等の外部サービスを利用します。",
+      "本サービスでは、お問い合わせフォームの送信処理等に外部サービスを利用しています。これらの事業者における情報の取り扱いは、各社のプライバシーポリシーに従います。また、AI仕組み化サービスの構築・運用においては、お客様の同意のもと、Google（Gmail）、Make、Anthropic（Claude AI）等の外部サービスを利用します。",
     ],
   },
   {

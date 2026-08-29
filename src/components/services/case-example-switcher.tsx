@@ -5,7 +5,6 @@ import { motion } from "framer-motion"
 
 export type CaseExample = {
   key: string
-  icon: string
   label: string
   subject: string
   customerName: string
@@ -44,10 +43,9 @@ export function CaseExampleSwitcher({ examples }: { examples: CaseExample[] }) {
               />
             )}
             <span
-              className="relative z-10 inline-flex items-center gap-1.5"
+              className="relative z-10"
               style={{ color: activeKey === example.key ? "#0f1e24" : "rgba(255,255,255,0.6)" }}
             >
-              <span aria-hidden="true">{example.icon}</span>
               {example.label}
             </span>
           </button>
@@ -59,7 +57,7 @@ export function CaseExampleSwitcher({ examples }: { examples: CaseExample[] }) {
         {/* 受信メール */}
         <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.1)" }}>
           <div className="flex items-center justify-between px-4 py-2.5" style={{ background: "rgba(255,255,255,0.06)" }}>
-            <span className="text-white/60 text-xs font-semibold">📩 届いたお問い合わせ</span>
+            <span className="text-white/60 text-xs font-semibold">届いたお問い合わせ</span>
             <span className="text-white/35 text-[11px]">10:02 受信</span>
           </div>
           <div className="bg-white p-5">
@@ -88,7 +86,7 @@ export function CaseExampleSwitcher({ examples }: { examples: CaseExample[] }) {
           style={{ border: "1px solid rgba(125,216,202,0.5)", boxShadow: "0 0 32px rgba(125,216,202,0.15)" }}
         >
           <div className="flex items-center justify-between px-4 py-2.5" style={{ background: "rgba(125,216,202,0.15)" }}>
-            <span className="text-[#7dd8ca] text-xs font-semibold">📝 AIが作成した返信下書き</span>
+            <span className="text-[#7dd8ca] text-xs font-semibold">AIが作成した返信下書き</span>
             <span className="text-white/35 text-[11px]">10:05 完成</span>
           </div>
           <div className="bg-white p-5">
@@ -102,8 +100,8 @@ export function CaseExampleSwitcher({ examples }: { examples: CaseExample[] }) {
                 <p key={i}>{line}</p>
               ))}
               {active.attachment && (
-                <p className="inline-flex items-center gap-1.5 text-[12px] text-[#1a2e35]/60 bg-[#1a2e35]/5 rounded-lg px-2.5 py-1.5">
-                  📎 {active.attachment}
+                <p className="inline-flex items-center text-[12px] text-[#1a2e35]/60 bg-[#1a2e35]/5 rounded-lg px-2.5 py-1.5">
+                  添付：{active.attachment}
                 </p>
               )}
               <div className="text-[12px] text-[#1a2e35]/60 border-t border-[#1a2e35]/10 pt-2.5 leading-relaxed">

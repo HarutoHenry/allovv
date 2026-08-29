@@ -147,6 +147,9 @@ export function HeroVideoGL({ src }: { src: string }) {
     window.addEventListener("resize", resize)
     vid.addEventListener("loadedmetadata", updateCover)
 
+    /* muted は属性ではなくプロパティでも立てておく。無音でない動画は自動再生を
+       許されず、属性だけだと差し替えの拍子に外れることがある */
+    vid.muted = true
     const tryPlay = () => vid.play().catch(() => {})
     vid.addEventListener("canplay", tryPlay)
     vid.addEventListener("loadeddata", tryPlay)
@@ -154,9 +157,11 @@ export function HeroVideoGL({ src }: { src: string }) {
 
     const onVisibility = () => { if (!document.hidden) tryPlay() }
     document.addEventListener("visibilitychange", onVisibility)
+    /* 低電力モードなどで自動再生を断られた時の逃げ道。once を付けない＝
+       最初の1回だけでなく、触られるたびに掛け直す。1回きりだと、その1回が
+       まだ動画の届く前だった場合にもう機会が無くなる */
     const onInteraction = () => tryPlay()
-    document.addEventListener("touchstart", onInteraction, { once: true })
-    document.addEventListener("click", onInteraction, { once: true })
+    document.addEventListener("pointerdown", onInteraction)
     vid.addEventListener("pause", tryPlay)
 
     // ヒーローが画面外に出たらRAFを停止し、戻ったら再開
@@ -183,13 +188,20 @@ export function HeroVideoGL({ src }: { src: string }) {
       vid.removeEventListener("loadeddata", tryPlay)
       vid.removeEventListener("pause", tryPlay)
       document.removeEventListener("visibilitychange", onVisibility)
-      document.removeEventListener("touchstart", onInteraction)
-      document.removeEventListener("click", onInteraction)
+      document.removeEventListener("pointerdown", onInteraction)
     }
   }, [src])
 
   return (
     <>
+      {/* テクスチャの元になる動画。透明にして隠してはいけない。
+          iOS Safari は「画面に映っていない動画」を省電力のために再生しない
+          （＝開いた瞬間は止まったまま、指が触れて初めて動き出す）ので、
+          opacity-0 で消すとスマホでだけ背景が動かなくなる。
+          代わりに canvas の下に普通に敷く。canvas は毎フレーム全面を塗るので
+          上から完全に隠れて見えないが、ブラウザから見れば「映っている」ことに
+          なるので再生が止められない。canvas がまだ1枚目を描く前の一瞬は
+          この動画がそのまま見える＝黒が出ないという利点もある */}
       <video
         ref={videoRef}
         src={src}
@@ -198,7 +210,7 @@ export function HeroVideoGL({ src }: { src: string }) {
         muted
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full opacity-0 pointer-events-none"
+        className="bg-video absolute inset-0 w-full h-full object-cover pointer-events-none"
       />
       <canvas
         ref={canvasRef}

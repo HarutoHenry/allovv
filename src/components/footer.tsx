@@ -1,69 +1,112 @@
+import Image from "next/image"
 import Link from "next/link"
 
-const footerLinks = [
+const serviceLinks = [
   { href: "/#business", label: "事業内容" },
+  { href: "/services/web", label: "ホームページ制作" },
   { href: "/services/ai-consulting", label: "料金" },
   { href: "/faq", label: "よくあるご質問" },
+]
+
+const companyLinks = [
   { href: "/#about", label: "会社概要" },
   { href: "/#news", label: "ニュース" },
   { href: "/#blog", label: "ブログ" },
   { href: "/#contact", label: "お問い合わせ" },
 ]
 
+function LinkColumn({
+  title,
+  links,
+}: {
+  title: string
+  links: { href: string; label: string }[]
+}) {
+  return (
+    <div>
+      <p className="font-display font-light text-[10px] tracking-[0.22em] uppercase text-accent-mint/85 mb-5">
+        {title}
+      </p>
+      <ul className="space-y-3.5">
+        {links.map((link) => (
+          <li key={link.href}>
+            <Link
+              href={link.href}
+              className="footer-link inline-block text-white/70 hover:text-white text-sm transition-colors"
+            >
+              {link.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
 export function Footer() {
   return (
-    <footer className="bg-navy py-16">
-      <div className="max-w-[900px] mx-auto px-5">
-        {/* Main Footer Content */}
-        <div className="flex flex-col md:flex-row md:items-start justify-between gap-8 mb-12">
-          {/* Logo + Tagline */}
-          <div className="text-center md:text-left">
-            <Link href="/" className="font-display font-bold text-xl text-white tracking-tight">
-              Allovv
+    <footer className="footer-ground relative overflow-hidden">
+      {/* 継ぎ目の光 */}
+      <div aria-hidden className="footer-seam absolute inset-x-0 top-0 h-px" />
+
+      <div className="relative max-w-[900px] mx-auto px-5 py-20 md:py-24">
+        <div className="flex flex-col md:flex-row md:justify-between gap-14 md:gap-10">
+          {/* 会社の言葉 */}
+          <div className="md:max-w-[380px]">
+            {/* ロゴはミント・ティール・モーブでできているので、紺地でそのまま読める（反転版は不要） */}
+            <Link
+              href="/"
+              className="inline-block opacity-90 hover:opacity-100 transition-opacity"
+              aria-label="Allovv トップへ"
+            >
+              <Image
+                src="/logo.png"
+                alt="Allovv"
+                width={306}
+                height={79}
+                className="h-8 w-auto object-contain"
+                placeholder="empty"
+                unoptimized
+              />
             </Link>
-            <p className="font-display font-light text-white/40 text-xs tracking-[0.12em] mt-2">
-              Give more. Allow more.
+            <p className="footer-tagline font-display font-light text-[clamp(1.75rem,4.5vw,2.5rem)] leading-[1.15] tracking-[-0.01em] mt-5">
+              Give more.
+              <br />
+              Allow more.
             </p>
+
+            <a
+              href="https://x.com/allovv_ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center w-10 h-10 mt-9 rounded-full border border-white/25 text-white/70 hover:text-navy hover:bg-accent-mint hover:border-accent-mint transition-colors"
+              aria-label="X（@allovv_ai）を開く"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+            </a>
           </div>
 
-          {/* Navigation */}
-          <nav aria-label="フッターナビゲーション" className="flex flex-wrap justify-center gap-6 md:gap-8">
-            {footerLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-white/60 hover:text-white text-sm transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
+          {/* ナビゲーション */}
+          <nav aria-label="フッターナビゲーション" className="grid grid-cols-2 gap-10 sm:gap-16">
+            <LinkColumn title="Services" links={serviceLinks} />
+            <LinkColumn title="Company" links={companyLinks} />
           </nav>
-
-          {/* Social */}
-          <a
-            href="https://x.com/allovv_ai"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white/60 hover:text-white transition-colors"
-            aria-label="X（@allovv_ai）を開く"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-            </svg>
-          </a>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-white/10 pt-8">
-          {/* Bottom Links */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-white/40 text-xs">
+        {/* 下段 */}
+        <div className="mt-16 pt-8 border-t border-white/10">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-white/55 text-xs">
             <span>&copy; 2026 Allovv</span>
-            <Link href="/privacy" className="hover:text-white/60 transition-colors">
-              プライバシーポリシー
-            </Link>
-            <Link href="/legal" className="hover:text-white/60 transition-colors">
-              特定商取引法に基づく表記
-            </Link>
+            <div className="flex flex-wrap gap-x-7 gap-y-3">
+              <Link href="/privacy" className="footer-link hover:text-white transition-colors">
+                プライバシーポリシー
+              </Link>
+              <Link href="/legal" className="footer-link hover:text-white transition-colors">
+                特定商取引法に基づく表記
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -5,9 +5,32 @@ export type NewsItem = {
   categoryColor: string
   title: string
   body: string
+  /** 記事上部に置くメイン画像（public 配下の絶対パス） */
+  image?: string
+  imageAlt?: string
+  imageCaption?: string
 }
 
 export const newsItems: NewsItem[] = [
+  {
+    slug: "hyogo-fudosan-club-2026",
+    date: "2026.08.30",
+    category: "イベント",
+    categoryColor: "bg-accent-mint/45 text-[#2f7f74]",
+    title: "兵庫不動産クラブ 納涼例会に参加しました",
+    image: "/images/news/hyogo-fudosan-club-2026.jpg",
+    imageAlt: "兵庫不動産クラブ 納涼例会の集合写真",
+    imageCaption: "兵庫不動産クラブ 納涼例会にて",
+    body: `兵庫不動産クラブ 納涼例会に参加させていただきました。
+
+高松建設・高松孝年社長とお話させていただいたこと、不動産・建設業をはじめ、さまざまな業種の経営者の方々とお話しさせていただき、AI活用の現状、現場で溜まっている不満、こんな仕組みがあれば助かるという具体的なご要望まで伺うことができました。貴重なお時間をいただき、ありがとうございます。
+
+実際に多くのご相談をいただけたことも嬉しく、いただいた期待に責任を持ってお応えしていきます。
+
+Allovvは不動産・M&A・自動車・士業・飲食・人材派遣など、業界を問わずAIの導入支援とクリエイティブ制作を行っております。
+
+業務のAI仕組み化、AIを活用した制作は、ぜひAllovvにご相談ください。`
+  },
   {
     slug: "business-succession-handover-2026",
     date: "2026.08.08",

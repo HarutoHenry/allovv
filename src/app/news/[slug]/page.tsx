@@ -1,3 +1,4 @@
+import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import { newsItems } from "@/lib/news-data"
@@ -19,6 +20,7 @@ export async function generateMetadata({ params }: Props) {
   return {
     title: item.title,
     description: item.body.slice(0, 120).replace(/[#*\n]/g, ""),
+    openGraph: item.image ? { images: [item.image] } : undefined,
   }
 }
 
@@ -55,6 +57,26 @@ export default async function NewsDetailPage({ params }: Props) {
               {item.title}
             </h1>
           </div>
+
+          {item.image && (
+            <figure className="mb-12 -mx-5 sm:mx-0">
+              <div className="relative aspect-[4/3] sm:rounded-xl overflow-hidden bg-navy/5">
+                <Image
+                  src={item.image}
+                  alt={item.imageAlt ?? item.title}
+                  fill
+                  priority
+                  sizes="(min-width: 760px) 720px, 100vw"
+                  className="object-cover"
+                />
+              </div>
+              {item.imageCaption && (
+                <figcaption className="mt-3 px-5 sm:px-0 text-xs text-navy/45 leading-relaxed">
+                  {item.imageCaption}
+                </figcaption>
+              )}
+            </figure>
+          )}
 
           <div className="w-full h-px bg-navy/10 mb-12" />
 

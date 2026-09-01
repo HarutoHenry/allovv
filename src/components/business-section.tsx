@@ -34,7 +34,7 @@ const slides: Slide[] = [
     title: ["AI仕組み化"],
     statement: ["毎日の事務作業を、", "AIが下書きします。"],
     steps: ["業務設計", "AI構築", "標準化"],
-    price: "1業務 ¥80,000〜（税別・1ヶ月サポート付き）",
+    price: "1業務 ¥50,000〜（税別・1ヶ月サポート付き）",
     cta: "業務ごとの料金を見る",
     href: "/services/ai-consulting",
     video: "/videos/philosophy-bg.mp4",

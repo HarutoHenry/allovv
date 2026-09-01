@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Zen_Kaku_Gothic_New, Jost } from "next/font/google";
 import { ScrollTop } from "@/components/scroll-top";
+import { AnalyticsTracker } from "@/components/analytics-tracker";
 import "./globals.css";
 
 const zenKaku = Zen_Kaku_Gothic_New({
@@ -83,6 +84,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         <ScrollTop />
+        <AnalyticsTracker />
         {children}
       </body>
     </html>

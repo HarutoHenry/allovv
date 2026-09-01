@@ -42,3 +42,6 @@ next-env.d.ts
 
 .claude/
 *.code-workspace
+
+# アクセス解析のローカル記録（DB未接続のときだけ使う）
+.analytics-dev.json

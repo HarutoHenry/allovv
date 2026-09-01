@@ -23,7 +23,7 @@ const plans = [
     ),
     title: "AI活用研修",
     subtitle: "従業員向け・全10〜12時間",
-    price: "¥400,000〜",
+    price: "¥150,000〜",
     priceNote: "税別 / 1社5名まで",
     featured: false,
     ctaLabel: "お問い合わせ",

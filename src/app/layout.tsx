@@ -19,7 +19,7 @@ const jost = Jost({
 });
 
 const siteDescription =
-  "Allovvは、人工知能の力を事業の推進力に変えるAIカンパニーです。起業支援・AI仕組み化・AIクリエイティブ制作を通じて、あらゆる挑戦の障壁を取り除きます。";
+  "Allovvは、人工知能の力を事業の推進力に変えるAIカンパニーです。AI仕組み化・AIクリエイティブ制作・起業支援を通じて、あらゆる挑戦の障壁を取り除きます。";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.allovv.com"),

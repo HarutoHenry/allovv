@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const VERT = `
   attribute vec2 a_pos;
@@ -35,13 +35,18 @@ const FRAG = `
   }
 `
 
-export function HeroVideoGL({ src }: { src: string }) {
+export function HeroVideoGL({ src, poster }: { src: string; poster: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const mouse = useRef({ x: 0.5, y: 0.5 })
   const smooth = useRef({ x: 0.5, y: 0.5 })
   const rafRef = useRef<number>(0)
   const visibleRef = useRef(true)
+  /* キャンバスが最初の1枚を描くまでは、下の動画ではなく静止画を見せる。
+     iOS は「まだ再生されていない動画」に起動ボタン（▶）を重ねてくるので、
+     その一瞬でも生の動画が見えていると押せそうなボタンが出てしまう */
+  const [painted, setPainted] = useState(false)
+  const paintedRef = useRef(false)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -49,7 +54,13 @@ export function HeroVideoGL({ src }: { src: string }) {
     if (!canvas || !video) return
 
     const gl = canvas.getContext("webgl")
-    if (!gl) return
+    if (!gl) {
+      /* WebGL が使えない端末ではキャンバスが永久に透明のままなので、
+         静止画を退けて動画そのものを見せる */
+      paintedRef.current = true
+      setPainted(true)
+      return
+    }
 
     const vid = video
     const cvs = canvas
@@ -129,6 +140,12 @@ export function HeroVideoGL({ src }: { src: string }) {
       s.y += (t.y - s.y) * 0.055
       gl!.uniform2f(uMouse, s.x, s.y)
       gl!.drawArrays(gl!.TRIANGLE_STRIP, 0, 4)
+      /* 1枚目が載って初めて静止画を外す。texImage2D 前に外すと、
+         中身の無いキャンバス＝黒が一瞬出る */
+      if (!paintedRef.current && lastVideoTime >= 0) {
+        paintedRef.current = true
+        setPainted(true)
+      }
       rafRef.current = requestAnimationFrame(render)
     }
 
@@ -197,14 +214,13 @@ export function HeroVideoGL({ src }: { src: string }) {
       {/* テクスチャの元になる動画。透明にして隠してはいけない。
           iOS Safari は「画面に映っていない動画」を省電力のために再生しない
           （＝開いた瞬間は止まったまま、指が触れて初めて動き出す）ので、
-          opacity-0 で消すとスマホでだけ背景が動かなくなる。
-          代わりに canvas の下に普通に敷く。canvas は毎フレーム全面を塗るので
-          上から完全に隠れて見えないが、ブラウザから見れば「映っている」ことに
-          なるので再生が止められない。canvas がまだ1枚目を描く前の一瞬は
-          この動画がそのまま見える＝黒が出ないという利点もある */}
+          opacity-0 や display:none で消すとスマホでだけ背景が動かなくなる。
+          代わりに全面のまま下に敷いて、上から静止画とキャンバスで覆う。
+          覆われているだけなら「映っている」扱いなので再生は止まらない。 */}
       <video
         ref={videoRef}
         src={src}
+        poster={poster}
         autoPlay
         loop
         muted
@@ -212,6 +228,21 @@ export function HeroVideoGL({ src }: { src: string }) {
         preload="auto"
         className="bg-video absolute inset-0 w-full h-full object-cover pointer-events-none"
       />
+
+      {/* 動画の1コマ目そのもの。キャンバスが描き始めるまでの間、動画の代わりに
+          ここが見えている。動画は下で普通に再生されたまま（隠すと iOS が止める）で、
+          見た目だけこの静止画が覆う＝▶ の起動ボタンが画面に出る隙が無くなる。
+          中身は動画の先頭フレームと同じ絵なので、入れ替わりは目に見えない。
+          自動再生を断られた端末では、この静止画がそのまま背景として残る */}
+      <img
+        src={poster}
+        alt=""
+        aria-hidden="true"
+        fetchPriority="high"
+        className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-[450ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none"
+        style={{ opacity: painted ? 0 : 1 }}
+      />
+
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full pointer-events-none"

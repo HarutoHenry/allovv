@@ -7,7 +7,7 @@ export function HeroSection() {
   return (
     <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
       {/* 流体動画 + WebGLカーソル効果 */}
-      <HeroVideoGL src="/videos/hero-bg.mp4" />
+      <HeroVideoGL src="/videos/hero-bg.mp4" poster="/videos/hero-bg-poster.jpg" />
 
       {/* Overlay */}
       <div className="absolute inset-0 bg-white/40 pointer-events-none" />

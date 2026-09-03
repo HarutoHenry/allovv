@@ -1,5 +1,11 @@
 import Image from "next/image"
 import Link from "next/link"
+import { InstagramIcon, XIcon } from "@/components/social-icons"
+
+const socialLinks = [
+  { name: "X", href: "https://x.com/allovv_ai", Icon: XIcon },
+  { name: "Instagram", href: "https://www.instagram.com/allovv_ai/", Icon: InstagramIcon },
+]
 
 const serviceLinks = [
   { href: "/#business", label: "事業内容" },
@@ -75,17 +81,20 @@ export function Footer() {
               Allow more.
             </p>
 
-            <a
-              href="https://x.com/allovv_ai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center w-10 h-10 mt-9 rounded-full border border-white/25 text-white/70 hover:text-navy hover:bg-accent-mint hover:border-accent-mint transition-colors"
-              aria-label="X（@allovv_ai）を開く"
-            >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-              </svg>
-            </a>
+            <div className="flex items-center gap-3 mt-9">
+              {socialLinks.map(({ name, href, Icon }) => (
+                <a
+                  key={name}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center w-10 h-10 rounded-full border border-white/25 text-white/70 hover:text-navy hover:bg-accent-mint hover:border-accent-mint transition-colors"
+                  aria-label={`${name}（@allovv_ai）を開く`}
+                >
+                  <Icon className="w-4 h-4" />
+                </a>
+              ))}
+            </div>
           </div>
 
           {/* ナビゲーション */}

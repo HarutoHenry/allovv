@@ -62,6 +62,11 @@ const organizationJsonLd = {
   logo: "https://www.allovv.com/logo.png",
   description: siteDescription,
   foundingDate: "2025-06",
+  sameAs: [
+    "https://x.com/allovv_ai",
+    "https://www.instagram.com/allovv_ai/",
+    "https://note.com/allovv",
+  ],
   address: {
     "@type": "PostalAddress",
     addressRegion: "神奈川県",

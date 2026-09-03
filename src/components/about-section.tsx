@@ -2,6 +2,7 @@
 
 import Image from "next/image"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
+import { InstagramIcon, XIcon } from "@/components/social-icons"
 
 const companyInfo = [
   { label: "会社名", value: "Allovv（アロー）" },
@@ -9,6 +10,11 @@ const companyInfo = [
   { label: "代表", value: "三沼 春斗" },
   { label: "所在地", value: "神奈川県横浜市" },
   { label: "事業内容", value: "AI仕組み化、AIクリエイティブ制作、起業支援" },
+]
+
+const socialLinks = [
+  { name: "X", href: "https://x.com/allovv_ai", handle: "@allovv_ai", Icon: XIcon },
+  { name: "Instagram", href: "https://www.instagram.com/allovv_ai/", handle: "@allovv_ai", Icon: InstagramIcon },
 ]
 
 export function AboutSection() {
@@ -48,17 +54,21 @@ export function AboutSection() {
                     SNS
                   </th>
                   <td className="py-4 text-navy text-sm">
-                    <a
-                      href="https://x.com/allovv_ai"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-[#4aa898] hover:text-navy transition-colors"
-                    >
-                      <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                      </svg>
-                      @allovv_ai
-                    </a>
+                    <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                      {socialLinks.map(({ name, href, handle, Icon }) => (
+                        <a
+                          key={name}
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-[#4aa898] hover:text-navy transition-colors"
+                        >
+                          <Icon className="w-3.5 h-3.5 shrink-0" />
+                          <span className="sr-only">{name}</span>
+                          {handle}
+                        </a>
+                      ))}
+                    </div>
                   </td>
                 </tr>
               </tbody>

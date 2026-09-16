@@ -53,6 +53,8 @@ const slides: Slide[] = [
     still: "/images/business/04.jpg",
     rate: 0.72,
   },
+  /* 2026-09-15 ユーザー指示で一時的に外している。戻す時はこのブロックを配列に戻し、
+     番号（CREATIVE を 04 に）と見出しの「3つの領域」を元に戻す
   {
     num: "03",
     label: "STARTUP",
@@ -66,11 +68,12 @@ const slides: Slide[] = [
     still: "/images/business/03.jpg",
     rate: 0.95,
   },
+  */
   {
-    num: "04",
+    num: "03",
     label: "CREATIVE",
     title: ["AIクリエイティブ", "制作"],
-    statement: ["広告の案を、", "何通りでも出します。"],
+    statement: ["AIにより、", "クリエイティブの幅は広がってます。", "あなたの理想を", "映像にいたします。"],
     price: "お見積り（画像・動画・広告コピー）",
     cta: "制作の例を見る",
     href: "#creative",
@@ -104,7 +107,10 @@ function sizeFor(w: number) {
      ※ここを広げすぎると隣の隣（＝反対側と同じカテゴリ）が画面に入る。上の条件は
        activeW を細くするほど余裕が出る向きなので、この式では崩れない */
   const activeW = Math.min(w * 0.82, w - 2 * (PEEK + gap))
-  const activeH = activeW / 1.2
+  /* 高さは幅より少しだけ高くする。CREATIVE は見出し2行＋本文4行あり、
+     横長（activeW/1.2）だと角丸に最終行が切られていた（iPhone 390px で 15px 不足）。
+     360px 幅でも上下に余白が残るよう 0.9 にしている */
+  const activeH = activeW / 0.9
   return { activeW, activeH, pillW: w * 0.3, pillH: activeH * 0.9, gap }
 }
 
@@ -437,7 +443,7 @@ export function BusinessSection() {
               className={`text-center text-navy font-bold text-2xl md:text-3xl leading-relaxed ${VEIL} ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}
               style={{ transitionDelay: "120ms" }}
             >
-              Allovvは4つの領域で<br className="md:hidden" />
+              Allovvは3つの領域で<br className="md:hidden" />
               AIを社会に実装します。
             </h2>
           </div>
@@ -578,7 +584,7 @@ export function BusinessSection() {
                     <span
                       /* 本文も見出しと同じで、スマホでは箱が広がりきってから出す。
                          見出しより少し遅らせて、番号→見出し→本文の順に目が動くようにする */
-                      className={`block overflow-hidden text-navy/65 text-[14px] md:text-[16px] leading-[1.9] tracking-[0.04em] ${MOVE_BODY} ${isActive ? 'scale-100 delay-[500ms] md:delay-0' : 'scale-[0.82] md:scale-100 delay-0'}`}
+                      className={`block overflow-hidden text-navy/65 text-[13px] min-[380px]:text-[14px] md:text-[16px] leading-[1.9] tracking-[0.04em] ${MOVE_BODY} ${isActive ? 'scale-100 delay-[500ms] md:delay-0' : 'scale-[0.82] md:scale-100 delay-0'}`}
                       style={isActive
                         ? { opacity: 1, maxHeight: 240, marginTop: 16 }
                         : { opacity: 0, maxHeight: 0, marginTop: 0 }}

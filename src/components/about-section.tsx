@@ -9,7 +9,7 @@ const companyInfo = [
   { label: "事業開始", value: "2025年6月" },
   { label: "代表", value: "三沼 春斗" },
   { label: "所在地", value: "神奈川県横浜市" },
-  { label: "事業内容", value: "AI仕組み化、AIクリエイティブ制作、起業支援" },
+  { label: "事業内容", value: "AI仕組み化、AIクリエイティブ制作、AI研修、起業支援" },
 ]
 
 const socialLinks = [

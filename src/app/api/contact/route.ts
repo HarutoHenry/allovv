@@ -1,5 +1,11 @@
 import { Resend } from "resend"
 import { NextResponse } from "next/server"
+import { checkEmail, EMAIL_MESSAGES } from "@/lib/contact/email"
+import { checkMailDomain } from "@/lib/contact/email-dns"
+import { checkFormToken, consumeSendQuota, issueFormToken } from "@/lib/contact/guard"
+
+export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -138,22 +144,123 @@ Web　　https://www.allovv.com
   return { text, html }
 }
 
-export async function POST(req: Request) {
-  const { name, company, email, type, message } = await req.json()
+const MAX_LENGTH = { name: 100, company: 100, message: 5000 }
+const MAX_URLS_IN_MESSAGE = 3
 
-  if (!name || !email || !type || !message) {
-    return NextResponse.json({ error: "必須項目が不足しています" }, { status: 400 })
+// 人の書くお問い合わせには出てこない、スパム投稿ツール特有の書き方
+const SPAM_MARKUP = /\[url=|\[link=|<a\s+href=/i
+const URL_PATTERN = /https?:\/\/|www\./i
+
+function countUrls(value: string) {
+  return value.split(/https?:\/\/|www\./i).length - 1
+}
+
+/** Bot に弾いたことを悟らせないよう、成功と同じ応答を返して何もしない */
+function silentlyDrop(reason: string) {
+  console.warn(`[contact] dropped: ${reason}`)
+  return NextResponse.json({ success: true })
+}
+
+function clientIp(req: Request) {
+  return (
+    req.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+    req.headers.get("x-real-ip") ||
+    "unknown"
+  )
+}
+
+/** ブラウザからの送信なら Origin が付く。他サイトから直接投げ込まれたものは断る */
+function isSameOrigin(req: Request) {
+  const origin = req.headers.get("origin")
+  if (!origin) return true
+  try {
+    return new URL(origin).host === req.headers.get("host")
+  } catch {
+    return false
+  }
+}
+
+function text(value: unknown) {
+  return typeof value === "string" ? value.trim() : ""
+}
+
+/** フォームを開いた時点で受付票を渡す（送信時にこれで経過時間を確かめる） */
+export async function GET() {
+  return NextResponse.json(
+    { token: issueFormToken() },
+    { headers: { "Cache-Control": "no-store" } },
+  )
+}
+
+export async function POST(req: Request) {
+  if (!isSameOrigin(req)) {
+    return NextResponse.json({ error: "送信元が不正です" }, { status: 403 })
   }
 
-  const typeLabel = TYPE_LABELS[type] ?? type
-  const payload: ContactPayload = { name, company, email, typeLabel, message }
+  let body: Record<string, unknown>
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: "送信内容を読み取れませんでした" }, { status: 400 })
+  }
 
-  // 1. 事業者への通知（これが本命なので失敗したらエラーを返す）
+  // 1. Bot の判定（画面に見えない入力欄が埋まっている／開いてから数秒で送られてきた）
+  if (text(body.website)) return silentlyDrop("honeypot")
+
+  const token = checkFormToken(body.token)
+  if (token === "too-fast") return silentlyDrop("too fast")
+  if (token !== "ok") {
+    // 受付票が無い・古い。画面側で取り直して自動で送り直す
+    return NextResponse.json({ error: "受付票が無効です", code: "token" }, { status: 400 })
+  }
+
+  // 2. 入力内容の検査（画面側と同じ基準をサーバーでも掛ける）
+  const name = text(body.name).replace(/[\r\n]+/g, " ")
+  const company = text(body.company).replace(/[\r\n]+/g, " ")
+  const type = text(body.type)
+  const message = text(body.message)
+  const email = checkEmail(text(body.email))
+
+  if (SPAM_MARKUP.test(message) || URL_PATTERN.test(name)) return silentlyDrop("spam markup")
+
+  const fieldErrors: Record<string, string> = {}
+  if (!name) fieldErrors.name = "お名前を入力してください"
+  else if (name.length > MAX_LENGTH.name) fieldErrors.name = `お名前は${MAX_LENGTH.name}文字以内で入力してください`
+  if (company.length > MAX_LENGTH.company) fieldErrors.company = `会社名は${MAX_LENGTH.company}文字以内で入力してください`
+  if (!email.ok) fieldErrors.email = email.message
+  if (!Object.prototype.hasOwnProperty.call(TYPE_LABELS, type)) fieldErrors.type = "お問い合わせ種別を選択してください"
+  if (!message) fieldErrors.message = "メッセージを入力してください"
+  else if (message.length > MAX_LENGTH.message) fieldErrors.message = `メッセージは${MAX_LENGTH.message}文字以内で入力してください`
+  else if (countUrls(message) > MAX_URLS_IN_MESSAGE) {
+    fieldErrors.message = `URLは${MAX_URLS_IN_MESSAGE}件までにしてください`
+  }
+
+  // 3. ドメインが実際にメールを受け取れるか（形式が正しい時だけ DNS に問い合わせる）
+  if (email.ok && (await checkMailDomain(email.domain)) === "no-mail") {
+    fieldErrors.email = EMAIL_MESSAGES.undeliverable
+  }
+
+  if (Object.keys(fieldErrors).length > 0 || !email.ok) {
+    return NextResponse.json({ error: "入力内容をご確認ください", fieldErrors }, { status: 400 })
+  }
+
+  // 4. 送信回数の上限（同じ接続元・同じ宛先への連続送信を止める）
+  if (!(await consumeSendQuota(clientIp(req), email.email))) {
+    return NextResponse.json(
+      { error: "短時間に送信が続いたため、受付を一時停止しています", code: "rate" },
+      { status: 429 },
+    )
+  }
+
+  const typeLabel = TYPE_LABELS[type]
+  const payload: ContactPayload = { name, company, email: email.email, typeLabel, message }
+
+  // 5. 事業者への通知（これが本命なので失敗したらエラーを返す）
   const owner = ownerNotification(payload)
   const { error } = await resend.emails.send({
     from: "Allovv Contact <noreply@allovv.com>",
     to: process.env.CONTACT_TO_EMAIL!,
-    replyTo: email,
+    replyTo: payload.email,
     subject: `【お問い合わせ】${typeLabel} - ${name}`,
     text: owner.text,
     html: owner.html,
@@ -164,11 +271,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "送信に失敗しました" }, { status: 500 })
   }
 
-  // 2. お問い合わせ本人への自動返信（失敗しても通知は済んでいるので成功扱い）
+  // 6. お問い合わせ本人への自動返信（失敗しても通知は済んでいるので成功扱い）
   const reply = autoReply(payload)
   const { error: replyError } = await resend.emails.send({
     from: "Allovv｜三沼 春斗 <noreply@allovv.com>",
-    to: email,
+    to: payload.email,
     replyTo: process.env.CONTACT_TO_EMAIL!,
     subject: "【Allovv】お問い合わせありがとうございます（自動返信）",
     text: reply.text,

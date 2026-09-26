@@ -45,6 +45,10 @@ export const metadata: Metadata = {
     icon: "/icon.png",
     apple: "/icon.png",
   },
+  // Google Search Console の所有権確認（URL プレフィックス https://www.allovv.com/）。消すと確認が外れる
+  verification: {
+    google: "U-lEDdVthPyTcR_YhLPsseuDglk2-6FgcDK0XaVL_p4",
+  },
 };
 
 export const viewport: Viewport = {

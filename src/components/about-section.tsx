@@ -1,13 +1,14 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 import { InstagramIcon, XIcon } from "@/components/social-icons"
 
-const companyInfo = [
+const companyInfo: { label: string; value: string; href?: string }[] = [
   { label: "会社名", value: "Allovv（アロー）" },
   { label: "事業開始", value: "2025年6月" },
-  { label: "代表", value: "三沼 春斗" },
+  { label: "代表", value: "三沼 春斗", href: "/about" },
   { label: "所在地", value: "神奈川県横浜市" },
   { label: "事業内容", value: "AI仕組み化、AIクリエイティブ制作、AI研修、起業支援" },
 ]
@@ -45,7 +46,14 @@ export function AboutSection() {
                       {item.label}
                     </th>
                     <td className="py-4 text-navy text-sm">
-                      {item.value}
+                      {item.href ? (
+                        <Link href={item.href} className="inline-flex items-center gap-2 hover:text-[#4aa898] transition-colors">
+                          {item.value}
+                          <span className="text-[#4aa898] text-xs underline underline-offset-4">プロフィール</span>
+                        </Link>
+                      ) : (
+                        item.value
+                      )}
                     </td>
                   </tr>
                 ))}

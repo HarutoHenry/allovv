@@ -4,6 +4,8 @@ export const SITE_URL = "https://www.allovv.com"
 export const SITE_NAME = "Allovv"
 /** 構造化データの中で「Allovv という組織」を指す共通の名札。各ページの Service や記事からここを参照する */
 export const ORG_ID = `${SITE_URL}/#organization`
+/** 代表（/about の人物）を指す名札。組織の founder からも参照する */
+export const PERSON_ID = `${SITE_URL}/about#person`
 
 // 検索で拾ってほしい言葉（AI導入・AIコンサル・AI仕組み化・業務改善）を、トップの題名と説明文に自然に入れる。
 // 事業の書き方は AGENTS.md に従う（単機能を主語にせず「業務を洗い出し、AIで置き換える」の枠で）

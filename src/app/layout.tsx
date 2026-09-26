@@ -3,7 +3,7 @@ import { Zen_Kaku_Gothic_New, Jost } from "next/font/google";
 import { ScrollTop } from "@/components/scroll-top";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
 import { JsonLd } from "@/components/json-ld";
-import { ORG_ID, SITE_NAME, SITE_URL, siteDescription, siteTitle } from "@/lib/seo";
+import { ORG_ID, PERSON_ID, SITE_NAME, SITE_URL, siteDescription, siteTitle } from "@/lib/seo";
 import "./globals.css";
 
 const zenKaku = Zen_Kaku_Gothic_New({
@@ -64,6 +64,7 @@ const organizationJsonLd = {
   logo: `${SITE_URL}/logo.png`,
   description: siteDescription,
   foundingDate: "2025-06",
+  founder: { "@id": PERSON_ID },
   knowsAbout: ["AI導入コンサルティング", "AI仕組み化", "業務改善", "業務効率化", "AI研修", "AIクリエイティブ制作"],
   areaServed: "JP",
   sameAs: [

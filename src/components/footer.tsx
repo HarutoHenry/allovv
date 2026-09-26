@@ -10,12 +10,15 @@ const socialLinks = [
 const serviceLinks = [
   { href: "/#business", label: "事業内容" },
   { href: "/services/web", label: "ホームページ制作" },
-  { href: "/services/ai-consulting", label: "料金" },
+  { href: "/services/ai-consulting", label: "AI導入コンサル・料金" },
+  { href: "/services/ai-training", label: "AI活用研修" },
+  { href: "/cases", label: "導入事例" },
   { href: "/faq", label: "よくあるご質問" },
 ]
 
 const companyLinks = [
   { href: "/#about", label: "会社概要" },
+  { href: "/about", label: "代表プロフィール" },
   { href: "/#news", label: "ニュース" },
   { href: "/#blog", label: "ブログ" },
   { href: "/#contact", label: "お問い合わせ" },

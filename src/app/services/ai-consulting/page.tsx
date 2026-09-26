@@ -5,12 +5,13 @@ import { PricingExampleToggle } from "@/components/services/pricing-example-togg
 import { IndustryCases } from "@/components/services/industry-cases"
 import { CaseExampleSwitcher, type CaseExample } from "@/components/services/case-example-switcher"
 import { JsonLd } from "@/components/json-ld"
+import { PhraseWrap } from "@/components/phrase-wrap"
 import { ORG_ID, SITE_URL, breadcrumbJsonLd, pageMetadata, yen } from "@/lib/seo"
 
 export const metadata = pageMetadata({
-  title: "AI導入コンサル・AI仕組み化の料金プラン",
+  title: "AI導入コンサルティング（AI仕組み化）の進め方と料金",
   description:
-    "業務を洗い出し、AIで置き換えられるところから実装するAI仕組み化（AI導入コンサルティング）の料金プランです。業務設計→AI構築→標準化の順で進めます。AI活用研修（¥150,000〜）、1業務からのAIによる業務効率化（¥50,000〜）、Cursor・Codexの高機能AI導入サポートをご用意しています。価格は税別です。",
+    "AllovvのAI導入コンサルティングは、業務の洗い出しから始めて、AIで置き換えられるところから実装します。業務設計→AI構築→標準化の進め方、AIに任せられる業務の例、情報の取り扱い、料金（1業務¥50,000〜・AI活用研修¥150,000〜、税別）をご案内します。",
   path: "/services/ai-consulting",
 })
 
@@ -30,8 +31,8 @@ const plans = [
     price: "¥150,000〜",
     priceNote: "税別 / 1社5名まで",
     featured: false,
-    ctaLabel: "お問い合わせ",
-    ctaHref: "/#contact",
+    ctaLabel: "研修の内容を見る",
+    ctaHref: "/services/ai-training",
     features: [
       "全10〜12時間（半日×3回など、日程はご相談）",
       "1社5名まで（人数の追加はご相談ください）",
@@ -107,6 +108,52 @@ const plans = [
     ],
     featuresLabel: null,
     featureNote: null,
+  },
+]
+
+// 料金のあとに置く説明の文面。書いてよいのは FAQ と料金カードにある事実だけ。
+// 実績・数字・新しい約束はここで足さない（足すときは先にユーザーに確認する）
+const steps = [
+  {
+    num: "01",
+    title: "業務設計",
+    body: "業務の流れをお伺いし、AIで置き換えるところと人が残すところを決めます。普段お使いの書式・文面・言い回しや、社内の手順もここで確認します。",
+  },
+  {
+    num: "02",
+    title: "AI構築",
+    body: "確認した書式や手順に合わせて、AIが下書きを用意する仕組みを構築し、テスト運用で調整します。構築・設定はすべてAllovvが行うので、ITに詳しくなくても進められます。",
+  },
+  {
+    num: "03",
+    title: "標準化",
+    body: "操作マニュアルをお渡しし、レクチャーで使い方を揃えます。人が代わっても同じ品質で回る形にしたうえで、導入後1ヶ月は調整と質問対応でサポートします。",
+  },
+]
+
+// 返信の自動化だけの会社に見えないよう、問い合わせ返信を先頭に置かない（AGENTS.md）
+const tasks = [
+  { name: "見積書の作成", body: "過去の見積を元に、金額入りの下書きを用意します。" },
+  { name: "打ち合わせの議事録", body: "録音から、決定事項をまとめます。" },
+  { name: "シフト作成", body: "希望と人数から、たたき台をつくります。" },
+  { name: "問い合わせへの返信", body: "届いた問い合わせへの返信を、下書きまで用意します。" },
+  { name: "契約書・規程のチェック", body: "抜けや気になる点を洗い出します。" },
+  { name: "発注予測", body: "飲食店向け。次に頼む量と抜けを出します。" },
+  { name: "手順書づくり", body: "ベテランの手順を、引き継げる手順書にします。" },
+]
+
+const assurances = [
+  {
+    title: "AIが用意するのは、下書きまでです",
+    body: "最終的な確認と判断は人が行う設計です。AIの出力が、そのまま社外に出ることはありません。",
+  },
+  {
+    title: "お客様のデータは、AIの学習に使われません",
+    body: "利用するAI（Anthropic社の商用API）は、お客様のデータをAIの学習に利用しない契約形態です。仕組みはお客様ご自身のアカウント上に構築するため、当方がデータを常時閲覧することもありません。",
+  },
+  {
+    title: "導入後も、実際の業務に合わせて調整します",
+    body: "導入後1ヶ月のサポート期間中に、AIへの指示を調整して精度を高めます。その後も続けたい場合は、月額¥30,000（税別）からの運用契約をご用意しています。運用契約はいつでも解約でき、解約後も仕組みはそのまま使い続けられます。",
   },
 ]
 
@@ -233,7 +280,7 @@ const jsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "Service",
-    name: "AI仕組み化",
+    name: "AI導入コンサルティング（AI仕組み化）",
     serviceType: "AI導入コンサルティング",
     description:
       "業務を洗い出し、AIで置き換えられるところから実装します。業務設計→AI構築→標準化の順で進め、人が代わっても同じ品質で回る形にします。",
@@ -263,7 +310,7 @@ const jsonLd = [
   },
   breadcrumbJsonLd([
     { name: "TOP", path: "/" },
-    { name: "AI仕組み化", path: "/services/ai-consulting" },
+    { name: "AI導入コンサルティング", path: "/services/ai-consulting" },
   ]),
 ]
 
@@ -305,8 +352,9 @@ export default function AiConsultingPage() {
             <span>標準化</span>
           </div>
 
-          <p className="text-white/50 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
-            人が代わっても同じ品質で回る形にします。
+          <p className="text-white/60 text-sm md:text-base max-w-xl mx-auto leading-relaxed text-pretty">
+            業務を洗い出し、AIで置き換えられるところから実装する<br className="hidden md:block" />
+            AI導入コンサルティングです。人が代わっても同じ品質で回る形にします。
           </p>
         </div>
 
@@ -469,6 +517,119 @@ export default function AiConsultingPage() {
           }
           examplesContent={<IndustryCases />}
         />
+
+        {/* ここから下は、検索から直接来た人向けの説明。トップの「料金を見る」から来た人には
+            料金を先に見せたいので、説明は料金のあとに置く。料金と同じ中央揃えにすると単調になるので、
+            見出しを左に置いて読み物の組み方にする */}
+        <section className="border-t border-white/5 py-20 md:py-28 px-5">
+          <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+            <h2 className="md:col-span-5 text-white text-2xl md:text-[2rem] font-bold leading-snug text-balance">
+              <PhraseWrap text="AI導入コンサルティングは、業務の洗い出しから始めます" />
+            </h2>
+            <div className="md:col-span-7 space-y-5 text-white/70 text-[15px] md:text-base leading-[1.9] text-pretty max-w-[62ch]">
+              <p>
+                最初に、日々の業務の流れをお伺いします。そのうえで、AIで置き換えられるところと人が残すべきところを整理し、効果の出やすい業務からご提案します。
+              </p>
+              <p>
+                特定のツールを入れることが目的ではありません。洗い出しの結果、AIを使わないほうがよい業務であれば、そのようにお伝えします。ご相談は無料です。
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* 進め方。この順でしか進まない本物の手順なので、番号を振る */}
+        <section className="border-t border-white/5 py-20 md:py-28 px-5">
+          <div className="max-w-[1100px] mx-auto">
+            <h2 className="text-white text-2xl md:text-[2rem] font-bold leading-snug text-balance mb-12 md:mb-16">
+              導入の進め方と期間
+            </h2>
+            <ol className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
+              {steps.map((step) => (
+                <li key={step.num} className="border-t border-white/15 pt-6">
+                  <span className="block font-display text-[#7dd8ca] text-sm tracking-[0.12em] tabular-nums mb-4">
+                    {step.num}
+                  </span>
+                  <h3 className="text-white text-xl font-bold mb-3">{step.title}</h3>
+                  <p className="text-white/65 text-sm md:text-[15px] leading-[1.9] text-pretty">{step.body}</p>
+                </li>
+              ))}
+            </ol>
+            <p className="text-white/60 text-sm leading-relaxed mt-12 max-w-[62ch] text-pretty">
+              ご契約・ご入金の確認後、最短2営業日で導入できます。業務フローの整理から進める標準的な進行では、1〜2週間程度が目安です。
+            </p>
+          </div>
+        </section>
+
+        {/* 任せられる業務の例 */}
+        <section className="border-t border-white/5 py-20 md:py-28 px-5">
+          <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+            <div className="md:col-span-5">
+              <h2 className="text-white text-2xl md:text-[2rem] font-bold leading-snug text-balance">
+                AIに任せられる業務の例
+              </h2>
+              <p className="text-white/60 text-sm leading-relaxed mt-5 md:max-w-[40ch] text-pretty">
+                これらは一例です。実際に任せる業務は、御社の業務を伺ったうえで一緒に決めます。料金は1業務あたり¥50,000〜（税別）です。
+              </p>
+            </div>
+            <dl className="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-x-10">
+              {tasks.map((task) => (
+                <div key={task.name} className="border-t border-white/10 py-5">
+                  <dt className="text-white font-bold text-[15px] mb-1.5">{task.name}</dt>
+                  <dd className="text-white/60 text-sm leading-relaxed text-pretty">{task.body}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </section>
+
+        {/* 導入事例への導線。事例の中身は /cases に置き、ここでは要点だけ */}
+        <section className="border-t border-white/5 py-20 md:py-28 px-5">
+          <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+            <h2 className="md:col-span-5 text-white text-2xl md:text-[2rem] font-bold leading-snug text-balance">
+              導入事例
+            </h2>
+            <div className="md:col-span-7">
+              <p className="text-[#7dd8ca] text-sm mb-3">東京都内の不動産会社・10業務をAIで改善</p>
+              <p className="text-white/70 text-[15px] md:text-base leading-[1.9] text-pretty max-w-[62ch] mb-8">
+                その一例として、案件の資料をAIが読み取り、決裁者の方の考え方や社内規定の基準をふまえて案件の良し悪しを判断する仕組みを構築しました。決裁者の方のご負担が軽減され、社員の方の判断力の向上にもつながっています。
+              </p>
+              <Link
+                href="/cases"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm transition-colors hover:bg-white/10"
+                style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.85)", border: "1px solid rgba(255,255,255,0.15)" }}
+              >
+                事例を詳しく見る
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* 情報の扱いと導入後 */}
+        <section className="border-t border-white/5 py-20 md:py-28 px-5">
+          <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+            <div className="md:col-span-5">
+              <h2 className="text-white text-2xl md:text-[2rem] font-bold leading-snug text-balance">
+                <PhraseWrap text="情報の取り扱いと、導入後のこと" />
+              </h2>
+              <p className="text-sm mt-5">
+                <Link href="/faq" className="text-[#7dd8ca]/80 hover:text-[#7dd8ca] transition-colors underline underline-offset-4">
+                  よくあるご質問をすべて見る
+                </Link>
+              </p>
+            </div>
+            <div className="md:col-span-7">
+              {assurances.map((item) => (
+                <div key={item.title} className="border-t border-white/10 py-6">
+                  <h3 className="text-white text-lg font-bold leading-snug mb-2.5 text-balance"><PhraseWrap text={item.title} /></h3>
+                  <p className="text-white/65 text-sm md:text-[15px] leading-[1.9] text-pretty max-w-[62ch]">{item.body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* Contact CTA */}
         <div className="border-t border-white/5 py-24 text-center px-5">

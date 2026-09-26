@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Zen_Kaku_Gothic_New, Jost } from "next/font/google";
 import { ScrollTop } from "@/components/scroll-top";
 import { AnalyticsTracker } from "@/components/analytics-tracker";
+import { JsonLd } from "@/components/json-ld";
+import { ORG_ID, SITE_NAME, SITE_URL, siteDescription, siteTitle } from "@/lib/seo";
 import "./globals.css";
 
 const zenKaku = Zen_Kaku_Gothic_New({
@@ -18,31 +20,26 @@ const jost = Jost({
   display: "swap",
 });
 
-const siteDescription =
-  "Allovvは、人工知能の力を事業の推進力に変えるAIカンパニーです。AI仕組み化・AIクリエイティブ制作・AI研修・起業支援を通じて、あらゆる挑戦の障壁を取り除きます。";
-
+// 正規URL（canonical）はここに置かない。子ページに引き継がれ、全ページが
+// トップのURLを名乗ってしまう（2026-09-26 まで実際にそうなっていた）。各ページで pageMetadata() を使う
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.allovv.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
-    default: "Allovv | AIで、日本のビジネスインフラを変える",
+    default: siteTitle,
     template: "%s | Allovv",
   },
   description: siteDescription,
   openGraph: {
     type: "website",
     locale: "ja_JP",
-    url: "https://www.allovv.com",
-    siteName: "Allovv",
-    title: "Allovv | AIで、日本のビジネスインフラを変える",
+    siteName: SITE_NAME,
+    title: siteTitle,
     description: siteDescription,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Allovv | AIで、日本のビジネスインフラを変える",
+    title: siteTitle,
     description: siteDescription,
-  },
-  alternates: {
-    canonical: "/",
   },
   icons: {
     icon: "/icon.png",
@@ -57,11 +54,14 @@ export const viewport: Viewport = {
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "Allovv",
-  url: "https://www.allovv.com",
-  logo: "https://www.allovv.com/logo.png",
+  "@id": ORG_ID,
+  name: SITE_NAME,
+  url: SITE_URL,
+  logo: `${SITE_URL}/logo.png`,
   description: siteDescription,
   foundingDate: "2025-06",
+  knowsAbout: ["AI導入コンサルティング", "AI仕組み化", "業務改善", "業務効率化", "AI研修", "AIクリエイティブ制作"],
+  areaServed: "JP",
   sameAs: [
     "https://x.com/allovv_ai",
     "https://www.instagram.com/allovv_ai/",
@@ -75,6 +75,15 @@ const organizationJsonLd = {
   },
 };
 
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: SITE_NAME,
+  url: SITE_URL,
+  inLanguage: "ja",
+  publisher: { "@id": ORG_ID },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -84,10 +93,7 @@ export default function RootLayout({
         <a href="#main" className="skip-link">
           本文へスキップ
         </a>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
+        <JsonLd data={[organizationJsonLd, websiteJsonLd]} />
         <ScrollTop />
         <AnalyticsTracker />
         {children}

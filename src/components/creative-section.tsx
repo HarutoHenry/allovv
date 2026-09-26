@@ -280,7 +280,7 @@ export function CreativeSection() {
         <div className="sticky top-0 h-screen w-full overflow-hidden">
           <video
             ref={bgRef}
-            className="w-full h-full object-cover"
+            className="bg-video w-full h-full object-cover"
             src="/videos/creative-bg.mp4"
             poster="/videos/creative-bg-poster.jpg"
             autoPlay

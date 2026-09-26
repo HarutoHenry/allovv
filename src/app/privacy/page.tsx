@@ -1,10 +1,12 @@
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "プライバシーポリシー",
   description: "Allovvのプライバシーポリシー（個人情報保護方針）です。",
-}
+  path: "/privacy",
+})
 
 const sections = [
   {

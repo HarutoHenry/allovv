@@ -9,6 +9,14 @@ import { AboutSection } from "@/components/about-section"
 import { ContactSection } from "@/components/contact-section"
 import { Footer } from "@/components/footer"
 import { HashScroll } from "@/components/hash-scroll"
+import { pageMetadata, siteDescription, siteTitle } from "@/lib/seo"
+
+export const metadata = pageMetadata({
+  title: siteTitle,
+  absolute: true,
+  description: siteDescription,
+  path: "/",
+})
 
 export default function Home() {
   return (

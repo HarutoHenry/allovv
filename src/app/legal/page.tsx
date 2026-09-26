@@ -1,10 +1,12 @@
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
+import { pageMetadata } from "@/lib/seo"
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "特定商取引法に基づく表記",
   description: "Allovvの特定商取引法に基づく表記です。",
-}
+  path: "/legal",
+})
 
 const items = [
   { label: "事業者名", value: "Allovv" },

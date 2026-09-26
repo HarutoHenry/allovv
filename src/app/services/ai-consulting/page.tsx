@@ -4,11 +4,15 @@ import { Footer } from "@/components/footer"
 import { PricingExampleToggle } from "@/components/services/pricing-example-toggle"
 import { IndustryCases } from "@/components/services/industry-cases"
 import { CaseExampleSwitcher, type CaseExample } from "@/components/services/case-example-switcher"
+import { JsonLd } from "@/components/json-ld"
+import { ORG_ID, SITE_URL, breadcrumbJsonLd, pageMetadata, yen } from "@/lib/seo"
 
-export const metadata = {
-  title: "AI仕組み化 料金プラン",
-  description: "AllovvのAI仕組み化サービス（業務設計→AI構築→標準化）の料金プランです。AI活用研修・業務効率化・高機能AI導入サポートをご用意しています。",
-}
+export const metadata = pageMetadata({
+  title: "AI導入コンサル・AI仕組み化の料金プラン",
+  description:
+    "業務を洗い出し、AIで置き換えられるところから実装するAI仕組み化（AI導入コンサルティング）の料金プランです。業務設計→AI構築→標準化の順で進めます。AI活用研修（¥150,000〜）、1業務からのAIによる業務効率化（¥50,000〜）、Cursor・Codexの高機能AI導入サポートをご用意しています。価格は税別です。",
+  path: "/services/ai-consulting",
+})
 
 const plans = [
   {
@@ -224,9 +228,49 @@ function CheckIcon() {
   )
 }
 
+// 検索エンジン向けに「何の、誰の、いくらのサービスか」を機械が読める形で渡す。料金は上の plans から作る
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "AI仕組み化",
+    serviceType: "AI導入コンサルティング",
+    description:
+      "業務を洗い出し、AIで置き換えられるところから実装します。業務設計→AI構築→標準化の順で進め、人が代わっても同じ品質で回る形にします。",
+    url: `${SITE_URL}/services/ai-consulting`,
+    provider: { "@id": ORG_ID },
+    areaServed: "JP",
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "AI仕組み化 料金プラン",
+      itemListElement: plans.map((plan) => {
+        const min = yen(plan.price)
+        return {
+          "@type": "Offer",
+          name: plan.title,
+          description: plan.subtitle,
+          ...(min && {
+            priceSpecification: {
+              "@type": "PriceSpecification",
+              minPrice: min,
+              priceCurrency: "JPY",
+              valueAddedTaxIncluded: false,
+            },
+          }),
+        }
+      }),
+    },
+  },
+  breadcrumbJsonLd([
+    { name: "TOP", path: "/" },
+    { name: "AI仕組み化", path: "/services/ai-consulting" },
+  ]),
+]
+
 export default function AiConsultingPage() {
   return (
     <>
+      <JsonLd data={jsonLd} />
       <Navigation />
       <main className="min-h-screen bg-[#0f1e24]">
 

@@ -4,6 +4,8 @@ import { notFound } from "next/navigation"
 import { newsItems } from "@/lib/news-data"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
+import { JsonLd } from "@/components/json-ld"
+import { ORG_ID, SITE_URL, breadcrumbJsonLd, pageMetadata } from "@/lib/seo"
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -13,15 +15,26 @@ export async function generateStaticParams() {
   return newsItems.map((item) => ({ slug: item.slug }))
 }
 
+/** 表示用の「2026.08.30」→ 検索エンジン向けの「2026-08-30」 */
+function isoDate(date: string) {
+  return date.replace(/\./g, "-")
+}
+
+function summary(body: string) {
+  return body.slice(0, 120).replace(/[#*\n]/g, "")
+}
+
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params
   const item = newsItems.find((n) => n.slug === slug)
   if (!item) return {}
-  return {
+  return pageMetadata({
     title: item.title,
-    description: item.body.slice(0, 120).replace(/[#*\n]/g, ""),
-    openGraph: item.image ? { images: [item.image] } : undefined,
-  }
+    description: summary(item.body),
+    path: `/news/${item.slug}`,
+    article: { publishedTime: isoDate(item.date) },
+    images: item.image ? [item.image] : undefined,
+  })
 }
 
 export default async function NewsDetailPage({ params }: Props) {
@@ -31,8 +44,28 @@ export default async function NewsDetailPage({ params }: Props) {
 
   const paragraphs = item.body.split("\n\n")
 
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "NewsArticle",
+      headline: item.title,
+      description: summary(item.body),
+      datePublished: isoDate(item.date),
+      url: `${SITE_URL}/news/${item.slug}`,
+      ...(item.image && { image: [`${SITE_URL}${item.image}`] }),
+      author: { "@id": ORG_ID },
+      publisher: { "@id": ORG_ID },
+    },
+    breadcrumbJsonLd([
+      { name: "TOP", path: "/" },
+      { name: "お知らせ", path: "/news" },
+      { name: item.title, path: `/news/${item.slug}` },
+    ]),
+  ]
+
   return (
     <>
+      <JsonLd data={jsonLd} />
       <Navigation />
       <main className="min-h-screen bg-white pt-32 pb-24">
         <div className="max-w-[720px] mx-auto px-5">

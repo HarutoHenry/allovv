@@ -35,9 +35,29 @@ const FRAG = `
   }
 `
 
-export function HeroVideoGL({ src, poster }: { src: string; poster: string }) {
+/** 指で触る端末（スマホ・タブレット）。カーソルの揺らぎはここでは起きようがないので、
+    WebGL を通さずに素材をそのまま流す。PC用の動画もこの条件では1バイトも取りに行かない */
+const TOUCH = "(hover: none)"
+/** そのうち縦持ちの時だけ、縦に切り出した軽い方を使う。iPad を横にした時まで
+    縦長の素材を引き伸ばすと粗くなるので、横向きは元の動画をそのまま流す */
+const TALL = "(hover: none) and (orientation: portrait)"
+/** 1px の透明な GIF。<picture> の mp4 を選ばないブラウザでは、ここに何も映らない */
+const BLANK = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+
+type Props = {
+  src: string
+  poster: string
+  /** スマホ用。縦長に切り出して軽くした同じ動画と、その1コマ目 */
+  mobileSrc: string
+  mobilePoster: string
+}
+
+export function HeroVideoGL({ src, poster, mobileSrc, mobilePoster }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const motionRef = useRef<HTMLImageElement>(null)
+  /** Safari 以外のスマホ（Android など）だけ、画像の代わりに <video> で流す */
+  const [mobileVideo, setMobileVideo] = useState(false)
   const mouse = useRef({ x: 0.5, y: 0.5 })
   const smooth = useRef({ x: 0.5, y: 0.5 })
   const rafRef = useRef<number>(0)
@@ -52,6 +72,8 @@ export function HeroVideoGL({ src, poster }: { src: string; poster: string }) {
     const canvas = canvasRef.current
     const video = videoRef.current
     if (!canvas || !video) return
+    // スマホは下の別の effect が受け持つ。こちらは静止画を残したまま何もしない
+    if (window.matchMedia(TOUCH).matches) return
 
     const gl = canvas.getContext("webgl")
     if (!gl) {
@@ -209,17 +231,44 @@ export function HeroVideoGL({ src, poster }: { src: string; poster: string }) {
     }
   }, [src])
 
+  /* スマホ。iPhone の低電力モードは <video> の自動再生を一切許さず、
+     何度 play() を掛け直しても、指が触れるまで止まったままになる。
+     ここは動画を「画像」として出して、その制限の外に置く。
+     Safari は <img>／<picture> に mp4 を渡すと GIF と同じ扱いで勝手に流す
+     （WebKit の仕様。音が無い前提なので自動再生の制限がかからず、▶ も出ない）。
+     mp4 を画像として読めないブラウザ（Android の Chrome など）は <picture> の
+     mp4 を飛ばして透明な GIF を選ぶので、その時だけ <video> に切り替える。
+     Android は無音の動画なら低電力でも自動再生を通す */
+  useEffect(() => {
+    if (!window.matchMedia(TOUCH).matches) return
+    const img = motionRef.current
+    if (!img) return
+    const decide = () => {
+      if (!img.currentSrc) return false
+      if (!/\.mp4(\?|$)/.test(img.currentSrc)) setMobileVideo(true)
+      return true
+    }
+    // どちらを選んだかは読み込みの手前で決まる。まだ決まっていなければ待つ
+    if (decide()) return
+    img.addEventListener("load", decide, { once: true })
+    img.addEventListener("error", decide, { once: true })
+    return () => {
+      img.removeEventListener("load", decide)
+      img.removeEventListener("error", decide)
+    }
+  }, [])
+
   return (
     <>
-      {/* テクスチャの元になる動画。透明にして隠してはいけない。
-          iOS Safari は「画面に映っていない動画」を省電力のために再生しない
-          （＝開いた瞬間は止まったまま、指が触れて初めて動き出す）ので、
-          opacity-0 や display:none で消すとスマホでだけ背景が動かなくなる。
+      {/* PC：テクスチャの元になる動画。透明にして隠してはいけない。
+          Safari は「画面に映っていない動画」を省電力のために再生しないので、
+          opacity-0 や display:none で消すと背景が動かなくなる。
           代わりに全面のまま下に敷いて、上から静止画とキャンバスで覆う。
-          覆われているだけなら「映っている」扱いなので再生は止まらない。 */}
+          覆われているだけなら「映っている」扱いなので再生は止まらない。
+          media でPCだけに渡す。スマホは下の <picture> が受け持つので、
+          ここでは1バイトも取りに行かせない（二重に読むと縦持ちで 3MB を超える） */}
       <video
         ref={videoRef}
-        src={src}
         poster={poster}
         autoPlay
         loop
@@ -227,26 +276,85 @@ export function HeroVideoGL({ src, poster }: { src: string; poster: string }) {
         playsInline
         preload="auto"
         className="bg-video absolute inset-0 w-full h-full object-cover pointer-events-none"
-      />
+      >
+        <source src={src} type="video/mp4" media="(hover: hover)" />
+      </video>
 
-      {/* 動画の1コマ目そのもの。キャンバスが描き始めるまでの間、動画の代わりに
-          ここが見えている。動画は下で普通に再生されたまま（隠すと iOS が止める）で、
-          見た目だけこの静止画が覆う＝▶ の起動ボタンが画面に出る隙が無くなる。
-          中身は動画の先頭フレームと同じ絵なので、入れ替わりは目に見えない。
-          自動再生を断られた端末では、この静止画がそのまま背景として残る */}
-      <img
-        src={poster}
-        alt=""
-        aria-hidden="true"
-        fetchPriority="high"
-        className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-[450ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none"
-        style={{ opacity: painted ? 0 : 1 }}
-      />
+      {/* 動画の1コマ目そのもの。PCではキャンバスが描き始めるまでの間、スマホでは
+          下の動画が届くまでの間、ここが見えている。中身は動画の先頭フレームと
+          同じ絵なので、入れ替わりは目に見えない。
+          スマホは縦に切り出した方を出す（横長の静止画を縦の画面に引き伸ばすと
+          粗くなる）。自動再生がどうしても掛からない端末では、これがそのまま残る */}
+      <picture>
+        <source media={TALL} srcSet={mobilePoster} />
+        <img
+          src={poster}
+          alt=""
+          aria-hidden="true"
+          fetchPriority="high"
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-[450ms] ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none"
+          style={{ opacity: painted ? 0 : 1 }}
+        />
+      </picture>
 
       <canvas
         ref={canvasRef}
         className="absolute inset-0 w-full h-full pointer-events-none"
       />
+
+      {/* スマホ：Safari はここで mp4 を選んで流す。それ以外は透明な1pxのまま */}
+      <picture>
+        <source media={TALL} type="video/mp4" srcSet={mobileSrc} />
+        <source media={TOUCH} type="video/mp4" srcSet={src} />
+        <img
+          ref={motionRef}
+          src={BLANK}
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+        />
+      </picture>
+      {mobileVideo && (
+        <MobileVideo src={src} poster={poster} mobileSrc={mobileSrc} mobilePoster={mobilePoster} />
+      )}
     </>
+  )
+}
+
+/** mp4 を画像として流せないスマホ向け。掛からなかった時は触れた瞬間に掛け直す。
+    効果の中でしか作られない（サーバーでは描かれない）ので、向きはその場で読んでよい */
+function MobileVideo({ src, poster, mobileSrc, mobilePoster }: Props) {
+  const ref = useRef<HTMLVideoElement>(null)
+  const [tall] = useState(() => window.matchMedia(TALL).matches)
+
+  useEffect(() => {
+    const vid = ref.current
+    if (!vid) return
+    vid.muted = true
+    const tryPlay = () => vid.play().catch(() => {})
+    const onVisibility = () => { if (!document.hidden) tryPlay() }
+    vid.addEventListener("canplay", tryPlay)
+    document.addEventListener("visibilitychange", onVisibility)
+    document.addEventListener("pointerdown", tryPlay)
+    tryPlay()
+    return () => {
+      vid.removeEventListener("canplay", tryPlay)
+      document.removeEventListener("visibilitychange", onVisibility)
+      document.removeEventListener("pointerdown", tryPlay)
+    }
+  }, [])
+
+  return (
+    <video
+      ref={ref}
+      src={tall ? mobileSrc : src}
+      poster={tall ? mobilePoster : poster}
+      autoPlay
+      loop
+      muted
+      playsInline
+      preload="auto"
+      className="bg-video absolute inset-0 w-full h-full object-cover pointer-events-none"
+    />
   )
 }

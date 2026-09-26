@@ -2,15 +2,20 @@ import Link from "next/link"
 import { newsItems } from "@/lib/news-data"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
+import { JsonLd } from "@/components/json-ld"
+import { breadcrumbJsonLd, pageMetadata } from "@/lib/seo"
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: "お知らせ",
-  description: "Allovvからの最新のお知らせ・プレスリリースです。",
-}
+  description:
+    "Allovvからのお知らせ・活動報告です。AI導入に活用できる補助金のご案内や、業務へのAI活用に関するレポートも掲載しています。",
+  path: "/news",
+})
 
 export default function NewsPage() {
   return (
     <>
+      <JsonLd data={breadcrumbJsonLd([{ name: "TOP", path: "/" }, { name: "お知らせ", path: "/news" }])} />
       <Navigation />
       <main className="min-h-screen bg-white pt-32 pb-24">
         <div className="max-w-[900px] mx-auto px-5">

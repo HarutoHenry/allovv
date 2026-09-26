@@ -7,7 +7,12 @@ export function HeroSection() {
   return (
     <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden">
       {/* 流体動画 + WebGLカーソル効果 */}
-      <HeroVideoGL src="/videos/hero-0907.mp4" poster="/videos/hero-0907-poster.jpg" />
+      <HeroVideoGL
+        src="/videos/hero-0907.mp4"
+        poster="/videos/hero-0907-poster.jpg"
+        mobileSrc="/videos/hero-0907-mobile.mp4"
+        mobilePoster="/videos/hero-0907-mobile-poster.jpg"
+      />
 
       {/* Overlay */}
       <div className="absolute inset-0 bg-white/40 pointer-events-none" />
@@ -19,7 +24,7 @@ export function HeroSection() {
             Give more. Allow more.
           </p>
           <p className="font-display font-light text-xs tracking-[0.2em] uppercase text-navy/40">
-            AI Company — Tokyo, Japan
+            AI Company — Yokohama, Japan
           </p>
         </div>
 

@@ -43,7 +43,7 @@ export function PhilosophySection() {
           muted
           playsInline
           preload="metadata"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="bg-video absolute inset-0 w-full h-full object-cover"
           src="/videos/philosophy-bg.mp4"
         />
       </div>

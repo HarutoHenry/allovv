@@ -21,6 +21,8 @@ type Slide = {
   /** カードの中で動く素材と、背景のぼかしに使う静止画 */
   video: string
   still: string
+  /** スマホで動画の代わりに置く1コマ。カードの縦横比（0.9）に切り出してある */
+  photo: string
   /** 白地に線画の素材だけは、下に色を敷いて乗算で重ねないとカードが消えてしまう */
   tint?: string
   /** 素材ごとに展開の速さが違うので、再生速度で他のカードに合わせる */
@@ -39,6 +41,7 @@ const slides: Slide[] = [
     href: "/services/ai-consulting",
     video: "/videos/philosophy-bg.mp4",
     still: "/images/business/02.jpg",
+    photo: "/images/business/02-m.webp",
     rate: 0.72,
   },
   {
@@ -51,6 +54,7 @@ const slides: Slide[] = [
     href: "/services/web",
     video: "/videos/hero-bg.mp4",
     still: "/images/business/04.jpg",
+    photo: "/images/business/04-m.webp",
     rate: 0.72,
   },
   /* 2026-09-15 ユーザー指示で一時的に外している。戻す時はこのブロックを配列に戻し、
@@ -79,6 +83,7 @@ const slides: Slide[] = [
     href: "#creative",
     video: "/videos/business-bg.mp4",
     still: "/images/business/01.jpg",
+    photo: "/images/business/01-m.webp",
     tint: "linear-gradient(140deg, #c5f5e8 0%, #e8f4fb 45%, #ffe4ef 100%)",
     // 4本の速さはこの04を基準に合わせている。全体をもう少し速く／遅くしたい時は、
     // 4つの rate を同じ倍率で掛け直せば釣り合いは崩れない
@@ -121,9 +126,25 @@ function sizeFor(w: number) {
       ②タブを離れて戻ってくると、iOS は自分から再生を再開しない
       ③同時に再生できる本数には端末ごとの上限があり、超えた分は無言で失敗する
     なので「掛かるまで掛け直す」側に寄せる。読み込みが進んだ時とタブに戻った時に
-    もう一度 play() を試し、画面の外にいる間は止めて本数の枠を空けておく。 */
+    もう一度 play() を試し、画面の外にいる間は止めて本数の枠を空けておく。
+    スマホでは動画をやめて写真を置く。iPhone の低電力モードはどれだけ掛け直しても
+    自動再生を許さず、指で触れるまで ▶ の付いた静止画になってしまうため。
+    カードは指で送る小さな面なので、止まった1枚でも見劣りしない */
 function CardVideo({ slide, playing }: { slide: Slide; playing: boolean }) {
   const ref = useRef<HTMLVideoElement>(null)
+  /** 動画を流す幅か。決まるまでは何も置かない（このセクションに着く頃には決まっている）。
+      境目はカードの寸法を切り替える sizeFor と同じ 768px */
+  const [motion, setMotion] = useState<boolean | null>(null)
+  /** 動画が実際に流れ始めたか。それまでは下に敷いた静止画を見せ、動画は透明にしておく */
+  const [live, setLive] = useState(false)
+
+  useEffect(() => {
+    const wide = window.matchMedia("(min-width: 768px)")
+    const update = () => setMotion(wide.matches)
+    update()
+    wide.addEventListener("change", update)
+    return () => wide.removeEventListener("change", update)
+  }, [])
 
   useEffect(() => {
     const el = ref.current
@@ -179,27 +200,57 @@ function CardVideo({ slide, playing }: { slide: Slide; playing: boolean }) {
       document.removeEventListener("visibilitychange", sync)
       document.removeEventListener("pointerdown", sync)
     }
-  }, [playing, slide.rate])
+  }, [playing, slide.rate, motion])
+
+  if (motion === null) return null
+  if (!motion) {
+    return (
+      <img
+        src={slide.photo}
+        alt=""
+        decoding="async"
+        className="absolute inset-0 w-full h-full object-cover"
+        style={slide.tint ? { mixBlendMode: "multiply" } : undefined}
+      />
+    )
+  }
+
+  const blend = slide.tint ? { mixBlendMode: "multiply" as const } : undefined
 
   return (
-    <video
-      ref={ref}
-      /* autoPlay 属性は付けない。付けると、このセクションがまだ画面のはるか下に
-         いる時点で7枚ぶんの動画が一斉に取りに行き、ページ本体の読み込みと
-         回線を取り合う。読み込みの途中でここまでスクロールされると、その
-         取り合いのまっただ中で再生を求めることになり、たいてい間に合わない。
-         再生は下の useEffect が「画面に入ってから」掛ける。preload="none" と
-         合わせて、ここへ来るまで動画は1バイトも取りに行かない。
-         その間に見えているのは poster の静止画なので、絵が欠けることはない */
-      loop
-      muted
-      playsInline
-      preload="none"
-      poster={slide.still}
-      src={slide.video}
-      className="bg-video absolute inset-0 w-full h-full object-cover"
-      style={slide.tint ? { mixBlendMode: "multiply" } : undefined}
-    />
+    <>
+      {/* 静止画は poster に任せず、<img> で下に敷く。iPhone（iPad・横向き含む）は
+          自動再生を断った動画の poster を出さないことがあり、カードが白いまま残る
+          （2026-09-26 に実機で 01・02 が空になっていた）。画面に何かが出るのを
+          動画の都合に預けない */}
+      {!live && (
+        <img
+          src={slide.still}
+          alt=""
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={blend}
+        />
+      )}
+      <video
+        ref={ref}
+        /* autoPlay 属性は付けない。付けると、このセクションがまだ画面のはるか下に
+           いる時点で7枚ぶんの動画が一斉に取りに行き、ページ本体の読み込みと
+           回線を取り合う。読み込みの途中でここまでスクロールされると、その
+           取り合いのまっただ中で再生を求めることになり、たいてい間に合わない。
+           再生は下の useEffect が「画面に入ってから」掛ける。preload="none" と
+           合わせて、ここへ来るまで動画は1バイトも取りに行かない。
+           流れ始めるまでは透明にしておき、上の静止画を見せる */
+        loop
+        muted
+        playsInline
+        preload="none"
+        src={slide.video}
+        onPlaying={() => setLive(true)}
+        className="bg-video absolute inset-0 w-full h-full object-cover"
+        style={{ ...blend, opacity: live ? 1 : 0 }}
+      />
+    </>
   )
 }
 

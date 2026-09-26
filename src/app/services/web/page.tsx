@@ -1,12 +1,15 @@
 import Link from "next/link"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
+import { JsonLd } from "@/components/json-ld"
+import { ORG_ID, SITE_URL, breadcrumbJsonLd, pageMetadata } from "@/lib/seo"
 
-export const metadata = {
-  title: "ホームページ制作",
+export const metadata = pageMetadata({
+  title: "ホームページ制作（¥50,000〜・最短5営業日）",
   description:
-    "Allovvのホームページ制作サービスです。¥50,000〜、最短5営業日から。スマートフォン表示は標準対応、オンライン打ち合わせに対応しています。公開後の運用はAI仕組み化でそのままお任せいただけます。",
-}
+    "Allovvのホームページ制作サービスです。¥50,000〜（税別）、最短5営業日から。スマートフォン表示は標準対応、オンライン打ち合わせに対応しています。公開後の運用はAI仕組み化でそのままお任せいただけます。",
+  path: "/services/web",
+})
 
 const included = [
   {
@@ -65,9 +68,37 @@ function CheckIcon() {
   )
 }
 
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "ホームページ制作",
+    serviceType: "ホームページ制作",
+    description:
+      "伝えたいことが伝わる、シンプルで見やすいホームページを制作します。スマートフォン表示は標準対応。公開後の運用まで含めてご相談いただけます。",
+    url: `${SITE_URL}/services/web`,
+    provider: { "@id": ORG_ID },
+    areaServed: "JP",
+    offers: {
+      "@type": "Offer",
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        minPrice: 50000,
+        priceCurrency: "JPY",
+        valueAddedTaxIncluded: false,
+      },
+    },
+  },
+  breadcrumbJsonLd([
+    { name: "TOP", path: "/" },
+    { name: "ホームページ制作", path: "/services/web" },
+  ]),
+]
+
 export default function WebProductionPage() {
   return (
     <>
+      <JsonLd data={jsonLd} />
       <Navigation />
       <main className="min-h-screen bg-[#0f1e24]">
 

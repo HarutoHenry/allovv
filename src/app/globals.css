@@ -418,7 +418,7 @@
 /* 日本語の段落を文節で折り返す（Chrome）。<br> で折り位置を決め打ちしなくて済む */
 .svc-jp { word-break: auto-phrase; }
 
-/* ブランドのラベル（AI仕組み化: Systemize / Industry Cases / Contact、ホームページ制作: Web Production / Contact だけで使う） */
+/* ブランドのラベル（AI仕組み化: Systemize / Industry Cases / Contact、ホームページ制作: Web Production / Contact、AI活用研修: Training / Contact だけで使う） */
 .svc-kicker {
   display: inline-flex;
   align-items: center;
@@ -473,6 +473,53 @@
 }
 .svc-enter { animation: svc-fade-up 800ms var(--ease-expo) var(--d, 0ms) both; }
 .svc-enter-fade { animation: svc-fade 1200ms var(--ease-strong) var(--d, 0ms) both; }
+
+/* AI活用研修のヒーローの背景（講師がスクリーンのまえで研修している図）。
+   絵は 16:9 のまま枠いっぱいに広げ、スクリーンの中心が枠の上から 4 割あたりに来るように切る。狭い画面では左右を切ってスクリーンと講師を残す */
+.tscene {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+  overflow: hidden;
+  pointer-events: none;
+  background: #0b181d;
+}
+.tscene-art {
+  --w: max(100cqw, 100cqh * 16 / 9);
+  --h: calc(var(--w) * 9 / 16);
+  position: absolute;
+  width: var(--w);
+  height: var(--h);
+  left: calc(50cqw - var(--w) / 2);
+  top: clamp(100cqh - var(--h), 40cqh - var(--h) * 0.38, 0px);
+}
+.tscene-art svg,
+.tscene-art canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+/* 上はナビの下を少し暗く、下は本文の地の色へ溶かす。見出しとリードが明るいところに乗らないように */
+.tscene-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(15 30 36 / 0.55) 0%, rgb(15 30 36 / 0) 17%),
+    linear-gradient(0deg, #0f1e24 0%, rgb(15 30 36 / 0.86) 24%, rgb(15 30 36 / 0.35) 44%, rgb(15 30 36 / 0) 60%);
+}
+@media (max-width: 767px) {
+  .tscene-art {
+    --w: 240cqw;
+    top: 3.25rem;
+  }
+}
+/* 光（スクリーン・光の筋・壁の照り返し）は、部屋が見えてから灯る */
+@keyframes tscene-on { from { opacity: 0; } }
+@keyframes tscene-ray { to { opacity: 0.02; } }
+.tscene-on { animation: tscene-on 1500ms var(--ease-strong) 140ms both; }
+.tscene-ray { animation: tscene-ray 7s ease-in-out infinite alternate; }
 
 /* 文中のリンク。下線は hover で左から引き直す */
 .svc-link {
@@ -755,6 +802,20 @@
 }
 @keyframes svc-march { to { transform: translateX(56px); } }
 
+/* AI活用研修の一文に引く蛍光ペン。文字の下半分にミントの帯を敷く。
+   スクロールに合わせて左から引く（未対応のブラウザや動きを減らす設定では、最初から引いてある） */
+.svc-mark {
+  color: inherit;
+  background-color: transparent;
+  background-image: linear-gradient(rgba(125, 216, 202, 0.34), rgba(125, 216, 202, 0.34));
+  background-repeat: no-repeat;
+  background-position: 0 90%;
+  background-size: 100% 0.42em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+@keyframes svc-mark-kf { from { background-size: 0% 0.42em; } }
+
 /* スクロール連動の演出。対応ブラウザだけで足す（未対応なら最初から見えている） */
 @keyframes svc-rise-kf { from { opacity: 0; transform: translateY(32px); } }
 @keyframes svc-slide-kf { from { opacity: 0; transform: translateX(-20px); } }
@@ -777,6 +838,13 @@
     animation-timeline: view();
     animation-range: entry 0% cover 35%;
   }
+  /* 2つ目の帯は1つ目を引き終えたところから続けて引く。見出しが画面の真ん中に来るころに引き終わる */
+  .svc-mark {
+    animation: svc-mark-kf linear both;
+    animation-timeline: view();
+    animation-range: entry 100% cover 32%;
+  }
+  .svc-mark--2 { animation-range: cover 32% cover 50%; }
   .svc-steps::after {
     animation: svc-fill-kf linear both;
     animation-timeline: --svc-steps;
@@ -800,6 +868,9 @@
   .svc-open,
   .svc-steps::after,
   .svc-march-track,
+  .svc-mark,
+  .tscene-on,
+  .tscene-ray,
   .svc-plan::before { animation: none; }
   .svc-device,
   .svc-device::before { transition: none; }

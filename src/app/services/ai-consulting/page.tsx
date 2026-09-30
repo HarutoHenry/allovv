@@ -519,7 +519,7 @@ export default function AiConsultingPage() {
         </div>
 
       </main>
-      <Footer onDark />
+      <Footer seamless />
     </>
   )
 }

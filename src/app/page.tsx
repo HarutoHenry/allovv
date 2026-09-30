@@ -33,7 +33,7 @@ export default function Home() {
         <AboutSection />
         <ContactSection />
       </main>
-      <Footer />
+      <Footer seamless />
     </>
   )
 }

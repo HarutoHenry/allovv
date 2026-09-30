@@ -51,12 +51,12 @@ function LinkColumn({
   )
 }
 
-/** onDark: 本体が同じ紺のページ（/about・/services/*）。継ぎ目の光を消して、境目なく続ける */
-export function Footer({ onDark = false }: { onDark?: boolean }) {
+/** seamless: 上端の光の帯を出さず、色は少し下で淡く灯す（トップ・/about・/services/*）。紺のページでは境目なく続き、明るいページでは紺の面がすっと始まる */
+export function Footer({ seamless = false }: { seamless?: boolean }) {
   return (
-    <footer className={`footer-ground relative overflow-hidden${onDark ? " footer-ground--on-dark" : ""}`}>
+    <footer className={`footer-ground relative overflow-hidden${seamless ? " footer-ground--seamless" : ""}`}>
       {/* 継ぎ目の光 */}
-      <div aria-hidden className={`footer-seam absolute inset-x-0 top-0 h-px${onDark ? " footer-seam--on-dark" : ""}`} />
+      <div aria-hidden className={`footer-seam absolute inset-x-0 top-0 h-px${seamless ? " footer-seam--seamless" : ""}`} />
 
       <div className="relative max-w-[900px] mx-auto px-5 py-20 md:py-24">
         <div className="flex flex-col md:flex-row md:justify-between gap-14 md:gap-10">

@@ -343,14 +343,14 @@
   opacity: 0.9;
 }
 
-/* 本体が同じ紺のページ（/about・/services/*）。上の地が暗いので、上端の光の線と
-   上端に寄せた色だまりが、ページの終わりに引いた一本の帯として浮いてしまう。
-   上端はページと同じ #0f1e24 から始め、色は少し下で淡く灯して、境目を消す。
-   区切りはページの中の区切り線（白10%）と同じ控えめさに揃える */
-.footer-ground--on-dark {
+/* 上端の光の帯を出さない版（トップ・/about・/services/*）。上端の光の線と上端に寄せた
+   色だまりは、ページの終わりに引いた一本の帯として浮いてしまう（明るいトップでも同じ指摘）。
+   上端は紺の #0f1e24 から始め、色は少し下で淡く灯す。紺のページでは境目が消え、
+   明るいページでは紺の面がすっと始まる。区切りはページの中の区切り線と同じ控えめさに揃える */
+.footer-ground--seamless {
   background: linear-gradient(180deg, #0f1e24 0%, #0b171c 100%);
 }
-.footer-ground--on-dark::before {
+.footer-ground--seamless::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -362,7 +362,7 @@
   mask-image: linear-gradient(180deg, transparent 0%, #000 50%);
   pointer-events: none;
 }
-.footer-seam--on-dark {
+.footer-seam--seamless {
   background: linear-gradient(
     90deg,
     transparent 0%,
@@ -372,7 +372,7 @@
     transparent 100%
   );
 }
-.footer-seam--on-dark::after { content: none; }
+.footer-seam--seamless::after { content: none; }
 
 /* タグライン。濃紺の上に置くので、パステルのままだと白に見えてしまう。
    彩度を上げて、光として読める明るさに寄せる。 */

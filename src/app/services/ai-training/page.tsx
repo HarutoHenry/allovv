@@ -218,7 +218,7 @@ export default function AiTrainingPage() {
         </div>
 
       </main>
-      <Footer onDark />
+      <Footer seamless />
     </>
   )
 }

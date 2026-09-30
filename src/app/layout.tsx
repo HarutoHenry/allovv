@@ -6,11 +6,16 @@ import { JsonLd } from "@/components/json-ld";
 import { ORG_ID, PERSON_ID, SITE_NAME, SITE_URL, siteDescription, siteTitle } from "@/lib/seo";
 import "./globals.css";
 
+/* preload は切る。日本語フォントは文字の範囲ごとに細かく分かれていて、subsets を latin に
+   絞っても全部が先読みの対象になり、4太さ×約90＝359ファイル・約4MBを毎回最優先で取りに行っていた。
+   その間ヒーロー動画とJSが後回しにされ、開いてから動き出すまでが遅れる。
+   切ればブラウザがページに実際に出ている文字の分だけを取りに行く */
 const zenKaku = Zen_Kaku_Gothic_New({
   variable: "--font-zen-kaku",
   subsets: ["latin"],
   weight: ["300", "400", "500", "700"],
   display: "swap",
+  preload: false,
 });
 
 const jost = Jost({

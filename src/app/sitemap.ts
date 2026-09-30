@@ -14,7 +14,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/services/ai-consulting` },
     { url: `${SITE_URL}/services/ai-training` },
     { url: `${SITE_URL}/services/web` },
-    { url: `${SITE_URL}/cases` },
     { url: `${SITE_URL}/about` },
     { url: `${SITE_URL}/faq` },
     { url: `${SITE_URL}/news`, ...(latestNews && { lastModified: date(latestNews) }) },

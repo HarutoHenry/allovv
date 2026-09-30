@@ -157,14 +157,21 @@ export function HeroVideoGL({ src, poster, mobileSrc, mobilePoster }: Props) {
         gl!.pixelStorei(gl!.UNPACK_FLIP_Y_WEBGL, true)
         gl!.texImage2D(gl!.TEXTURE_2D, 0, gl!.RGBA, gl!.RGBA, gl!.UNSIGNED_BYTE, vid)
       }
+      /* 1コマ目が届くまでは何も描かない。空のテクスチャは不透明な黒として読まれ、
+         キャンバスは静止画より上にあるので、ここで描くと開いた直後に画面が
+         灰色に沈んでから動画に切り替わる（白40%の幕越しの黒）。描かなければ
+         キャンバスは透明のままで、下の静止画（＝動画の1コマ目）が見えている */
+      if (lastVideoTime < 0) {
+        rafRef.current = requestAnimationFrame(render)
+        return
+      }
       const s = smooth.current, t = mouse.current
       s.x += (t.x - s.x) * 0.055
       s.y += (t.y - s.y) * 0.055
       gl!.uniform2f(uMouse, s.x, s.y)
       gl!.drawArrays(gl!.TRIANGLE_STRIP, 0, 4)
-      /* 1枚目が載って初めて静止画を外す。texImage2D 前に外すと、
-         中身の無いキャンバス＝黒が一瞬出る */
-      if (!paintedRef.current && lastVideoTime >= 0) {
+      // 1枚目を描いてから静止画を外す
+      if (!paintedRef.current) {
         paintedRef.current = true
         setPainted(true)
       }

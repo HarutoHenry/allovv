@@ -3,7 +3,9 @@ import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { PricingExampleToggle } from "@/components/services/pricing-example-toggle"
 import { IndustryCases } from "@/components/services/industry-cases"
-import { CaseExampleSwitcher, type CaseExample } from "@/components/services/case-example-switcher"
+import { SystemizeCanvas } from "@/components/services/systemize-canvas"
+import { SlipMark } from "@/components/services/slip-mark"
+import { PlanRow } from "@/components/services/plan-row"
 import { JsonLd } from "@/components/json-ld"
 import { PhraseWrap } from "@/components/phrase-wrap"
 import { ORG_ID, SITE_URL, breadcrumbJsonLd, pageMetadata, yen } from "@/lib/seo"
@@ -19,13 +21,6 @@ const plans = [
   {
     id: "training",
     badge: "研修",
-    badgeColor: "bg-[#e0f7f4] text-[#5fb8ab]",
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-          d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.42A12.08 12.08 0 0118 15.5c0 1.02-.13 2.01-.37 2.95A11.96 11.96 0 0112 21a11.96 11.96 0 01-5.63-2.55A12.05 12.05 0 016 15.5c0-1.7.34-3.32.95-4.79L12 14z" />
-      </svg>
-    ),
     title: "AI活用研修",
     subtitle: "従業員向け・全10〜12時間",
     price: "¥150,000〜",
@@ -48,13 +43,6 @@ const plans = [
   {
     id: "efficiency",
     badge: "人気No.1",
-    badgeColor: "bg-[#7dd8ca]/20 text-[#7dd8ca]",
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-      </svg>
-    ),
     title: "AIによる業務効率化",
     subtitle: "1業務からご依頼いただけます",
     price: "¥50,000〜",
@@ -85,13 +73,6 @@ const plans = [
   {
     id: "advanced",
     badge: "高機能",
-    badgeColor: "bg-[#9b8ec4]/20 text-[#c5b8f0]",
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-          d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-      </svg>
-    ),
     title: "高機能AI導入サポート",
     subtitle: "Cursor・Codex",
     price: "お見積り",
@@ -157,123 +138,75 @@ const assurances = [
   },
 ]
 
-const caseExamples: CaseExample[] = [
-  {
-    key: "pricing",
-    label: "料金について",
-    subject: "料金についてのお問い合わせ",
-    customerName: "佐藤",
-    customerEmail: "sato@example.com",
-    customerBody: [
-      "Allovv ご担当者様",
-      "はじめまして。佐藤と申します。ホームページで御社のサービスを知り、ご連絡いたしました。",
-      "導入にかかる料金と期間、また専門知識がなくても運用できるかを教えていただけますでしょうか。",
-      "お忙しいところ恐れ入りますが、よろしくお願いいたします。",
-      "佐藤",
-    ],
-    replySubject: "Re: 料金についてのお問い合わせ",
-    aiBody: [
-      "佐藤様",
-      "お問い合わせいただき、誠にありがとうございます。",
-      "導入費用は一度きりで、¥50,000（税別）から承っております。最短2営業日で導入いただけます。構築から操作レクチャーまで弊社が行いますので、専門知識は不要です。",
-      "正確なお見積りのため、一度オンラインでお話しさせていただけたらと思います。ご都合のよい日時をお知らせください。",
-      "何卒、よろしくお願いいたします。",
-    ],
-  },
-  {
-    key: "schedule",
-    label: "導入期間について",
-    subject: "導入までの期間について",
-    customerName: "中村",
-    customerEmail: "nakamura@example.com",
-    customerBody: [
-      "Allovv ご担当者様",
-      "はじめまして。中村と申します。貴社のAIメール自動化に興味があり、ご連絡いたしました。",
-      "現在、問い合わせ対応に追われており、できるだけ早く導入したいと考えています。お申し込みから実際に使えるようになるまで、どのくらいの期間がかかりますでしょうか。",
-      "よろしくお願いいたします。",
-      "中村",
-    ],
-    replySubject: "Re: 導入までの期間について",
-    aiBody: [
-      "中村様",
-      "お問い合わせいただき、誠にありがとうございます。",
-      "導入期間は、お申し込みから最短2営業日です。初回の打ち合わせで業務フローと課題をお伺いした後、設定・テスト運用を弊社側で行いますので、お客様側での特別な準備は必要ございません。",
-      "ご都合のよい日時が決まりましたら、オンラインでの打ち合わせを設定させていただきます。",
-      "何卒、よろしくお願いいたします。",
-    ],
-  },
-  {
-    key: "support",
-    label: "サポート体制について",
-    subject: "導入後のサポートについて",
-    customerName: "高橋",
-    customerEmail: "takahashi@example.com",
-    customerBody: [
-      "Allovv ご担当者様",
-      "高橋と申します。ホームページを拝見し、ご連絡いたしました。",
-      "AIに任せることに少し不安があり、導入後のサポート体制について詳しく教えていただけますでしょうか。",
-      "よろしくお願いいたします。",
-      "高橋",
-    ],
-    replySubject: "Re: 導入後のサポートについて",
-    aiBody: [
-      "高橋様",
-      "お問い合わせいただき、誠にありがとうございます。",
-      "導入時には操作レクチャーを行い、その後は月額¥30,000（税別）の保守プランで、設定変更とメール・チャットでの質問対応をいたします。月次レポートと月1回の改善打ち合わせをご希望でしたら、運用改善プランをご案内いたしますので、遠慮なくお申し付けください。",
-      "ご不明点があれば、遠慮なくお申し付けください。",
-    ],
-  },
-  {
-    key: "difference",
-    label: "他社との違い",
-    subject: "他社サービスとの違いについて",
-    customerName: "山本",
-    customerEmail: "yamamoto@example.com",
-    customerBody: [
-      "Allovv ご担当者様",
-      "山本と申します。AIメール自動化のサービスを比較しており、貴社にもご連絡いたしました。",
-      "他社のツールとの違いや、貴社ならではの強みがあれば教えていただけますでしょうか。",
-      "よろしくお願いいたします。",
-      "山本",
-    ],
-    replySubject: "Re: 他社サービスとの違いについて",
-    aiBody: [
-      "山本様",
-      "お問い合わせいただき、誠にありがとうございます。",
-      "弊社の強みは、代表自身が日々AIメール自動化を実際に運用しながら改善を重ねている点です。汎用ツールの提供ではなく、貴社の業務フローに合わせて一つ一つ設計・調整いたします。",
-      "導入後も伴走してチューニングを続けますので、「導入して終わり」にはならないサービスです。",
-    ],
-  },
-  {
-    key: "quote",
-    label: "資料・見積もり請求",
-    subject: "サービス資料のご請求",
-    customerName: "田中",
-    customerEmail: "tanaka@example.com",
-    customerBody: [
-      "Allovv ご担当者様",
-      "田中と申します。社内で導入を検討するにあたり、サービス資料と概算のお見積りをいただくことは可能でしょうか。",
-      "よろしくお願いいたします。",
-      "田中",
-    ],
-    replySubject: "Re: サービス資料のご請求",
-    aiBody: [
-      "田中様",
-      "お問い合わせいただき、誠にありがとうございます。",
-      "サービス資料と概算のお見積りを添付いたします。貴社の業務内容に応じて金額が変動する場合がございますので、正式なお見積りは簡単なヒアリングの後にご提示いたします。",
-      "ご都合のよい日時がございましたら、オンラインでご案内いたします。",
-    ],
-    attachment: "Allovv_サービス資料.pdf",
-  },
-]
-
-function CheckIcon() {
+function CheckIcon({ className = "" }: { className?: string }) {
   return (
-    <svg className="w-4 h-4 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg className={`w-4 h-4 shrink-0 mt-[0.3em] ${className}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
     </svg>
   )
 }
+
+function Arrow() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  )
+}
+
+// 手順ごとの小さな図。ヒーローの帯と同じ話（散らばった書類 → 揃う → 同じ形で回る）を3コマで見せる
+const slips = [4, 24, 44]
+function StepGlyph({ step }: { step: number }) {
+  if (step === 0) {
+    return (
+      <svg width="64" height="40" viewBox="0 0 64 40" aria-hidden="true" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="1.2">
+        <rect x="5" y="13" width="15" height="20" rx="2" transform="rotate(-16 12.5 23)" />
+        <rect x="25" y="5" width="15" height="20" rx="2" transform="rotate(11 32.5 15)" />
+        <rect x="45" y="15" width="15" height="20" rx="2" transform="rotate(-6 52.5 25)" />
+      </svg>
+    )
+  }
+  const filled = step === 2
+  return (
+    <svg width="64" height="40" viewBox="0 0 64 40" aria-hidden="true">
+      {slips.map((x) => (
+        <g key={x}>
+          <rect
+            x={x + 0.6}
+            y="10.6"
+            width="14.8"
+            height="19.8"
+            rx="2"
+            fill={filled ? "#7dd8ca" : "none"}
+            stroke="#7dd8ca"
+            strokeWidth="1.2"
+          />
+          {[16, 20, 24].map((y, i) => (
+            <rect
+              key={y}
+              x={x + 3.5}
+              y={y}
+              width={[8, 6, 7][i]}
+              height="1.3"
+              fill={filled ? "#0f1e24" : "#7dd8ca"}
+              opacity={filled ? 0.6 : 0.7}
+            />
+          ))}
+        </g>
+      ))}
+    </svg>
+  )
+}
+
+// 問い合わせ欄の下を流れる書類の列。ヒーローの帯で最後に揃った書類と同じ形
+const marchTile = `url("data:image/svg+xml,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="56" height="36" viewBox="0 0 56 36">' +
+    '<rect x="17" y="3.5" width="22" height="29" rx="3" fill="#7dd8ca"/>' +
+    '<rect x="21.5" y="11" width="12" height="2" fill="#0f1e24" fill-opacity=".6"/>' +
+    '<rect x="21.5" y="16.5" width="9" height="2" fill="#0f1e24" fill-opacity=".6"/>' +
+    '<rect x="21.5" y="22" width="10.5" height="2" fill="#0f1e24" fill-opacity=".6"/>' +
+    "</svg>",
+)}")`
 
 // 検索エンジン向けに「何の、誰の、いくらのサービスか」を機械が読める形で渡す。料金は上の plans から作る
 const jsonLd = [
@@ -319,214 +252,159 @@ export default function AiConsultingPage() {
     <>
       <JsonLd data={jsonLd} />
       <Navigation />
-      <main className="min-h-screen bg-[#0f1e24]">
+      <main id="main" className="min-h-screen bg-[#0f1e24] overflow-x-clip">
 
-        {/* Hero */}
-        <div className="pt-36 pb-20 text-center px-5">
-          <Link
-            href="/#business"
-            className="inline-flex items-center gap-2 text-[#7dd8ca]/60 text-xs font-display tracking-[0.15em] uppercase hover:text-[#7dd8ca] transition-colors mb-8"
-          >
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            SERVICES
-          </Link>
+        {/* Hero。見出しを左に大きく置き、説明は右下に添える。下の帯で「ばらばらの業務が揃っていく」様子を見せる */}
+        <header className="pt-32 md:pt-40">
+          <div className="max-w-[1200px] mx-auto px-5 md:px-10">
+            <Link
+              href="/#business"
+              className="inline-flex items-center gap-2 text-white/60 text-[13px] font-display tracking-[0.08em] hover:text-white transition-colors"
+            >
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              SERVICES
+            </Link>
 
-          <p className="font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-5">
-            Systemize
-          </p>
+            <div className="mt-10 md:mt-14 grid md:grid-cols-12 gap-x-10 gap-y-7 items-end">
+              <div className="md:col-span-7">
+                <p className="svc-kicker svc-enter">
+                  <SlipMark />
+                  Systemize
+                </p>
+                <h1 className="svc-h1 text-white mt-4">
+                  <span>AI仕組み化</span>
+                </h1>
+              </div>
+              <p
+                className="svc-jp svc-enter md:col-span-5 text-white/75 text-[15px] md:text-[17px] leading-[1.9] text-pretty md:pb-3"
+                style={{ "--d": "380ms" } as React.CSSProperties}
+              >
+                業務を洗い出し、AIで置き換えられるところから実装するAI導入コンサルティングです。人が代わっても同じ品質で回る形にします。
+              </p>
+            </div>
 
-          <h1 className="text-white text-3xl md:text-5xl font-bold leading-tight mb-5">
-            AI仕組み化
-          </h1>
-
-          {/* 着手順そのもの。設計 → 構築 → 標準化の順でしか進まないので、矢印が意味を持つ。
-              言葉を主役にしたいので、矢印はミントを薄く敷いて後ろに下げる */}
-          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 mb-6
-                          text-white/85 text-sm md:text-base font-medium tracking-[0.06em]">
-            <span>業務設計</span>
-            <span aria-hidden="true" className="text-[#7dd8ca]/55">→</span>
-            <span>AI構築</span>
-            <span aria-hidden="true" className="text-[#7dd8ca]/55">→</span>
-            <span>標準化</span>
+            {/* 着手順そのもの。設計 → 構築 → 標準化の順でしか進まないので、矢印が意味を持つ。
+                帯の関門と同じ位置に名前を置き、書類がそこを通るたびに整っていく */}
+            <div className="mt-12 md:mt-16 svc-enter-fade" style={{ "--d": "520ms" } as React.CSSProperties}>
+              <SystemizeCanvas steps={["業務設計", "AI構築", "標準化"]} />
+            </div>
           </div>
+        </header>
 
-          <p className="text-white/60 text-sm md:text-base max-w-xl mx-auto leading-relaxed text-pretty">
-            業務を洗い出し、AIで置き換えられるところから実装する<br className="hidden md:block" />
-            AI導入コンサルティングです。人が代わっても同じ品質で回る形にします。
-          </p>
+        {/* 料金と導入例の切り替え */}
+        <div className="pt-16 md:pt-24">
+          <PricingExampleToggle
+            pricingContent={
+              <div className="max-w-[1200px] mx-auto px-5 md:px-10 pt-4 md:pt-8 pb-24 md:pb-32">
+                <ul>
+                  {plans.map((plan) => (
+                    <PlanRow key={plan.id} featured={plan.featured}>
+                      <div className="grid md:grid-cols-12 gap-x-10 gap-y-10 py-12 md:py-16">
+                        <div className="md:col-span-6 lg:col-span-5">
+                          <span className="svc-plan-badge inline-block px-3 py-1 rounded-full text-[12px] font-bold tracking-[0.04em]">
+                            {plan.badge}
+                          </span>
+                          <h2 className="mt-5 text-[1.625rem] md:text-[2rem] font-bold leading-[1.3]">{plan.title}</h2>
+                          <p className="svc-plan-muted mt-2 text-[14px] md:text-[15px]">{plan.subtitle}</p>
+
+                          {plan.price === "お見積り" ? (
+                            <p className="mt-8 md:mt-10 font-bold text-[clamp(1.75rem,3.4vw,2.5rem)] leading-[1.1]">{plan.price}</p>
+                          ) : (
+                            <p className="mt-8 md:mt-10 font-num font-bold text-[clamp(2.5rem,5vw,3.5rem)] leading-none tracking-[-0.02em]">
+                              {plan.price.replace("〜", "")}
+                              <span className="text-[0.5em] font-medium ml-0.5">〜</span>
+                            </p>
+                          )}
+                          <p className="svc-plan-muted mt-3 text-[13px]">{plan.priceNote}</p>
+                          <Link href={plan.ctaHref} className="svc-btn svc-btn--plan mt-7">
+                            {plan.ctaLabel}
+                            <Arrow />
+                          </Link>
+                        </div>
+
+                        <div className="md:col-span-6 lg:col-span-6 lg:col-start-7 md:pt-1">
+                          {/* featuresLabel があるプランは、長い一覧をプルダウンに畳む */}
+                          {plan.featuresLabel ? (
+                            <details className="svc-details">
+                              <summary className="svc-plan-line flex items-center justify-between gap-4 py-4 border-y text-[15px] font-bold">
+                                {plan.featuresLabel}
+                                <svg
+                                  className="svc-chev w-4 h-4 shrink-0"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                  aria-hidden="true"
+                                >
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                              </summary>
+                              <ul className="space-y-3 pt-5 pb-1">
+                                {plan.features.map((feature) => (
+                                  <li key={feature} className="svc-jp svc-plan-body text-pretty flex items-start gap-3 text-[15px] leading-[1.7]">
+                                    <CheckIcon className="svc-plan-check" />
+                                    {feature}
+                                  </li>
+                                ))}
+                              </ul>
+                            </details>
+                          ) : (
+                            <ul className="space-y-3">
+                              {plan.features.map((feature) => (
+                                <li key={feature} className="svc-jp svc-plan-body text-pretty flex items-start gap-3 text-[15px] leading-[1.7]">
+                                  <CheckIcon className="svc-plan-check" />
+                                  {feature}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+
+                          {plan.featureNote && (
+                            <ul className="mt-6 space-y-2.5">
+                              {plan.featureNote.items.map((item) => (
+                                <li key={item} className="svc-jp svc-plan-muted text-pretty flex items-start gap-3 text-[14px] leading-[1.75]">
+                                  <CheckIcon className="svc-plan-check" />
+                                  {item}
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
+                      </div>
+                    </PlanRow>
+                  ))}
+                </ul>
+
+                {/* 料金の考え方（業務ごとの参考価格 → まとめると割引。率は公開しない）*/}
+                <div className="mt-14 md:mt-20 pt-10 border-t border-white/10 grid lg:grid-cols-12 gap-x-10 gap-y-8">
+                  <p className="svc-jp lg:col-span-7 text-white/70 text-[15px] leading-[1.9]">
+                    料金は、AIに任せる業務の内容によって変わります。<br className="hidden md:block" />
+                    2業務以上をお選びの場合は、合計から割り引いた一式価格でご提示します。<br className="hidden md:block" />
+                    御社に必要な業務だけを選んでいただくため、最終的なお見積りはヒアリングのうえでご提示します。
+                  </p>
+                  <div className="lg:col-span-5 lg:col-start-8 space-y-4">
+                    <p className="text-white/55 text-[13px]">すべての料金は税別です。詳細はお問い合わせください。</p>
+                    <Link href="/faq" className="svc-jp svc-link svc-link--wrap text-[14px] leading-[1.9]">
+                      よくあるご質問（セキュリティ・導入期間・費用）はこちら
+                      <Arrow />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            }
+            examplesContent={<IndustryCases />}
+          />
         </div>
 
-        {/* Pricing & Examples toggle */}
-        <PricingExampleToggle
-          pricingContent={
-            <div className="max-w-[1100px] mx-auto px-5 pb-28">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-            {plans.map((plan) => (
-              <div
-                key={plan.id}
-                className="relative rounded-2xl p-8 flex flex-col"
-                style={
-                  plan.featured
-                    ? {
-                        background: "rgba(125, 216, 202, 0.06)",
-                        border: "1px solid rgba(125, 216, 202, 0.45)",
-                        boxShadow: "0 0 40px rgba(125, 216, 202, 0.12), 0 8px 32px rgba(0,0,0,0.3)",
-                      }
-                    : {
-                        background: "rgba(255,255,255,0.03)",
-                        border: "1px solid rgba(255,255,255,0.08)",
-                        boxShadow: "0 4px 24px rgba(0,0,0,0.2)",
-                      }
-                }
-              >
-                {/* Featured label */}
-                {plan.featured && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                    <span className="px-4 py-1 rounded-full text-[11px] font-semibold tracking-wide"
-                      style={{ background: "linear-gradient(135deg, #7dd8ca 0%, #9fe8dc 100%)", color: "#0f1e24" }}>
-                      MOST POPULAR
-                    </span>
-                  </div>
-                )}
-
-                {/* Badge */}
-                <span className={`inline-block self-start px-3 py-1 text-xs font-medium rounded-full mb-5 ${plan.badgeColor}`}>
-                  {plan.badge}
-                </span>
-
-                {/* Icon */}
-                <div className={`mb-4 ${plan.featured ? "text-[#7dd8ca]" : "text-white/40"}`}>
-                  {plan.icon}
-                </div>
-
-                {/* Title */}
-                <h2 className="text-white text-xl font-bold leading-snug mb-1">
-                  {plan.title}
-                </h2>
-                <p className="text-white/40 text-sm mb-6">{plan.subtitle}</p>
-
-                {/* Price */}
-                <div className="mb-2">
-                  {plan.price === "お見積り" ? (
-                    <p className="text-3xl font-bold text-white/80">{plan.price}</p>
-                  ) : (
-                    <p className="text-3xl font-bold"
-                      style={{ background: "linear-gradient(135deg, #7dd8ca 0%, #9fe8dc 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
-                      {plan.price}
-                    </p>
-                  )}
-                </div>
-                <p className="text-white/30 text-xs mb-8">{plan.priceNote}</p>
-
-                {/* CTA */}
-                <Link
-                  href={plan.ctaHref}
-                  className="block text-center py-3 rounded-xl font-semibold text-sm mb-8 transition-all"
-                  style={
-                    plan.featured
-                      ? { background: "linear-gradient(135deg, #c5f5e8 0%, #ffe4ef 100%)", color: "#1a2e35" }
-                      : { background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.75)", border: "1px solid rgba(255,255,255,0.12)" }
-                  }
-                >
-                  {plan.ctaLabel}
-                </Link>
-
-                {/* Divider */}
-                <div className="border-t border-white/10 mb-6" />
-
-                {/* Features（featuresLabel があるプランは、長い一覧をプルダウンに畳む） */}
-                {plan.featuresLabel ? (
-                  <details className="group">
-                    <summary
-                      className="cursor-pointer list-none flex items-center justify-between gap-3 px-4 py-3 rounded-xl text-sm font-medium text-white/75 hover:text-white transition-colors"
-                      style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)" }}
-                    >
-                      <span>{plan.featuresLabel}</span>
-                      <svg className="w-4 h-4 shrink-0 transition-transform group-open:rotate-180"
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </summary>
-                    <ul className="space-y-3 mt-5">
-                      {plan.features.map((feature) => (
-                        <li key={feature} className="flex items-start gap-3 text-white/65 text-sm">
-                          <span className={plan.featured ? "text-[#7dd8ca]" : "text-white/30"}>
-                            <CheckIcon />
-                          </span>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </details>
-                ) : (
-                  <ul className="space-y-3">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-3 text-white/65 text-sm">
-                        <span className={plan.featured ? "text-[#7dd8ca]" : "text-white/30"}>
-                          <CheckIcon />
-                        </span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-                {/* Monthly support note */}
-                {plan.featureNote && (
-                  <div className="mt-6 pt-5 border-t border-[#7dd8ca]/20">
-                    {plan.featureNote.label && (
-                      <p className="text-[#7dd8ca] text-xs font-semibold tracking-wide mb-3">
-                        + {plan.featureNote.label}
-                      </p>
-                    )}
-                    <ul className="space-y-3">
-                      {plan.featureNote.items.map((item) => (
-                        <li key={item} className="flex items-start gap-3 text-white/50 text-sm">
-                          <span className="text-[#7dd8ca]/60">
-                            <CheckIcon />
-                          </span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* 料金の考え方（業務ごとの参考価格 → まとめると割引。率は公開しない）*/}
-          <p className="text-center text-white/45 text-sm mt-12 max-w-3xl mx-auto leading-relaxed">
-            料金は、AIに任せる業務の内容によって変わります。<br className="hidden md:block" />
-            2業務以上をお選びの場合は、合計から割り引いた一式価格でご提示します。<br className="hidden md:block" />
-            御社に必要な業務だけを選んでいただくため、最終的なお見積りはヒアリングのうえでご提示します。
-          </p>
-
-          {/* Bottom Note */}
-          <p className="text-center text-white/25 text-xs mt-8">
-            すべての料金は税別です。詳細はお問い合わせください。
-          </p>
-          <p className="text-center text-xs mt-4">
-            <Link href="/faq" className="text-[#7dd8ca]/60 hover:text-[#7dd8ca] transition-colors underline underline-offset-4">
-              よくあるご質問（セキュリティ・導入期間・費用）はこちら
-            </Link>
-          </p>
-            </div>
-          }
-          examplesContent={<IndustryCases />}
-        />
-
         {/* ここから下は、検索から直接来た人向けの説明。トップの「料金を見る」から来た人には
-            料金を先に見せたいので、説明は料金のあとに置く。料金と同じ中央揃えにすると単調になるので、
-            見出しを左に置いて読み物の組み方にする */}
-        <section className="border-t border-white/5 py-20 md:py-28 px-5">
-          <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
-            <h2 className="md:col-span-5 text-white text-2xl md:text-[2rem] font-bold leading-snug text-balance">
+            料金を先に見せたいので、説明は料金のあとに置く。見出しは全幅、本文の2段落はその下に左右に並べて、面を偏らせない */}
+        <section className="border-t border-white/10">
+          <div className="max-w-[1200px] mx-auto px-5 md:px-10 py-24 md:py-36">
+            <h2 className="svc-display svc-rise text-white">
               <PhraseWrap text="AI導入コンサルティングは、業務の洗い出しから始めます" />
             </h2>
-            <div className="md:col-span-7 space-y-5 text-white/70 text-[15px] md:text-base leading-[1.9] text-pretty max-w-[62ch]">
+            <div className="svc-jp svc-rise mt-10 md:mt-14 grid md:grid-cols-2 gap-6 md:gap-10 text-white/70 text-[15px] md:text-[17px] leading-[1.95]">
               <p>
                 最初に、日々の業務の流れをお伺いします。そのうえで、AIで置き換えられるところと人が残すべきところを整理し、効果の出やすい業務からご提案します。
               </p>
@@ -537,122 +415,111 @@ export default function AiConsultingPage() {
           </div>
         </section>
 
-        {/* 進め方。この順でしか進まない本物の手順なので、番号を振る */}
-        <section className="border-t border-white/5 py-20 md:py-28 px-5">
-          <div className="max-w-[1100px] mx-auto">
-            <h2 className="text-white text-2xl md:text-[2rem] font-bold leading-snug text-balance mb-12 md:mb-16">
-              導入の進め方と期間
-            </h2>
-            <ol className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
-              {steps.map((step) => (
-                <li key={step.num} className="border-t border-white/15 pt-6">
-                  <span className="block font-display text-[#7dd8ca] text-sm tracking-[0.12em] tabular-nums mb-4">
-                    {step.num}
-                  </span>
-                  <h3 className="text-white text-xl font-bold mb-3">{step.title}</h3>
-                  <p className="text-white/65 text-sm md:text-[15px] leading-[1.9] text-pretty">{step.body}</p>
+        {/* 進め方。この順でしか進まない本物の手順なので、番号を振る。
+            線はスクロールに合わせて左から伸び、ヒーローの帯と同じ「揃っていく」話を3コマで繰り返す */}
+        <section className="border-t border-white/10">
+          <div className="max-w-[1200px] mx-auto px-5 md:px-10 py-24 md:py-32">
+            <h2 className="svc-h2 text-white">導入の進め方と期間</h2>
+            <ol className="svc-steps mt-14 md:mt-20 grid md:grid-cols-3 gap-12 md:gap-10">
+              {steps.map((step, i) => (
+                <li key={step.num} className="relative pl-9 md:pl-0 md:pt-12">
+                  <span
+                    aria-hidden="true"
+                    className="absolute left-0 top-[2px] md:top-0 w-[9px] h-[9px] rounded-full bg-[#7dd8ca] ring-4 ring-[#0f1e24]"
+                  />
+                  <div className="mb-6">
+                    <StepGlyph step={i} />
+                  </div>
+                  <h3 className="flex items-baseline gap-3 text-white">
+                    <span aria-hidden="true" className="font-num text-[#7dd8ca] text-[15px] font-medium">
+                      {step.num}
+                    </span>
+                    <span className="text-[1.5rem] md:text-[1.75rem] font-bold leading-[1.3]">{step.title}</span>
+                  </h3>
+                  <p className="svc-jp mt-4 text-white/70 text-[15px] leading-[1.9]">{step.body}</p>
                 </li>
               ))}
             </ol>
-            <p className="text-white/60 text-sm leading-relaxed mt-12 max-w-[62ch] text-pretty">
-              ご契約・ご入金の確認後、最短2営業日で導入できます。業務フローの整理から進める標準的な進行では、1〜2週間程度が目安です。
+            <p className="svc-jp mt-16 md:mt-20 pt-8 border-t border-white/10 text-white/80 text-[17px] leading-[1.9] max-w-[62ch] lg:max-w-none">
+              ご契約・ご入金の確認後、<strong className="text-[#9fe8dc] font-bold whitespace-nowrap">最短2営業日</strong>で導入できます。業務フローの整理から進める標準的な進行では、<span className="whitespace-nowrap">1〜2週間程度</span>が目安です。
             </p>
           </div>
         </section>
 
-        {/* 任せられる業務の例 */}
-        <section className="border-t border-white/5 py-20 md:py-28 px-5">
-          <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
-            <div className="md:col-span-5">
-              <h2 className="text-white text-2xl md:text-[2rem] font-bold leading-snug text-balance">
-                AIに任せられる業務の例
-              </h2>
-              <p className="text-white/60 text-sm leading-relaxed mt-5 md:max-w-[40ch] text-pretty">
-                これらは一例です。実際に任せる業務は、御社の業務を伺ったうえで一緒に決めます。料金は1業務あたり¥50,000〜（税別）です。
-              </p>
-            </div>
-            <dl className="md:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-x-10">
+        {/* 任せられる業務の例。見出しは1行のまま上に置き、一覧は全幅で「業務名｜説明」を揃えて流す */}
+        <section className="border-t border-white/10">
+          <div className="max-w-[1200px] mx-auto px-5 md:px-10 py-24 md:py-32">
+            <h2 className="svc-h2 text-white">AIに任せられる業務の例</h2>
+            <p className="svc-jp mt-6 text-white/70 text-[15px] leading-[1.9] max-w-[62ch]">
+              これらは一例です。実際に任せる業務は、御社の業務を伺ったうえで一緒に決めます。料金は1業務あたり
+              <span className="font-num text-white font-medium">¥50,000〜</span>
+              （税別）です。
+            </p>
+            <dl className="mt-12 md:mt-16 border-b border-white/10">
               {tasks.map((task) => (
-                <div key={task.name} className="border-t border-white/10 py-5">
-                  <dt className="text-white font-bold text-[15px] mb-1.5">{task.name}</dt>
-                  <dd className="text-white/60 text-sm leading-relaxed text-pretty">{task.body}</dd>
+                <div key={task.name} className="svc-slide grid sm:grid-cols-12 gap-x-8 gap-y-2 border-t border-white/10 py-6 md:py-7">
+                  <dt className="svc-jp text-balance sm:col-span-5 lg:col-span-4 text-white font-bold text-[clamp(1.25rem,2.2vw,1.625rem)] leading-[1.35]">
+                    {task.name}
+                  </dt>
+                  <dd className="svc-jp sm:col-span-7 lg:col-span-8 text-white/65 text-[15px] leading-[1.8] sm:pt-1.5">{task.body}</dd>
                 </div>
               ))}
             </dl>
           </div>
         </section>
 
-        {/* 導入事例への導線。事例の中身は /cases に置き、ここでは要点だけ */}
-        <section className="border-t border-white/5 py-20 md:py-28 px-5">
-          <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
-            <h2 className="md:col-span-5 text-white text-2xl md:text-[2rem] font-bold leading-snug text-balance">
-              導入事例
-            </h2>
-            <div className="md:col-span-7">
-              <p className="text-[#7dd8ca] text-sm mb-3">東京都内の不動産会社・10業務をAIで改善</p>
-              <p className="text-white/70 text-[15px] md:text-base leading-[1.9] text-pretty max-w-[62ch] mb-8">
-                その一例として、案件の資料をAIが読み取り、決裁者の方の考え方や社内規定の基準をふまえて案件の良し悪しを判断する仕組みを構築しました。決裁者の方のご負担が軽減され、社員の方の判断力の向上にもつながっています。
-              </p>
-              <Link
-                href="/cases"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm transition-colors hover:bg-white/10"
-                style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.85)", border: "1px solid rgba(255,255,255,0.15)" }}
-              >
-                事例を詳しく見る
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* 情報の扱いと導入後 */}
-        <section className="border-t border-white/5 py-20 md:py-28 px-5">
-          <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
-            <div className="md:col-span-5">
-              <h2 className="text-white text-2xl md:text-[2rem] font-bold leading-snug text-balance">
-                <PhraseWrap text="情報の取り扱いと、導入後のこと" />
-              </h2>
-              <p className="text-sm mt-5">
-                <Link href="/faq" className="text-[#7dd8ca]/80 hover:text-[#7dd8ca] transition-colors underline underline-offset-4">
+        {/* 情報の扱いと導入後。安心材料なので、暗い面から一段明るい面に切り替えて落ち着いて読ませる */}
+        <section className="px-3 md:px-5">
+          <div className="svc-open rounded-2xl bg-[#e0f7f4] text-[#1a2e35]">
+            <div className="max-w-[1200px] mx-auto px-5 md:px-10 py-20 md:py-28">
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+                <h2 className="svc-h2">
+                  <PhraseWrap text="情報の取り扱いと、導入後のこと" />
+                </h2>
+                <Link href="/faq" className="svc-link svc-link--dark text-[14px] md:mb-2 shrink-0">
                   よくあるご質問をすべて見る
+                  <Arrow />
                 </Link>
-              </p>
-            </div>
-            <div className="md:col-span-7">
-              {assurances.map((item) => (
-                <div key={item.title} className="border-t border-white/10 py-6">
-                  <h3 className="text-white text-lg font-bold leading-snug mb-2.5 text-balance"><PhraseWrap text={item.title} /></h3>
-                  <p className="text-white/65 text-sm md:text-[15px] leading-[1.9] text-pretty max-w-[62ch]">{item.body}</p>
-                </div>
-              ))}
+              </div>
+              <div className="mt-12 md:mt-16 border-b border-[#1a2e35]/15">
+                {assurances.map((item) => (
+                  <div key={item.title} className="grid md:grid-cols-12 gap-x-10 gap-y-3 border-t border-[#1a2e35]/15 py-8 md:py-10">
+                    <h3 className="md:col-span-5 lg:col-span-6 text-[1.25rem] md:text-[1.5rem] font-bold leading-[1.45]">
+                      <PhraseWrap text={item.title} />
+                    </h3>
+                    <p className="svc-jp md:col-span-7 lg:col-span-6 text-[#1a2e35]/75 text-[15px] leading-[1.9] md:pt-1">{item.body}</p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Contact CTA */}
-        <div className="border-t border-white/5 py-24 text-center px-5">
-          <p className="font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-5">
-            CONTACT
+        {/* Contact CTA。最後に帯で揃った書類が同じ歩調で流れていき、ページの話を閉じる */}
+        <section className="max-w-[1200px] mx-auto px-5 md:px-10 pt-28 md:pt-40 pb-16 md:pb-20">
+          <p className="svc-kicker">
+            <SlipMark />
+            Contact
           </p>
-          <h2 className="text-white text-2xl md:text-3xl font-bold mb-4">
-            まずはご相談ください
-          </h2>
-          <p className="text-white/40 text-sm mb-10 max-w-sm mx-auto leading-relaxed">
-            貴社の状況をヒアリングしたうえで、最適なプランをご提案します。
-          </p>
-          <Link
-            href="/#contact"
-            className="inline-block px-8 py-3.5 rounded-full font-semibold text-sm transition-all hover:-translate-y-0.5"
-            style={{ background: "linear-gradient(135deg, #c5f5e8 0%, #ffe4ef 100%)", color: "#1a2e35" }}
-          >
-            無料相談はこちら
-          </Link>
+          <h2 className="svc-cta-h svc-rise text-white mt-6">まずはご相談ください</h2>
+          <div className="mt-12 md:mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+            <p className="svc-jp text-white/70 text-[15px] md:text-[17px] leading-[1.9]">
+              貴社の状況をヒアリングしたうえで、最適なプランをご提案します。
+            </p>
+            <Link href="/#contact" className="svc-btn svc-btn--pastel self-start md:self-auto">
+              無料相談はこちら
+              <Arrow />
+            </Link>
+          </div>
+        </section>
+        <div className="pb-16 md:pb-24">
+          <div aria-hidden="true" className="svc-march">
+            <div className="svc-march-track" style={{ backgroundImage: marchTile }} />
+          </div>
         </div>
 
       </main>
-      <Footer />
+      <Footer onDark />
     </>
   )
 }

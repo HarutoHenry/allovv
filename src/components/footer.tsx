@@ -12,7 +12,6 @@ const serviceLinks = [
   { href: "/services/web", label: "ホームページ制作" },
   { href: "/services/ai-consulting", label: "AI導入コンサル・料金" },
   { href: "/services/ai-training", label: "AI活用研修" },
-  { href: "/cases", label: "導入事例" },
   { href: "/faq", label: "よくあるご質問" },
 ]
 
@@ -52,11 +51,12 @@ function LinkColumn({
   )
 }
 
-export function Footer() {
+/** onDark: 本体が同じ紺のページ（/about・/services/*）。継ぎ目の光を消して、境目なく続ける */
+export function Footer({ onDark = false }: { onDark?: boolean }) {
   return (
-    <footer className="footer-ground relative overflow-hidden">
+    <footer className={`footer-ground relative overflow-hidden${onDark ? " footer-ground--on-dark" : ""}`}>
       {/* 継ぎ目の光 */}
-      <div aria-hidden className="footer-seam absolute inset-x-0 top-0 h-px" />
+      <div aria-hidden className={`footer-seam absolute inset-x-0 top-0 h-px${onDark ? " footer-seam--on-dark" : ""}`} />
 
       <div className="relative max-w-[900px] mx-auto px-5 py-20 md:py-24">
         <div className="flex flex-col md:flex-row md:justify-between gap-14 md:gap-10">

@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useId, useRef, useState } from "react"
+import { SlipMark } from "@/components/services/slip-mark"
 
 type Case = {
   task: string
@@ -118,148 +118,148 @@ const industries: Industry[] = [
   },
 ]
 
-const spring = { type: "spring" as const, stiffness: 380, damping: 34 }
+const figure = "font-num font-bold text-[#9fe8dc] text-[clamp(1.625rem,3vw,2.25rem)] leading-[1.15] tracking-[-0.01em]"
 
+/**
+ * 業種の一覧（左）と、選んだ業種の事例（右）。スマホでは業種が横に並んで横スクロールになる。
+ * 業種の切り替えはタブと同じ操作（← → ↑ ↓ / Home / End）。キーボードで切り替えた時は事例を動かさずに出す
+ */
 export function IndustryCases() {
-  const [activeKey, setActiveKey] = useState(industries[0].key)
-  const active = industries.find((i) => i.key === activeKey)!
+  const [activeIndex, setActiveIndex] = useState(0)
+  const [instant, setInstant] = useState(false)
+  const id = useId()
+  const buttons = useRef<(HTMLButtonElement | null)[]>([])
+  const active = industries[activeIndex]
+
+  const select = (i: number, byKeyboard: boolean) => {
+    setInstant(byKeyboard)
+    setActiveIndex(i)
+    // スマホの横スクロールで、端で切れている業種を押した時に見える位置まで寄せる
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    buttons.current[i]?.scrollIntoView({
+      block: "nearest",
+      inline: "nearest",
+      behavior: byKeyboard || reduce ? "auto" : "smooth",
+    })
+  }
+
+  const onKeyDown = (e: React.KeyboardEvent, i: number) => {
+    const last = industries.length - 1
+    const next =
+      e.key === "ArrowRight" || e.key === "ArrowDown" ? (i === last ? 0 : i + 1)
+      : e.key === "ArrowLeft" || e.key === "ArrowUp" ? (i === 0 ? last : i - 1)
+      : e.key === "Home" ? 0
+      : e.key === "End" ? last
+      : -1
+    if (next < 0) return
+    e.preventDefault()
+    select(next, true)
+    buttons.current[next]?.focus()
+  }
 
   return (
-    <div className="max-w-[1100px] mx-auto px-5 pb-28">
-      <p className="font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-5 text-center">
-        Industry Cases
-      </p>
-      <h2 className="text-white text-2xl md:text-4xl font-bold text-center mb-4">
-        業界別・AI活用事例
-      </h2>
-      <p className="text-white/50 text-sm md:text-base text-center max-w-xl mx-auto leading-relaxed mb-12">
-        気になる業種を選ぶと、実際に出ている効果が表示されます。
-        <br className="hidden md:block" />
-        メール対応はほんの入り口。同じ考え方で、業種ごとの定型業務を
-        <br className="hidden md:block" />
-        仕組み化できます。
-      </p>
-
-      {/* 業種セレクタ */}
-      <div className="flex flex-wrap justify-center gap-2 mb-14">
-        {industries.map((ind) => {
-          const isActive = ind.key === activeKey
-          return (
-            <button
-              key={ind.key}
-              type="button"
-              onClick={() => setActiveKey(ind.key)}
-              className="relative px-4 py-2.5 rounded-full text-sm font-medium transition-colors duration-300"
-              style={{
-                border: isActive ? "1px solid transparent" : "1px solid rgba(255,255,255,0.12)",
-              }}
-            >
-              {isActive && (
-                <motion.span
-                  layoutId="industry-pill"
-                  className="absolute inset-0 rounded-full"
-                  style={{
-                    background: "linear-gradient(135deg, #7dd8ca 0%, #9fe8dc 100%)",
-                    boxShadow: "0 0 24px rgba(125,216,202,0.5)",
-                  }}
-                  transition={spring}
-                />
-              )}
-              <span
-                className="relative z-10"
-                style={{ color: isActive ? "#0f1e24" : "rgba(255,255,255,0.6)" }}
-              >
-                {ind.label}
-              </span>
-            </button>
-          )
-        })}
+    <div className="max-w-[1200px] mx-auto px-5 md:px-10 pt-16 md:pt-24 pb-24 md:pb-32">
+      <div>
+        <p className="svc-kicker">
+          <SlipMark />
+          Industry Cases
+        </p>
+        <h2 className="svc-h2 text-white mt-5">業界別・AI活用事例</h2>
       </div>
 
-      {/* 詳細パネル */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeKey}
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -16 }}
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      <div
+        data-instant={instant ? "" : undefined}
+        className="mt-12 md:mt-16 grid lg:grid-cols-12 gap-8 lg:gap-10"
+      >
+        <div
+          role="tablist"
+          aria-label="業種"
+          aria-orientation="vertical"
+          className="lg:col-span-3 -mx-5 px-5 md:-mx-10 md:px-10 lg:mx-0 lg:px-0 flex lg:flex-col gap-2 lg:gap-0 overflow-x-auto lg:overflow-visible no-scrollbar snap-x scroll-px-5 lg:border-b lg:border-white/10"
         >
-          {/* 業種ヘッダー */}
-          <div className="text-center mb-10">
-            <motion.div
-              initial={{ scaleX: 0, opacity: 0 }}
-              animate={{ scaleX: 1, opacity: 1 }}
-              transition={{ ...spring, delay: 0.05 }}
-              className="w-10 h-px mx-auto mb-5"
-              style={{ background: "linear-gradient(90deg, transparent, #7dd8ca, transparent)" }}
-            />
-            <h3 className="text-white text-xl md:text-2xl font-bold">{active.label}</h3>
-            <p className="text-white/40 text-sm mt-1">{active.sublabel}</p>
-          </div>
-
-          {/* 事例カード */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {active.cases.map((c, i) => (
-              <motion.div
-                key={c.task}
-                initial={{ opacity: 0, y: 28 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.12 + i * 0.09, duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="relative rounded-2xl p-6 overflow-hidden"
-                style={{
-                  background: "rgba(255,255,255,0.04)",
-                  border: "1px solid rgba(125,216,202,0.18)",
-                  boxShadow: "0 0 0 rgba(125,216,202,0)",
+          {industries.map((ind, i) => {
+            const selected = i === activeIndex
+            return (
+              <button
+                key={ind.key}
+                ref={(el) => {
+                  buttons.current[i] = el
                 }}
+                type="button"
+                role="tab"
+                id={`${id}-tab-${ind.key}`}
+                aria-selected={selected}
+                aria-controls={`${id}-panel`}
+                tabIndex={selected ? 0 : -1}
+                onClick={(e) => select(i, e.detail === 0)}
+                onKeyDown={(e) => onKeyDown(e, i)}
+                className="shrink-0 snap-start flex items-center gap-3 whitespace-nowrap rounded-full border border-white/15 px-4 py-2.5 text-[14px] font-bold text-white/65 transition-colors duration-200 aria-selected:border-transparent aria-selected:bg-[#7dd8ca] aria-selected:text-[#0f1e24] lg:w-full lg:rounded-none lg:border-0 lg:border-t lg:border-white/10 lg:px-0 lg:py-4 lg:text-[15px] lg:text-white/55 lg:aria-selected:border-white/10 lg:aria-selected:bg-transparent lg:aria-selected:text-white svc-ind-tab"
               >
-                {/* 上端のグローライン */}
-                <div
-                  className="absolute top-0 left-0 right-0 h-px"
-                  style={{ background: "linear-gradient(90deg, transparent, rgba(125,216,202,0.7), transparent)" }}
-                />
-                <p className="text-white/55 text-xs leading-relaxed mb-4 min-h-[2.5rem]">{c.task}</p>
+                <SlipMark className="svc-ind-mark hidden lg:block" />
+                <span className="svc-ind-label">{ind.label}</span>
+              </button>
+            )
+          })}
+        </div>
 
-                {c.before && c.after ? (
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-white/35 text-sm line-through decoration-white/25">{c.before}</span>
-                    <span className="text-[#7dd8ca]">→</span>
-                    <span
-                      className="text-2xl font-bold"
-                      style={{
-                        background: "linear-gradient(135deg, #7dd8ca 0%, #9fe8dc 100%)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
-                      }}
-                    >
-                      {c.after}
-                    </span>
+        <div className="lg:col-span-8 lg:col-start-5">
+          <div
+            key={active.key}
+            role="tabpanel"
+            id={`${id}-panel`}
+            aria-labelledby={`${id}-tab-${active.key}`}
+            tabIndex={0}
+            className="rounded-sm"
+          >
+            <div className="svc-case flex flex-col md:flex-row md:items-baseline md:justify-between gap-1 md:gap-6 pb-5 border-b border-white/10">
+              <h3 className="text-white text-[1.625rem] md:text-[2rem] font-bold leading-[1.3]">{active.label}</h3>
+              <p className="text-white/55 text-[13px] md:text-sm">{active.sublabel}</p>
+            </div>
+
+            <ul>
+              {active.cases.map((c, i) => (
+                <li
+                  key={c.task}
+                  className="svc-case grid md:grid-cols-12 gap-3 md:gap-8 py-6 md:py-8 border-b border-white/10"
+                  style={{ "--i": i + 1 } as React.CSSProperties}
+                >
+                  <p className="md:col-span-5 text-white/80 text-[15px] leading-[1.7] md:pt-1.5">{c.task}</p>
+                  <div className="md:col-span-7">
+                    {c.before && c.after ? (
+                      <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                        <span className="font-num text-white/50 text-[15px] line-through decoration-white/35">
+                          {c.before}
+                        </span>
+                        <svg
+                          viewBox="0 0 20 10"
+                          width="20"
+                          height="10"
+                          aria-hidden="true"
+                          className="self-center text-[#7dd8ca]"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="1.5"
+                        >
+                          <path d="M0 5h18M14 1l4 4-4 4" />
+                        </svg>
+                        <span className="sr-only">から</span>
+                        <span className={figure}>{c.after}</span>
+                      </p>
+                    ) : (
+                      <p className={figure}>{c.metric}</p>
+                    )}
+                    {c.extra && <p className="text-white/60 text-[13px] md:text-sm mt-2">{c.extra}</p>}
                   </div>
-                ) : (
-                  <p
-                    className="text-2xl font-bold"
-                    style={{
-                      background: "linear-gradient(135deg, #7dd8ca 0%, #9fe8dc 100%)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                      backgroundClip: "text",
-                    }}
-                  >
-                    {c.metric}
-                  </p>
-                )}
-
-                {c.extra && <p className="text-white/40 text-xs mt-3 leading-relaxed">{c.extra}</p>}
-              </motion.div>
-            ))}
+                </li>
+              ))}
+            </ul>
           </div>
-        </motion.div>
-      </AnimatePresence>
 
-      <p className="text-center text-white/30 text-xs mt-12 max-w-2xl mx-auto leading-relaxed">
-        ※ 各種公開事例をもとにした業界の一般的な成果であり、特定の導入結果を保証するものではありません。
-      </p>
+          <p className="svc-jp mt-8 text-white/50 text-[12px] md:text-[13px] leading-[1.8] max-w-[62ch]">
+            ※ 各種公開事例をもとにした業界の一般的な成果であり、特定の導入結果を保証するものではありません。
+          </p>
+        </div>
+      </div>
     </div>
   )
 }

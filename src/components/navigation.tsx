@@ -13,6 +13,8 @@ export function Navigation() {
   const pathname = usePathname()
   const router = useRouter()
   const isTop = pathname === "/"
+  // 会社概要とサービスの各ページは背景が暗い。白いすりガラスや紺のアイコンだと浮く・見えないので暗い配色にする
+  const isDark = pathname === "/about" || pathname.startsWith("/services/")
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,7 +73,9 @@ export function Navigation() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,box-shadow,backdrop-filter] duration-300 ${
         scrolled || mobileMenuOpen
-          ? "bg-white/70 backdrop-blur-xl shadow-[0_1px_0_rgba(26,46,53,0.06),0_8px_32px_rgba(26,46,53,0.05)]"
+          ? isDark
+            ? "bg-[#0f1e24]/80 backdrop-blur-xl shadow-[0_1px_0_rgba(184,240,232,0.08)]"
+            : "bg-white/70 backdrop-blur-xl shadow-[0_1px_0_rgba(26,46,53,0.06),0_8px_32px_rgba(26,46,53,0.05)]"
           : "bg-transparent"
       }`}
     >
@@ -121,7 +125,7 @@ export function Navigation() {
 
         {/* Mobile Menu Button */}
         <button
-          className="lg:hidden p-2 text-navy transition-colors translate-y-[10px] -translate-x-[13px]"
+          className={`lg:hidden p-2 transition-colors translate-y-[10px] -translate-x-[13px] ${isDark ? "text-white" : "text-navy"}`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label={mobileMenuOpen ? "メニューを閉じる" : "メニューを開く"}
           aria-expanded={mobileMenuOpen}
@@ -154,13 +158,20 @@ export function Navigation() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div id="mobile-menu" className="lg:hidden bg-white/95 backdrop-blur-[16px] border-t border-navy/10 animate-menu-in">
+        <div
+          id="mobile-menu"
+          className={`lg:hidden backdrop-blur-[16px] border-t animate-menu-in ${
+            isDark ? "bg-[#0f1e24]/95 border-white/10" : "bg-white/95 border-navy/10"
+          }`}
+        >
           <div className="px-5 py-4 space-y-4">
             {navLinks.map((link) => (
               <button
                 key={link.href}
                 onClick={() => handleNav(link.href)}
-                className="block text-navy/70 hover:text-navy font-display font-light text-xs tracking-[0.15em] transition-colors"
+                className={`block font-display font-light text-xs tracking-[0.15em] transition-colors ${
+                  isDark ? "text-white/70 hover:text-white" : "text-navy/70 hover:text-navy"
+                }`}
               >
                 {link.label}
               </button>

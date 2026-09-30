@@ -343,6 +343,37 @@
   opacity: 0.9;
 }
 
+/* 本体が同じ紺のページ（/about・/services/*）。上の地が暗いので、上端の光の線と
+   上端に寄せた色だまりが、ページの終わりに引いた一本の帯として浮いてしまう。
+   上端はページと同じ #0f1e24 から始め、色は少し下で淡く灯して、境目を消す。
+   区切りはページの中の区切り線（白10%）と同じ控えめさに揃える */
+.footer-ground--on-dark {
+  background: linear-gradient(180deg, #0f1e24 0%, #0b171c 100%);
+}
+.footer-ground--on-dark::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 70% at 10% 55%, rgba(93, 207, 190, 0.11) 0%, transparent 70%),
+    radial-gradient(55% 65% at 90% 60%, rgba(255, 143, 184, 0.08) 0%, transparent 70%),
+    radial-gradient(45% 55% at 50% 50%, rgba(155, 142, 196, 0.07) 0%, transparent 75%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 50%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 50%);
+  pointer-events: none;
+}
+.footer-seam--on-dark {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(184, 240, 232, 0.12) 25%,
+    rgba(196, 184, 232, 0.14) 50%,
+    rgba(255, 214, 231, 0.12) 75%,
+    transparent 100%
+  );
+}
+.footer-seam--on-dark::after { content: none; }
+
 /* タグライン。濃紺の上に置くので、パステルのままだと白に見えてしまう。
    彩度を上げて、光として読める明るさに寄せる。 */
 .footer-tagline {
@@ -368,3 +399,415 @@
 }
 .footer-link:hover::after,
 .footer-link:focus-visible::after { transform: scaleX(1); }
+
+/* ── Service pages (svc-) ──
+   /services/ai-consulting の作り直し（2026-09-30）で使う部品。濃紺（#0f1e24）の面に置く前提。
+   動きは「最初から見えている状態」を正にして、対応ブラウザでだけスクロール連動の演出を足す。
+   イージング名は Tailwind の --ease-out / --ease-in-out とぶつからない名前にしておく */
+:root {
+  --ease-strong: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-move: cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* 数字は Jost の等幅数字で。日本語が混ざったところは Zen Kaku に落ちる */
+.font-num {
+  font-family: var(--font-jost), var(--font-zen-kaku), sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+/* 日本語の段落を文節で折り返す（Chrome）。<br> で折り位置を決め打ちしなくて済む */
+.svc-jp { word-break: auto-phrase; }
+
+/* ブランドのラベル（AI仕組み化: Systemize / Industry Cases / Contact、ホームページ制作: Web Production / Contact だけで使う） */
+.svc-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-jost), sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #9fe8dc;
+}
+
+.svc-h1 {
+  font-size: clamp(3.5rem, 13vw, 6rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  overflow: clip;
+  padding-block: 0.04em;
+}
+/* 7文字の見出し（ホームページ制作）。スマホからPCまで1行に収まる大きさにする */
+.svc-h1--long { font-size: clamp(2.125rem, 10.2vw, 6rem); }
+/* 見出しは文節で折り、行の長さを揃える（「取り／扱い」のような語の途中の改行を避ける） */
+.svc-h2,
+.svc-display,
+.svc-cta-h { word-break: auto-phrase; text-wrap: balance; }
+.svc-h2 {
+  font-size: clamp(1.75rem, 3.4vw, 2.625rem);
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+  font-weight: 700;
+}
+.svc-display {
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  font-weight: 700;
+}
+.svc-cta-h {
+  font-size: clamp(2rem, 7.2vw, 5.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+/* ヒーローの登場。見出しは下から枠の中へせり上がり、リードと帯は少し遅れて出る */
+@keyframes svc-lift { from { transform: translateY(105%); } }
+@keyframes svc-fade-up { from { opacity: 0; transform: translateY(14px); } }
+@keyframes svc-fade { from { opacity: 0; } }
+.svc-h1 > span {
+  display: inline-block;
+  animation: svc-lift 900ms var(--ease-expo) 120ms both;
+}
+.svc-enter { animation: svc-fade-up 800ms var(--ease-expo) var(--d, 0ms) both; }
+.svc-enter-fade { animation: svc-fade 1200ms var(--ease-strong) var(--d, 0ms) both; }
+
+/* 文中のリンク。下線は hover で左から引き直す */
+.svc-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #9fe8dc;
+  text-decoration: underline;
+  text-decoration-color: rgba(159, 232, 220, 0.4);
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-color 200ms ease, color 200ms ease;
+}
+.svc-link svg { transition: transform 200ms var(--ease-strong); }
+@media (hover: hover) and (pointer: fine) {
+  .svc-link:hover { text-decoration-color: currentColor; }
+  .svc-link:hover svg { transform: translateX(3px); }
+}
+/* 長い文言のリンク。折り返しても矢印が文末についてくるように、行内に流す */
+.svc-link--wrap { display: inline; }
+.svc-link--wrap svg { display: inline-block; vertical-align: -0.1em; margin-left: 8px; }
+.svc-link--dark { color: #1a2e35; text-decoration-color: rgba(26, 46, 53, 0.35); }
+
+/* ボタン。押した瞬間に少し沈む */
+.svc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 16px 28px;
+  transition: transform 160ms var(--ease-strong), background-color 200ms ease, filter 200ms ease;
+}
+.svc-btn svg { transition: transform 220ms var(--ease-strong); }
+.svc-btn:active { transform: scale(0.97); }
+.svc-btn--pastel { background: linear-gradient(135deg, #c5f5e8 0%, #ffe4ef 100%); color: #1a2e35; }
+.svc-btn--navy { background: #1a2e35; color: #ffffff; }
+.svc-btn--ghost { background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.92); }
+@media (hover: hover) and (pointer: fine) {
+  .svc-btn:hover svg { transform: translateX(4px); }
+  .svc-btn--pastel:hover { filter: brightness(1.04); }
+  .svc-btn--navy:hover { background: #0f1e24; }
+  .svc-btn--ghost:hover { background: rgba(255, 255, 255, 0.14); }
+}
+
+/* 料金の行。普段は3行とも暗い面。カーソルを乗せた行（スマホは画面の真ん中に来た行）だけ、
+   入った位置から淡いミント→ピンクの面が広がり、文字が紺に変わる。色が付いている間、面の色はゆっくり流れる。
+   離れた時は縮めずにその場で素早く消す（出た位置へ縮めると、縁に小さな色の塊が残って見える）。
+   --x / --y は plan-row.tsx が入った位置を入れる。--p-dur は色の切り替えの長さで、戻る時は短くする */
+.svc-plan {
+  --p-dur: 180ms;
+  --p-ink: #ffffff;
+  --p-ink-2: rgba(255, 255, 255, 0.75);
+  --p-ink-3: rgba(255, 255, 255, 0.6);
+  --p-line: rgba(255, 255, 255, 0.14);
+  --p-check: #7dd8ca;
+  --p-badge-bg: rgba(255, 255, 255, 0.1);
+  --p-badge-ink: rgba(255, 255, 255, 0.85);
+  --p-btn-bg: rgba(255, 255, 255, 0.08);
+  --p-btn-ink: rgba(255, 255, 255, 0.92);
+  --p-pad: 1.5rem;
+  position: relative;
+  isolation: isolate;
+  margin-inline: -0.75rem;
+  padding-inline: var(--p-pad);
+  color: var(--p-ink);
+  transition: color var(--p-dur) ease;
+}
+@media (min-width: 768px) {
+  .svc-plan { --p-pad: 2rem; margin-inline: -2rem; }
+}
+.svc-plan--featured { --p-badge-bg: #7dd8ca; --p-badge-ink: #0f1e24; }
+.svc-plan[data-lit],
+.svc-plan:has(:focus-visible) {
+  --p-dur: 320ms;
+  --p-ink: #1a2e35;
+  --p-ink-2: rgba(26, 46, 53, 0.82);
+  --p-ink-3: rgba(26, 46, 53, 0.72);
+  --p-line: rgba(26, 46, 53, 0.15);
+  --p-check: #1a2e35;
+  --p-badge-bg: #1a2e35;
+  --p-badge-ink: #ffffff;
+  --p-btn-bg: #1a2e35;
+  --p-btn-ink: #ffffff;
+}
+.svc-plan::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 16px;
+  background: linear-gradient(115deg, #dcf9f1 0%, #fff0f5 50%, #dcf9f1 100%) 0 0 / 200% 100%;
+  opacity: 0;
+  clip-path: circle(0 at var(--x, 50%) var(--y, 50%));
+  /* 消えきってから、次に広げるための円を小さく戻す */
+  transition: opacity var(--p-dur) ease, clip-path 0s linear var(--p-dur);
+  animation: svc-plan-drift 9s linear infinite paused;
+}
+.svc-plan[data-lit]::before,
+.svc-plan:has(:focus-visible)::before {
+  opacity: 1;
+  clip-path: circle(150% at var(--x, 50%) var(--y, 50%));
+  transition: opacity 0s, clip-path 700ms var(--ease-expo);
+  animation-play-state: running;
+}
+@keyframes svc-plan-drift { to { background-position: 200% 0; } }
+/* 行の区切り線。文字の幅に揃え、色が付いた行とそのすぐ下の行では消す */
+.svc-plan::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: var(--p-pad);
+  right: var(--p-pad);
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  transition: opacity 240ms ease;
+}
+.svc-plan:first-child::after { display: none; }
+.svc-plan[data-lit]::after,
+.svc-plan[data-lit] + .svc-plan::after,
+.svc-plan:has(:focus-visible)::after,
+.svc-plan:has(:focus-visible) + .svc-plan::after { opacity: 0; }
+/* 1行だけの料金（ホームページ制作）。文字の幅の線を上下に引き、色が付いたら消す */
+.svc-plan-solo > .svc-plan::after {
+  display: block;
+  top: 0;
+  bottom: 0;
+  height: auto;
+  background: none;
+  border-block: 1px solid rgba(255, 255, 255, 0.1);
+}
+.svc-plan-body { color: var(--p-ink-2); transition: color var(--p-dur) ease; }
+.svc-plan-muted { color: var(--p-ink-3); transition: color var(--p-dur) ease; }
+.svc-plan-check { color: var(--p-check); transition: color var(--p-dur) ease; }
+.svc-plan-line { border-color: var(--p-line); transition: border-color var(--p-dur) ease; }
+.svc-plan-badge {
+  background: var(--p-badge-bg);
+  color: var(--p-badge-ink);
+  transition: background-color var(--p-dur) ease, color var(--p-dur) ease;
+}
+.svc-btn--plan {
+  background: var(--p-btn-bg);
+  color: var(--p-btn-ink);
+  transition: transform 160ms var(--ease-strong), background-color var(--p-dur) ease, color var(--p-dur) ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .svc-btn--plan:hover { background: #0f1e24; color: #ffffff; }
+}
+
+/* 料金／導入例のタブ。下線は選んだ側へ受け渡すように伸び縮みする（動いてきた向きから伸ばす） */
+.svc-tab {
+  position: relative;
+  padding-bottom: 14px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 200ms ease;
+}
+.svc-tab[aria-selected="true"] { color: #ffffff; }
+@media (hover: hover) and (pointer: fine) {
+  .svc-tab[aria-selected="false"]:hover { color: rgba(255, 255, 255, 0.8); }
+}
+.svc-tab-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: #7dd8ca;
+  transform: scaleX(0);
+  transform-origin: var(--from, left);
+  transition: transform 280ms var(--ease-move);
+}
+.svc-tab[aria-selected="true"] .svc-tab-line { transform: scaleX(1); }
+[data-instant] .svc-tab-line,
+[data-instant] .svc-tab { transition: none; }
+
+/* プルダウン（対応できる業務を見る）。対応ブラウザでは高さをなめらかに開く */
+.svc-details summary { list-style: none; cursor: pointer; }
+.svc-details summary::-webkit-details-marker { display: none; }
+.svc-details .svc-chev { transition: transform 240ms var(--ease-strong); }
+.svc-details[open] .svc-chev { transform: rotate(180deg); }
+@supports (interpolate-size: allow-keywords) {
+  .svc-details { interpolate-size: allow-keywords; }
+  .svc-details::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition: block-size 280ms var(--ease-strong), content-visibility 280ms allow-discrete;
+  }
+  .svc-details[open]::details-content { block-size: auto; }
+}
+
+/* 業種を切り替えた時の事例の出方。キーボードで選んだ時は出さない */
+@keyframes svc-case-in { from { opacity: 0; transform: translateY(8px); } }
+.svc-case { animation: svc-case-in 260ms var(--ease-strong) both; animation-delay: calc(var(--i, 0) * 45ms); }
+[data-instant] .svc-case { animation: none; }
+
+/* 業種の一覧で、選んでいる行に付く小さな書類の印 */
+.svc-ind-mark {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 200ms ease, transform 220ms var(--ease-strong);
+}
+[aria-selected="true"] > .svc-ind-mark { opacity: 1; transform: none; }
+/* 印の分だけ名前を右へずらす（PC の縦並びだけ。印が無い時は名前が左端に揃う） */
+.svc-ind-label { transition: transform 220ms var(--ease-strong); }
+@media (min-width: 1024px) {
+  .svc-ind-label { margin-left: -24px; }
+  [aria-selected="true"] > .svc-ind-label { transform: translateX(24px); }
+}
+@media (hover: hover) and (pointer: fine) {
+  .svc-ind-tab[aria-selected="false"]:hover { color: #ffffff; }
+}
+[data-instant] .svc-ind-mark,
+[data-instant] .svc-ind-label { transition: none; }
+
+/* 進め方の線。灰色の線の上を、読み進めるとミントが伸びる（未対応ブラウザでは最初から伸びきった状態） */
+.svc-steps { position: relative; view-timeline: --svc-steps block; }
+.svc-steps::before,
+.svc-steps::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.14);
+}
+.svc-steps::after { background: #7dd8ca; transform-origin: top; }
+@media (min-width: 768px) {
+  .svc-steps:not(.svc-steps--lg)::before,
+  .svc-steps:not(.svc-steps--lg)::after { left: 0; right: 0; top: 4px; bottom: auto; width: auto; height: 1px; }
+  .svc-steps:not(.svc-steps--lg)::after { transform-origin: left; }
+}
+/* 4段の進め方（ホームページ制作）。1279px までは縦のまま（1024px の4列だと本文が細切れに折れる）、1280px から横の線にする */
+@media (min-width: 1280px) {
+  .svc-steps--lg::before,
+  .svc-steps--lg::after { left: 0; right: 0; top: 4px; bottom: auto; width: auto; height: 1px; }
+  .svc-steps--lg::after { transform-origin: left; }
+}
+
+/* ヒーローの帯の下の端末名。いまの枠の幅に当たる名前だけ白くなり、左にミントの点が付く */
+.svc-device {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 240ms ease;
+}
+.svc-device::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: #7dd8ca;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 240ms var(--ease-strong), transform 240ms var(--ease-strong);
+}
+.svc-device[data-on] { color: #fff; }
+.svc-device[data-on]::before { opacity: 1; transform: scale(1); }
+
+/* 下の帯（Contact）。揃った書類が同じ歩調で右へ流れていく＝ヒーローの帯の終わりの姿 */
+.svc-march {
+  height: 36px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.svc-march-track {
+  width: calc(100% + 56px);
+  height: 100%;
+  margin-left: -56px;
+  background-repeat: repeat-x;
+  background-position: 0 50%;
+  background-size: 56px 36px;
+  animation: svc-march 2s linear infinite;
+}
+@keyframes svc-march { to { transform: translateX(56px); } }
+
+/* スクロール連動の演出。対応ブラウザだけで足す（未対応なら最初から見えている） */
+@keyframes svc-rise-kf { from { opacity: 0; transform: translateY(32px); } }
+@keyframes svc-slide-kf { from { opacity: 0; transform: translateX(-20px); } }
+@keyframes svc-open-kf { from { clip-path: inset(7% 3% 0 3% round 16px); } to { clip-path: inset(0 0 0 0 round 16px); } }
+@keyframes svc-fill-kf { from { transform: scale(1, 0); } }
+@keyframes svc-fill-x-kf { from { transform: scale(0, 1); } }
+@supports (animation-timeline: view()) {
+  .svc-rise {
+    animation: svc-rise-kf linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 75%;
+  }
+  .svc-slide {
+    animation: svc-slide-kf linear both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 90%;
+  }
+  .svc-open {
+    animation: svc-open-kf linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 35%;
+  }
+  .svc-steps::after {
+    animation: svc-fill-kf linear both;
+    animation-timeline: --svc-steps;
+    animation-range: entry 60% cover 60%;
+  }
+  @media (min-width: 768px) {
+    .svc-steps:not(.svc-steps--lg)::after { animation-name: svc-fill-x-kf; }
+  }
+  @media (min-width: 1280px) {
+    .svc-steps--lg::after { animation-name: svc-fill-x-kf; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .svc-h1 > span,
+  .svc-enter,
+  .svc-enter-fade,
+  .svc-case,
+  .svc-rise,
+  .svc-slide,
+  .svc-open,
+  .svc-steps::after,
+  .svc-march-track,
+  .svc-plan::before { animation: none; }
+  .svc-device,
+  .svc-device::before { transition: none; }
+  /* 料金の行は、広がる動きをやめて色を静かに切り替える */
+  .svc-plan::before,
+  .svc-plan[data-lit]::before,
+  .svc-plan:has(:focus-visible)::before {
+    clip-path: none;
+    transition: opacity var(--p-dur) ease;
+  }
+}

@@ -120,7 +120,7 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* プロフィール → 事例・サービスへの導線 */}
+        {/* プロフィール → サービスへの導線 */}
         <section className="border-t border-white/5 py-20 md:py-28 px-5">
           <div className="max-w-[1100px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
             <h2 className="md:col-span-5 text-white text-2xl md:text-[2rem] font-bold leading-snug text-balance">
@@ -131,16 +131,6 @@ export default function AboutPage() {
                 業務を洗い出し、AIで置き換えられるところから仕組みにしていくAI導入コンサルティングを中心に、社員向けのAI活用研修やAIクリエイティブ制作も承っています。
               </p>
               <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/cases"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm transition-colors hover:bg-white/10"
-                  style={{ background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.85)", border: "1px solid rgba(255,255,255,0.15)" }}
-                >
-                  導入事例を見る
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </Link>
                 <Link
                   href="/services/ai-consulting"
                   className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-semibold text-sm transition-colors hover:bg-white/10"
@@ -177,7 +167,7 @@ export default function AboutPage() {
         </div>
 
       </main>
-      <Footer />
+      <Footer onDark />
     </>
   )
 }

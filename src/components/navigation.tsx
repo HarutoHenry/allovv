@@ -80,9 +80,13 @@ export function Navigation() {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-8 pt-[22px] pb-3 flex items-end translate-x-[20px]">
+      <div className="max-w-7xl mx-auto px-8 pt-[22px] pb-3 flex items-end lg:translate-x-[20px]">
+        {/* スマホ・タブレット（メニューボタンの出る幅）はロゴを画面の真ん中に置く（2026-10-06「ろごは真なかに」）。
+            右のメニューボタンと同じ幅の空きを左に置き、その間でロゴを中央に揃える */}
+        <span aria-hidden className="lg:hidden w-10 shrink-0" />
+
         {/* Logo — 左1/3 */}
-        <div className="flex-1 flex items-center pl-[53px] lg:pl-[24px] xl:pl-[73px] 2xl:pl-[55px]">
+        <div className="flex-1 flex items-center justify-center lg:justify-start lg:pl-[24px] xl:pl-[73px] 2xl:pl-[55px]">
           <Link
             href="/"
             aria-label="Allovv トップページへ"
@@ -126,7 +130,7 @@ export function Navigation() {
 
         {/* Mobile Menu Button */}
         <button
-          className={`lg:hidden p-2 transition-colors translate-y-[10px] -translate-x-[13px] ${isDark ? "text-white" : "text-navy"}`}
+          className={`lg:hidden p-2 transition-colors translate-y-[10px] translate-x-[7px] ${isDark ? "text-white" : "text-navy"}`}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           aria-label={mobileMenuOpen ? "メニューを閉じる" : "メニューを開く"}
           aria-expanded={mobileMenuOpen}

@@ -1,0 +1,1135 @@
+/* トップの Philosophy。
+   1280px からは参考画像（1920×1088、うち上の 80px はナビ）の座標をそのまま写している。
+   --u は 1920px 幅のときの 1px。数字は参考画像で測った値 */
+
+.section {
+  --u: calc(min(100vw, 1920px) / 1920);
+  --ink: #1a2e35;
+  --slate: #4f5a76;
+  --teal: #3a9f95;
+  --teal-2: #63c7bb;
+  --lav: #a497e3;
+  --pink: #e49ad0;
+  --grad: linear-gradient(100deg, var(--teal) 0%, var(--teal-2) 38%, var(--lav) 100%);
+  --latin: var(--font-jost), "Jost", sans-serif;
+  /* ふわふわ漂う動き用。sine の ease-in-out */
+  --ease-float: cubic-bezier(0.37, 0, 0.63, 1);
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  color: var(--ink);
+  background: #f8fbfb;
+}
+
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 動画の上の白い幕。下端は次の News の薄紫に寄せて、境目を作らない */
+.veil {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(55% 50% at 50% 46%, rgba(238, 234, 251, 0.45), rgba(238, 234, 251, 0) 72%),
+    linear-gradient(
+      to bottom,
+      rgba(249, 252, 252, 0.95) 0%,
+      rgba(248, 251, 252, 0.8) 18%,
+      rgba(248, 251, 252, 0.8) 80%,
+      rgba(243, 240, 250, 0.96) 100%
+    );
+}
+
+/* ── 並び。スマホは縦一列 ──
+   見出しのすぐ下に図を置き、最初の画面で球が見えるようにする（2026-10-06「スマホ版の構成改善して」）。
+   左の塊（.intro）をほどいて、見出し（head）→ 図 → 本文（body）→ 3つの与える → Our Belief → 札 の順。
+   段と段のあいだは中身ごとに違うので、row-gap ではなく各段の margin-top で取る */
+.stage {
+  position: relative;
+  max-width: 1920px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "head" "art" "body" "values" "belief" "card";
+  padding: 80px 20px 88px;
+}
+
+/* 768px からは塊に戻す（下の 768px・1280px の段で display: block） */
+.intro {
+  grid-area: intro;
+  display: contents;
+}
+.introHead {
+  grid-area: head;
+}
+.introBody {
+  grid-area: body;
+}
+.art {
+  grid-area: art;
+}
+.values {
+  grid-area: values;
+}
+.belief {
+  grid-area: belief;
+}
+.card {
+  grid-area: card;
+}
+
+/* 英字の一行の、句と句のあいだ */
+.phrase {
+  display: inline-block;
+  margin-right: 1.1em;
+}
+.phrase:last-child {
+  margin-right: 0;
+}
+
+/* ── 左。見出しと本文 ── */
+.eyebrow {
+  font-family: var(--latin);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.title {
+  margin-top: 18px;
+  font-size: clamp(1.875rem, 9.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.44;
+  letter-spacing: 0.02em;
+}
+
+.give {
+  width: fit-content;
+  margin-top: 16px;
+  font-family: var(--latin);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.8;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  background: linear-gradient(100deg, #6fc8bd, #a99de6);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.lead {
+  margin-top: 24px;
+  font-size: 15px;
+  line-height: 2;
+  letter-spacing: 0.06em;
+  color: color-mix(in srgb, var(--ink) 84%, transparent);
+}
+
+.dash {
+  display: block;
+  width: 24px;
+  height: 2px;
+  margin-top: 26px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--teal-2), var(--lav));
+}
+
+.allow {
+  margin-top: 18px;
+  font-family: var(--latin);
+  font-size: 12px;
+  line-height: 1.8;
+  letter-spacing: 0.18em;
+  color: var(--teal);
+}
+
+/* ── 真ん中の図。720×640 の枠の中を % と cqw で置く ── */
+.art {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 460px);
+  aspect-ratio: 720 / 640;
+  container-type: inline-size;
+}
+
+.orbitBack,
+.orbitFront {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.orbitBack {
+  z-index: 0;
+}
+.orbitFront {
+  z-index: 2;
+}
+.ringGlow {
+  opacity: 0.75;
+}
+
+.orb {
+  position: absolute;
+  left: 9.72%;
+  top: 20.31%;
+  width: 68.06%;
+  aspect-ratio: 490 / 470;
+  z-index: 1;
+  animation: philo-breathe 10s var(--ease-float) infinite alternate;
+}
+
+.orb > span {
+  position: absolute;
+}
+
+.orbHalo {
+  inset: -16%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(192, 178, 242, 0.42),
+    rgba(160, 222, 214, 0.2) 58%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+.orbShape {
+  overflow: hidden;
+  will-change: transform;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55),
+    inset 0 0 3.2cqw rgba(255, 255, 255, 0.5);
+}
+
+.orbShapeA {
+  inset: 0;
+  border-radius: 56% 44% 38% 62% / 44% 36% 64% 56%;
+  animation: philo-spin 40s linear infinite;
+}
+
+.orbShapeB {
+  inset: 1.5% 0.5% 0 2%;
+  opacity: 0.6;
+  border-radius: 40% 60% 58% 42% / 60% 46% 54% 40%;
+  animation: philo-spin 56s linear infinite reverse;
+}
+
+/* 色の面。外の形の回転と逆に回して、画面に対しては止めておく */
+.orbColor {
+  position: absolute;
+  inset: -14%;
+  will-change: transform;
+  background:
+    radial-gradient(70% 58% at 6% 96%, rgba(255, 255, 255, 0) 64%, rgba(255, 255, 255, 0.42) 67%, rgba(255, 255, 255, 0) 71%),
+    radial-gradient(64% 70% at 102% 12%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0.34) 63.5%, rgba(255, 255, 255, 0) 68%),
+    radial-gradient(48% 40% at 30% 4%, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 0.3) 74%, rgba(255, 255, 255, 0) 79%),
+    radial-gradient(30% 24% at 40% 32%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 72%),
+    radial-gradient(44% 30% at 56% 84%, rgba(196, 176, 252, 0.6), rgba(196, 176, 252, 0) 72%),
+    linear-gradient(102deg, #b9eeee 8%, #ade4ef 30%, #b1caee 50%, #d5c9fb 68%, #f4cdf0 90%);
+}
+
+.orbShapeA .orbColor {
+  animation: philo-spin 40s linear infinite reverse;
+}
+.orbShapeB .orbColor {
+  animation: philo-spin 56s linear infinite;
+}
+
+/* 中で漂う、左の青緑と右の桃色のたまり */
+.orbColor::before,
+.orbColor::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+.orbColor::before {
+  left: 8%;
+  top: 26%;
+  width: 44%;
+  height: 54%;
+  background: radial-gradient(closest-side, rgba(150, 228, 224, 0.75), rgba(150, 228, 224, 0));
+  animation: philo-drift-a 13s var(--ease-float) infinite alternate;
+}
+.orbColor::after {
+  right: 6%;
+  top: 30%;
+  width: 46%;
+  height: 54%;
+  background: radial-gradient(closest-side, rgba(246, 190, 236, 0.75), rgba(246, 190, 236, 0));
+  animation: philo-drift-b 15s var(--ease-float) infinite alternate;
+}
+
+.orbGloss {
+  left: 16%;
+  top: 9%;
+  width: 46%;
+  height: 30%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0));
+  transform: rotate(-24deg);
+}
+
+/* 右側の細かい粒 */
+.orbDots {
+  right: 7%;
+  top: 25%;
+  width: 40%;
+  height: 52%;
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.95) 0 0.15cqw,
+    rgba(255, 255, 255, 0) 0.24cqw
+  );
+  background-size: 1.15cqw 1.15cqw;
+  -webkit-mask-image: radial-gradient(closest-side, #000 15%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 15%, transparent 100%);
+  animation: philo-twinkle 6s var(--ease-float) infinite alternate;
+}
+
+/* 左上の光の点 */
+.orbSpot {
+  left: 40%;
+  top: 19.5%;
+  width: 4%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 30%, rgba(255, 255, 255, 0) 72%);
+  animation: philo-twinkle 4.5s var(--ease-float) infinite alternate;
+}
+
+.orbText {
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 1%;
+  font-family: var(--latin);
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 0.15cqw 1.4cqw rgba(96, 78, 168, 0.3);
+}
+
+.orbName {
+  /* ロゴと同じ字形（philosophy-section.tsx の logoFont）。字間もロゴに合わせて少し開く */
+  font-family: var(--font-logo), var(--latin);
+  font-size: 9.3cqw;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.03em;
+}
+
+.orbLine {
+  padding-left: 0.38em;
+  font-size: max(7px, 1.81cqw);
+  font-weight: 500;
+  line-height: 1.85;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+}
+
+.orbName + .orbLine {
+  margin-top: 2.4cqw;
+}
+
+/* 3つの泡 */
+.bubble {
+  position: absolute;
+  z-index: 3;
+  width: 23.61%;
+  aspect-ratio: 1;
+  will-change: transform;
+  animation: philo-float 8s var(--ease-float) infinite alternate;
+}
+
+.bubbleAi {
+  left: 11.81%;
+  top: 1.875%;
+  animation-duration: 7.2s;
+  animation-delay: -2s;
+}
+
+.bubbleTime {
+  left: 76.39%;
+  top: 28.44%;
+  animation-duration: 8.4s;
+  animation-delay: -5s;
+}
+
+.bubblePossibility {
+  left: 7.36%;
+  top: 69.69%;
+  width: 25.56%;
+  animation-duration: 9.6s;
+  animation-delay: -1s;
+}
+
+.bubbleBody {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: radial-gradient(
+    circle at 46% 42%,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.7) 46%,
+    rgba(248, 244, 254, 0.4) 74%,
+    rgba(236, 246, 248, 0.5) 100%
+  );
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  box-shadow:
+    inset 0.9cqw 0.7cqw 1.8cqw rgba(232, 196, 244, 0.5),
+    inset -0.9cqw -1cqw 2cqw rgba(170, 230, 228, 0.45),
+    inset 0 0 0.5cqw rgba(255, 255, 255, 0.9),
+    0 2cqw 4.4cqw rgba(120, 110, 180, 0.12);
+}
+
+.icon {
+  position: absolute;
+  left: 35%;
+  top: 22.5%;
+  width: 30%;
+  height: 30%;
+}
+
+.bubbleLabel,
+.bubbleSub {
+  position: absolute;
+  left: 0;
+  right: 0;
+  font-family: var(--latin);
+  line-height: 1;
+  text-align: center;
+  text-transform: uppercase;
+  transform: translateY(-50%);
+}
+
+.bubbleLabel {
+  top: 70%;
+  padding-left: 0.06em;
+  font-size: max(10px, 2.92cqw);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: #4d6188;
+}
+
+.bubbleSub {
+  top: 85%;
+  padding-left: 0.28em;
+  font-size: max(7px, 1.46cqw);
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  color: #7c89a6;
+}
+
+/* 図が小さいときは、泡の中の小さな英字を外して名前だけにする */
+@container (max-width: 519px) {
+  .bubbleSub {
+    display: none;
+  }
+  .bubbleLabel {
+    top: 72%;
+  }
+}
+
+/* 泡の中の日本語（題の一行）。スマホだけで出す */
+.bubbleJa {
+  display: none;
+}
+
+/* 図のまわりの小さな光 */
+.speck {
+  position: absolute;
+  z-index: 0;
+  width: 1.4%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 28%, rgba(196, 182, 240, 0.5) 52%, rgba(196, 182, 240, 0) 72%);
+  animation: philo-twinkle 5s var(--ease-float) infinite alternate;
+}
+.speck1 {
+  left: 58%;
+  top: 4%;
+  animation-delay: -1.5s;
+}
+.speck2 {
+  left: 2%;
+  top: 22%;
+  width: 1%;
+  animation-delay: -3s;
+}
+.speck3 {
+  left: 93%;
+  top: 82%;
+  animation-delay: -0.5s;
+}
+.speck4 {
+  left: 44%;
+  top: 96%;
+  width: 1%;
+  animation-delay: -4s;
+}
+
+/* ── 右。3つの与える ── */
+.values {
+  --no-col: 44px;
+  --node: 9px;
+  --rail-x: 6px;
+  --node-top: 38px;
+  --rail-tail: 26px;
+  display: grid;
+  row-gap: 40px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.value {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--no-col) minmax(0, 1fr);
+  grid-template-areas: "no title" ". text";
+  align-items: center;
+}
+
+.no {
+  grid-area: no;
+  width: fit-content;
+  font-family: var(--latin);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  background: linear-gradient(120deg, var(--teal) 0%, var(--teal-2) 45%, var(--lav) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.valueTitle {
+  grid-area: title;
+  font-family: var(--latin);
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+}
+
+.valueText {
+  grid-area: text;
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 1.9;
+  letter-spacing: 0.04em;
+  color: var(--slate);
+}
+
+/* 番号の下の、丸と縦の線 */
+.rail {
+  position: absolute;
+  top: var(--node-top);
+  bottom: calc(var(--rail-tail) * -1);
+  left: var(--rail-x);
+  width: var(--node);
+  pointer-events: none;
+}
+.rail::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-sizing: border-box;
+  width: var(--node);
+  height: var(--node);
+  border-radius: 50%;
+  border: 1.5px solid var(--node-color, var(--teal-2));
+  background: rgba(255, 255, 255, 0.9);
+}
+.rail::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: calc(var(--node) + 6px);
+  bottom: 0;
+  width: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(to bottom, var(--node-color, var(--teal-2)), rgba(164, 151, 227, 0));
+  opacity: 0.7;
+}
+.value:nth-child(2) .rail {
+  --node-color: var(--lav);
+}
+.value:nth-child(3) .rail {
+  --node-color: var(--pink);
+}
+.value:last-child .rail::after {
+  display: none;
+}
+
+/* ── 下の真ん中。Our Belief ── */
+.belief {
+  text-align: center;
+}
+
+.beliefLabel {
+  padding-left: 0.35em;
+  font-family: var(--latin);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--teal);
+}
+
+.beliefText {
+  margin-top: 14px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+}
+
+.belief .dash {
+  margin-inline: auto;
+  margin-top: 18px;
+}
+
+.beliefEn {
+  width: fit-content;
+  margin: 16px auto 0;
+  padding-left: 0.28em;
+  font-family: var(--latin);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.8;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── 右下。ガラスの札 ── */
+.card {
+  position: relative;
+  justify-self: center;
+  width: min(100%, 400px);
+  container-type: inline-size;
+}
+
+.cardGlass {
+  position: relative;
+  min-height: 26.5cqw;
+  padding: 7.4cqw 0 6cqw 6.7cqw;
+  border-radius: 5cqw;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.22));
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 16px 36px rgba(110, 100, 170, 0.07);
+}
+
+.cardText {
+  font-family: var(--latin);
+  /* 狭い札では右の飾りに文字がかからないよう、手前で折り返す */
+  width: fit-content;
+  max-width: 52cqw;
+  font-size: max(9.5px, 2.5cqw);
+  font-weight: 400;
+  line-height: 1.75;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  background: linear-gradient(100deg, #86c4c8, #aea8dc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.cardRule {
+  display: block;
+  width: 10cqw;
+  height: 2px;
+  margin-top: 3.4cqw;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #b9b2ea, #d8d2f4);
+}
+
+.cardBlob {
+  position: absolute;
+  z-index: 1;
+  left: 61.46%;
+  top: -12.1cqw;
+  width: 38.54cqw;
+  height: 42.7cqw;
+  will-change: transform;
+  animation: philo-wobble 9s var(--ease-float) infinite alternate;
+}
+
+.cardBlob::before {
+  content: "";
+  position: absolute;
+  inset: 0 -4% 4% -6%;
+  border-radius: 38% 62% 70% 30% / 30% 52% 48% 70%;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: radial-gradient(70% 70% at 40% 50%, rgba(255, 255, 255, 0.1) 46%, rgba(226, 200, 244, 0.5) 82%, rgba(248, 210, 236, 0.75) 100%);
+  box-shadow:
+    inset 0 0 2cqw rgba(255, 255, 255, 0.8),
+    0 3cqw 6cqw rgba(160, 140, 210, 0.12);
+}
+
+/* 殻の右下に散る細かい粒 */
+.cardBlob::after {
+  content: "";
+  position: absolute;
+  right: -2%;
+  bottom: 6%;
+  width: 60%;
+  height: 56%;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 0.14cqw, rgba(255, 255, 255, 0) 0.22cqw);
+  background-size: 1.1cqw 1.1cqw;
+  -webkit-mask-image: radial-gradient(closest-side at 70% 70%, #000 20%, transparent 100%);
+  mask-image: radial-gradient(closest-side at 70% 70%, #000 20%, transparent 100%);
+}
+
+.cardBlobInner {
+  position: absolute;
+  inset: 16% 22% 10% 2%;
+  border-radius: 58% 42% 49% 51% / 47% 55% 45% 53%;
+  background:
+    radial-gradient(28% 22% at 34% 26%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0) 72%),
+    radial-gradient(58% 58% at 78% 72%, rgba(222, 196, 248, 0.85), rgba(222, 196, 248, 0) 72%),
+    radial-gradient(52% 52% at 20% 62%, rgba(176, 234, 228, 0.9), rgba(176, 234, 228, 0) 72%),
+    linear-gradient(140deg, #e3f6f6 0%, #c3e9ee 40%, #d4cef6 72%, #e6d2f6 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+    inset -1.6cqw -2cqw 4cqw rgba(170, 150, 226, 0.22),
+    inset 1.6cqw 1.6cqw 3cqw rgba(255, 255, 255, 0.6);
+  opacity: 0.92;
+}
+
+/* ── 767px まで。スマホの段と段のあいだ ── */
+@media (max-width: 767.98px) {
+  /* 見出しは下の球と軸をそろえて中央に（2026-10-06「左寄せじゃなく中央に」）。
+     英字は字間が最後の字の後ろにも付くので、同じだけ左にも足して見た目の中心を合わせる */
+  .introHead {
+    text-align: center;
+  }
+  .eyebrow {
+    padding-left: 0.3em;
+  }
+  /* 題の3行はスマホでは下の図の泡の中に移す（2026-10-06「下の図形の一つ一つにこの言葉をいれて」）。
+     見出しとしては残し、画面からだけ外す（図は aria-hidden なので、読み上げはこの題が受け持つ） */
+  .title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .give {
+    margin-inline: auto;
+    padding-left: 0.26em;
+  }
+  .art {
+    margin-top: 28px;
+  }
+  /* 泡には題の一行をそのまま一行で入れる（2026-10-06「改行せず、文字をもう少し小さく」）。
+     いちばん長い「可能性を与える。」が丸の内側に収まるよう、泡を一回り大きくし、かな詰め（palt）で幅を詰める。
+     泡の中心の位置はそのまま（右の泡だけ、はみ出さないよう少し内へ） */
+  .bubbleAi {
+    left: 10.12%;
+    top: 0;
+    width: 27%;
+  }
+  .bubbleTime {
+    left: 72.8%;
+    top: 26.53%;
+    width: 27%;
+  }
+  .bubblePossibility {
+    left: 5.64%;
+    top: 67.75%;
+    width: 29%;
+  }
+  .icon {
+    left: 38%;
+    top: 22%;
+    width: 24%;
+    height: 24%;
+  }
+  .bubbleLabel {
+    display: none;
+  }
+  /* 行末の「。」は字の右半分が空くので、そのぶん左に足して見た目の中心を合わせる */
+  .bubbleJa {
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 64%;
+    padding-left: 0.5em;
+    transform: translateY(-50%);
+    font-size: max(9px, 2.9cqw);
+    font-weight: 700;
+    font-feature-settings: "palt";
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-align: center;
+    white-space: nowrap;
+    color: var(--ink);
+  }
+  /* 球の下の本文と Allow の一行はスマホでは出さない（2026-10-06「スマホ版コレ消して」）。768px 以上はそのまま */
+  .introBody {
+    display: none;
+  }
+
+  /* 3つの与えるは、元の形（番号・見出し・本文・丸と線）のまま横に3つ並べて画面に収める
+     （2026-10-06「横ながれがいいね」→「スクロールとかではなく、元のデザインのまま画面におさめる」）。
+     丸と線は縦から横に向きを変え、01→02→03 を左から右へつなぐ。
+     見出しが2行になる列があっても本文の頭がそろうよう、各列は subgrid で親の行を共有する */
+  .values {
+    --gap: 12px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: calc(var(--node) + 18px) auto auto auto;
+    column-gap: var(--gap);
+    row-gap: 0;
+    margin-top: 56px;
+  }
+  .value {
+    grid-row: span 4;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: subgrid;
+    grid-template-areas: "." "no" "title" "text";
+    align-items: start;
+  }
+  .no {
+    font-size: 13px;
+  }
+  .valueTitle {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+  .valueText {
+    margin-top: 12px;
+    font-size: 11.5px;
+    line-height: 1.85;
+    letter-spacing: 0.02em;
+  }
+  .rail {
+    top: 0;
+    bottom: auto;
+    left: 0;
+    right: calc(var(--gap) * -1);
+    width: auto;
+    height: var(--node);
+  }
+  .rail::after {
+    left: calc(var(--node) + 6px);
+    right: 6px;
+    top: 50%;
+    bottom: auto;
+    width: auto;
+    height: 1px;
+    transform: translateY(-50%);
+    background: linear-gradient(to right, var(--node-color, var(--teal-2)), rgba(164, 151, 227, 0));
+  }
+  .belief {
+    margin-top: 72px;
+  }
+  /* 本文は 8 字までの句で折る（philosophy-section.tsx の values）。320px 幅でも句の途中で割れない大きさにする */
+  @media (max-width: 359.98px) {
+    .values {
+      --gap: 10px;
+    }
+    .valueText {
+      font-size: 10.5px;
+    }
+    /* 図を左右の余白に少しはみ出させ、長い一行の入る泡（時間・可能性）をもう一回り大きくする */
+    .art {
+      justify-self: stretch;
+      width: auto;
+      margin-inline: -12px;
+    }
+    .bubbleTime {
+      left: 71%;
+      top: 25.4%;
+      width: 29%;
+    }
+    .bubblePossibility {
+      left: 4.64%;
+      top: 66.6%;
+      width: 31%;
+    }
+  }
+  /* 最後の札は締めの一枚として小ぶりに。右の球を小さくして、英字が2行に収まるようにする */
+  .card {
+    width: min(100%, 340px);
+    margin-top: 76px;
+  }
+  .cardText {
+    max-width: 68cqw;
+    letter-spacing: 0.18em;
+  }
+  .cardBlob {
+    left: 71%;
+    top: -9cqw;
+    width: 31cqw;
+    height: 34.4cqw;
+  }
+}
+
+/* ── 768px から。左に見出し・右に図、その下に3つ、いちばん下に Our Belief と札 ── */
+@media (min-width: 768px) and (max-width: 1279.98px) {
+  .stage {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "intro art"
+      "values values"
+      "belief card";
+    column-gap: 40px;
+    row-gap: 72px;
+    align-items: center;
+    padding: 112px 40px 112px;
+  }
+  .intro {
+    display: block;
+  }
+  .title {
+    font-size: clamp(2.25rem, 4.4vw, 3rem);
+  }
+  .art {
+    width: min(100%, 520px);
+  }
+  .values {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 32px;
+    align-self: start;
+  }
+  .value {
+    align-content: start;
+  }
+  .rail {
+    display: none;
+  }
+  .card {
+    justify-self: end;
+    margin-top: 0;
+  }
+}
+
+/* ── 1280px から。参考画像と同じ3列 ── */
+@media (min-width: 1280px) {
+  /* ナビの PHILOSOPHY から来たとき、参考画像と同じくナビのすぐ下からこの段が始まるように */
+  /* 参考画像そのままの大きさだと大きいので、全体を 0.85 倍に縮める（2026-10-06「もうすこし縮小して」）。
+     ただし 1280px 幅のときの大きさより下には縮めない（文字と図がそれ以上小さくならないように）。
+     縮めたぶん舞台の幅も狭め、画面の中央に置く。背景の動画は全幅のまま */
+  .section {
+    --u: max(calc(1280px / 1920), calc(min(100vw, 1920px) * 0.85 / 1920));
+    scroll-margin-top: 78px;
+  }
+
+  .stage {
+    max-width: calc(var(--u) * 1920);
+    grid-template-columns: minmax(0, 1fr) calc(var(--u) * 680) minmax(0, 1fr);
+    grid-template-areas:
+      "intro art values"
+      ". belief card";
+    column-gap: 0;
+    row-gap: calc(var(--u) * 42);
+    align-items: start;
+    padding: calc(var(--u) * 100) calc(var(--u) * 80) calc(var(--u) * 76);
+  }
+
+  .intro {
+    display: block;
+    padding-left: calc(var(--u) * 43);
+  }
+  .eyebrow {
+    font-size: max(11px, calc(var(--u) * 14));
+  }
+  .title {
+    margin-top: calc(var(--u) * 27);
+    font-size: max(40px, calc(var(--u) * 60));
+    line-height: 1.433;
+  }
+  .give {
+    margin-top: calc(var(--u) * 21);
+    font-size: max(10.5px, calc(var(--u) * 14));
+    letter-spacing: 0.3em;
+  }
+  .lead {
+    margin-top: calc(var(--u) * 32);
+    font-size: max(14px, calc(var(--u) * 20));
+    line-height: 1.875;
+    letter-spacing: 0.08em;
+  }
+  .dash {
+    width: calc(var(--u) * 24);
+    margin-top: calc(var(--u) * 36);
+  }
+  .allow {
+    margin-top: calc(var(--u) * 22);
+    font-size: max(11px, calc(var(--u) * 13.5));
+    letter-spacing: 0.2em;
+  }
+
+  .art {
+    justify-self: stretch;
+    width: auto;
+    left: calc(var(--u) * 35);
+    margin-inline: calc(var(--u) * -20);
+    margin-top: calc(var(--u) * -35);
+  }
+
+  .values {
+    --no-col: calc(var(--u) * 67);
+    --node: max(7px, calc(var(--u) * 9));
+    --rail-x: calc(var(--u) * 11);
+    --node-top: calc(var(--u) * 57);
+    --rail-tail: calc(var(--u) * 54);
+    justify-self: end;
+    width: max(310px, calc(var(--u) * 400));
+    margin-top: calc(var(--u) * 6);
+    margin-right: calc(var(--u) * -20);
+    row-gap: calc(var(--u) * 81);
+  }
+  .no {
+    font-size: max(19px, calc(var(--u) * 28));
+  }
+  .valueTitle {
+    font-size: max(17px, calc(var(--u) * 25));
+  }
+  .valueText {
+    margin-top: calc(var(--u) * 14);
+    font-size: max(13px, calc(var(--u) * 15));
+    line-height: 1.87;
+  }
+
+  .beliefLabel {
+    font-size: max(10px, calc(var(--u) * 12));
+  }
+  .beliefText {
+    margin-top: calc(var(--u) * 16);
+    font-size: max(18px, calc(var(--u) * 26));
+    line-height: 1.615;
+  }
+  .belief .dash {
+    margin-top: calc(var(--u) * 22);
+  }
+  .beliefEn {
+    margin-top: calc(var(--u) * 22);
+    font-size: max(10px, calc(var(--u) * 12));
+    letter-spacing: 0.3em;
+  }
+
+  .card {
+    justify-self: end;
+    align-self: end;
+    width: max(380px, calc(var(--u) * 480));
+    margin-top: 0;
+    margin-right: calc(var(--u) * 5);
+  }
+  .cardText {
+    max-width: none;
+  }
+}
+
+/* ── 動き ── */
+@keyframes philo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes philo-breathe {
+  from {
+    transform: scale(0.985);
+  }
+  to {
+    transform: scale(1.015);
+  }
+}
+
+@keyframes philo-float {
+  from {
+    transform: translateY(3%);
+  }
+  to {
+    transform: translateY(-3%);
+  }
+}
+
+@keyframes philo-drift-a {
+  from {
+    transform: translate(-6%, 5%) scale(0.94);
+  }
+  to {
+    transform: translate(9%, -6%) scale(1.08);
+  }
+}
+
+@keyframes philo-drift-b {
+  from {
+    transform: translate(7%, -5%) scale(1.06);
+  }
+  to {
+    transform: translate(-9%, 6%) scale(0.93);
+  }
+}
+
+@keyframes philo-twinkle {
+  from {
+    opacity: 0.35;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes philo-wobble {
+  from {
+    transform: translateY(2%) rotate(-7deg);
+  }
+  to {
+    transform: translateY(-2%) rotate(7deg);
+  }
+}
+
+/* 画面の外にあるあいだは止めておく（philosophy-section.tsx が data-paused を付け外しする） */
+.section[data-paused="true"] *,
+.section[data-paused="true"] *::before,
+.section[data-paused="true"] *::after {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section *,
+  .section *::before,
+  .section *::after {
+    animation: none;
+  }
+}

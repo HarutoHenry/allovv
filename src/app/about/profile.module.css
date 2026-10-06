@@ -1,0 +1,661 @@
+/* 代表プロフィール。Philosophy の作り直し（保留中）と別に出せるよう、globals.css には足さずここにまとめる。
+
+   1024px 以上は、2026-10-05 にユーザーから受け取った参考画像（1920×1088）と同じ構成にする。
+   参考画像の座標をそのまま使えるよう、横 1920 を 1920 等分した --u を単位にして置く。
+   ただし 1:1 では大きすぎた（2026-10-05「でかいな / サイズ落として」）ので、舞台の幅は 1280px で止めて中央に置く（1440px でもまだ大きかった。同日「もう少しちいさくしてもいいかな」）。
+   右の手紙だけは普通の流れで組み、文字が長くなった幅では舞台ごと下へ伸びる（下の飾りは下端に付いてくる） */
+
+.page {
+  --ink: #141c28;
+  --ink-soft: #2b313b;
+  --label: #4b515d;
+  --mist: #eef1f3;
+  background: #f7f8f8;
+  color: var(--ink);
+}
+
+.mincho {
+  font-family: var(--font-mincho), "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+}
+
+.serif {
+  font-family: var(--font-serif), "Cormorant Garamond", Georgia, serif;
+}
+
+/* 字間を広くとった英字の小見出し */
+.caps {
+  font-family: var(--font-jost), "Jost", sans-serif;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* 紺の面。右上がやや明るい。下端は右へ向けてゆるく下がる。
+   開く動き（clip-path）と曲線の切り抜きがぶつからないよう、色は内側の .panelFill に持たせる */
+.panelFill {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 100% 0%, #3a5470 0%, rgba(58, 84, 112, 0) 60%),
+    linear-gradient(200deg, #2f465f 0%, #24374b 45%, #18293a 100%);
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    100% 100%,
+    90% 100%,
+    80% 99.8%,
+    70% 99.4%,
+    60% 98.8%,
+    50% 97.9%,
+    40% 96.7%,
+    30% 95.2%,
+    20% 93.8%,
+    10% 92.9%,
+    0 92.6%
+  );
+}
+
+.photo {
+  background: #253549;
+}
+
+/* globals.css が p に 1.75 を当てるので、本文の段落は .body の行間を引き継がせる */
+.body p {
+  line-height: inherit;
+}
+
+.vertical {
+  writing-mode: vertical-rl;
+}
+
+/* 下から上へ読む縦の英字（FOUNDER） */
+.verticalUp {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+/* 東京と富士山の下端は切らずに背景へ溶かす。--fade（溶かす高さ）は幅ごとに .hero で決める。
+   線形だと溶け終わりに段が見えるので、途中の濃さを足してゆるやかにする */
+.hero {
+  --fade-down: linear-gradient(
+    to top,
+    transparent 0,
+    rgb(0 0 0 / 0.25) calc(var(--fade) * 0.3),
+    rgb(0 0 0 / 0.65) calc(var(--fade) * 0.62),
+    #000 var(--fade)
+  );
+}
+
+.skyline,
+.fuji {
+  mask-image: var(--fade-down);
+}
+
+/* ---------- 1024px 以上：参考画像どおりの舞台 ---------- */
+@media (min-width: 1024px) {
+  .hero {
+    --u: calc(min(100vw, 1280px) / 1920);
+    /* ナビ（高さ約 80px）の下に、題の前の余白をたっぷり取る（2026-10-06「もう少し上にスペースほしい」で 120→160px） */
+    --top: 160px;
+    /* 下端の飾りを背景に溶かす高さ */
+    --fade: calc(150 * var(--u));
+    position: relative;
+    padding-top: var(--top);
+    /* 霧の円は舞台の下端で切る（参考画像の下端と同じ） */
+    overflow: clip;
+  }
+
+  .stage {
+    position: relative;
+    width: calc(1920 * var(--u));
+    margin-inline: auto;
+  }
+
+  /* ページの題。左は紺の面の中の標語、右は手紙の右端にそろえる */
+  .head {
+    display: flex;
+    align-items: baseline;
+    gap: calc(30 * var(--u));
+    margin-left: calc(147 * var(--u));
+    width: calc(1644 * var(--u));
+    padding-bottom: calc(60 * var(--u));
+  }
+
+  .title {
+    font-size: max(calc(54 * var(--u)), 28px);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.14em;
+  }
+
+  .titleEn {
+    font-size: max(calc(25 * var(--u)), 15px);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--label);
+  }
+
+  .titleRule {
+    flex: 1;
+    align-self: center;
+    height: 1px;
+    background: #c9cdd2;
+  }
+
+  /* ここから下が参考画像の範囲。飾りの位置はこの箱の上端・下端から測る */
+  .board {
+    position: relative;
+    min-height: calc(990 * var(--u));
+  }
+
+  .at {
+    position: absolute;
+  }
+
+  .founder {
+    left: calc(52 * var(--u));
+    bottom: calc(395 * var(--u));
+    font-size: max(calc(14 * var(--u)), 9px);
+    letter-spacing: 0.52em;
+    color: var(--label);
+  }
+
+  .panel {
+    left: calc(90 * var(--u));
+    top: 0;
+    width: calc(688 * var(--u));
+    height: calc(478 * var(--u));
+  }
+
+  .tagline {
+    position: absolute;
+    left: calc(57 * var(--u));
+    top: calc(101 * var(--u));
+    font-size: max(calc(23.5 * var(--u)), 12.5px);
+    line-height: 1.9;
+    letter-spacing: 0.17em;
+    color: #fff;
+  }
+
+  .tech {
+    position: absolute;
+    left: calc(58 * var(--u));
+    top: calc(301 * var(--u));
+    font-size: max(calc(12 * var(--u)), 8.5px);
+    line-height: 2.17;
+    letter-spacing: 0.36em;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .photo {
+    left: calc(357 * var(--u));
+    top: calc(49 * var(--u));
+    width: calc(380 * var(--u));
+    height: calc(459 * var(--u));
+  }
+
+  .name {
+    left: calc(355 * var(--u));
+    top: calc(509 * var(--u));
+  }
+
+  .nameEn {
+    display: block;
+    font-size: calc(100 * var(--u));
+    font-weight: 600;
+    line-height: 0.89;
+    letter-spacing: -0.005em;
+  }
+
+  .nameEn2 {
+    display: block;
+    margin-left: calc(55 * var(--u));
+  }
+
+  .nameJa {
+    display: block;
+    margin-top: calc(13 * var(--u));
+    margin-left: calc(114 * var(--u));
+    font-size: max(calc(22 * var(--u)), 13px);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0.2em;
+  }
+
+  .role {
+    left: calc(469 * var(--u));
+    top: calc(742 * var(--u));
+    font-size: max(calc(17.5 * var(--u)), 11px);
+    letter-spacing: 0.14em;
+    line-height: 1;
+    color: var(--ink-soft);
+  }
+
+  .dash {
+    height: 1px;
+    background: currentColor;
+  }
+
+  .roleDash {
+    left: calc(469 * var(--u));
+    top: calc(799.5 * var(--u));
+    width: calc(32 * var(--u));
+    color: #555b66;
+  }
+
+  /* スカイライン（東京）と、その上に重なる紺の円。左下に置き、舞台の下端で切る */
+  .skyline {
+    left: 0;
+    bottom: 0;
+    width: calc(620 * var(--u));
+    height: calc(374 * var(--u));
+  }
+
+  /* 舞台より画面が広いと、円の左の切り口が画面の途中に浮く。その幅では左側も霞ませて背景に溶かす */
+  @media (min-width: 1281px) {
+    .skyline {
+      mask-image: var(--fade-down), linear-gradient(90deg, transparent 0%, #000 38%);
+      mask-composite: intersect;
+    }
+  }
+
+  .people {
+    z-index: 1;
+    left: calc(649 * var(--u));
+    bottom: calc(73 * var(--u));
+    font-size: max(calc(11.5 * var(--u)), 8.5px);
+    line-height: 2;
+    letter-spacing: 0.4em;
+    color: var(--label);
+  }
+
+  .peopleDash {
+    left: calc(650 * var(--u));
+    bottom: calc(45 * var(--u));
+    width: calc(31 * var(--u));
+    color: #868c96;
+  }
+
+  /* 右の手紙。流れで組む */
+  .letter {
+    position: relative;
+    margin-left: calc(919 * var(--u));
+    width: calc(872 * var(--u));
+    padding-top: calc(38 * var(--u));
+    padding-bottom: calc(244 * var(--u));
+  }
+
+  .label {
+    font-size: max(calc(12.5 * var(--u)), 9px);
+    letter-spacing: 0.56em;
+    color: var(--label);
+  }
+
+  .say {
+    margin-top: calc(28 * var(--u));
+    margin-left: calc(-1 * var(--u));
+    font-size: calc(62 * var(--u));
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.015em;
+    font-feature-settings: "palt";
+  }
+
+  .body {
+    margin-top: calc(26 * var(--u));
+    font-size: max(calc(24 * var(--u)), 14px);
+    line-height: 1.83;
+    letter-spacing: 0.045em;
+    color: var(--ink-soft);
+  }
+
+  .body p + p {
+    margin-top: calc(28 * var(--u));
+  }
+
+  .sign {
+    margin-top: calc(29 * var(--u));
+    text-align: right;
+    font-size: max(calc(21 * var(--u)), 13px);
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+  }
+
+  /* 右端の縦の英字と、その上の短い線 */
+  .sideRule {
+    left: calc(1859 * var(--u));
+    top: calc(69 * var(--u));
+    height: calc(52 * var(--u));
+    width: 1px;
+    background: #9aa0a8;
+  }
+
+  .side {
+    left: calc(1854 * var(--u));
+    top: calc(146 * var(--u));
+    font-size: max(calc(11.5 * var(--u)), 8.5px);
+    letter-spacing: 0.43em;
+    color: var(--label);
+  }
+
+  /* 富士山の帯の後ろの淡い円 */
+  .mist {
+    left: calc(716 * var(--u));
+    bottom: calc(-157 * var(--u));
+    width: calc(412 * var(--u));
+    height: calc(412 * var(--u));
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 40%, #edf0f2 0%, #f0f2f4 70%, #f2f4f5 100%);
+    /* 円は舞台の下端より 157 下まであるので、溶かし始めをその分上げる */
+    mask-image: linear-gradient(
+      to top,
+      transparent calc(157 * var(--u)),
+      #000 calc(157 * var(--u) + var(--fade))
+    );
+  }
+
+  .fuji {
+    left: calc(863 * var(--u));
+    bottom: 0;
+    width: calc(1004 * var(--u));
+    height: calc(214 * var(--u));
+  }
+
+  .fujiText {
+    /* 狭い幅で文字が最小サイズに張り付いても右の柱に食い込まないよう、右端でそろえる */
+    right: calc(87 * var(--u));
+    bottom: calc(31 * var(--u));
+    font-size: max(calc(12.5 * var(--u)), 9px);
+    line-height: 1.85;
+    letter-spacing: 0.43em;
+    color: #3d4654;
+  }
+
+  .fujiLine {
+    display: inline-block;
+    vertical-align: middle;
+    width: calc(166 * var(--u));
+    height: 1px;
+    margin-left: calc(12 * var(--u));
+    margin-top: -0.2em;
+    background: rgba(255, 255, 255, 0.85);
+  }
+
+}
+
+/* ---------- 1023px まで：同じ要素を上から順に積む ---------- */
+@media (max-width: 1023px) {
+  .hero {
+    --fade: 80px;
+    padding-top: 140px;
+    overflow-x: clip;
+  }
+
+  .stage {
+    display: flex;
+    flex-direction: column;
+    padding-inline: 20px;
+  }
+
+  /* 舞台の中身を .stage の並びにそのまま加える */
+  .board {
+    display: contents;
+  }
+
+  .head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+
+  .title {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.14em;
+  }
+
+  .titleEn {
+    font-size: 15px;
+    line-height: 1;
+    color: var(--label);
+  }
+
+  .titleRule {
+    flex: 1;
+    align-self: center;
+    height: 1px;
+    background: #c9cdd2;
+  }
+
+  /* スマホ幅では線がほとんど残らないので出さない */
+  @media (max-width: 519px) {
+    .titleRule {
+      display: none;
+    }
+  }
+
+  .founder,
+  .sideRule,
+  .side,
+  .mist {
+    display: none;
+  }
+
+  /* 紺の面に標語、写真は右に寄せて面の下へはみ出させる */
+  .panel {
+    order: 1;
+    position: relative;
+    margin-right: 28px;
+    padding: 40px 24px 190px;
+  }
+
+  .tagline {
+    position: relative;
+    font-size: 19px;
+    line-height: 1.95;
+    letter-spacing: 0.17em;
+    color: #fff;
+  }
+
+  .tech {
+    position: relative;
+    margin-top: 24px;
+    font-size: 9.5px;
+    line-height: 2.2;
+    letter-spacing: 0.34em;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .photo {
+    order: 2;
+    position: relative;
+    z-index: 1;
+    align-self: flex-end;
+    width: 58%;
+    max-width: 330px;
+    aspect-ratio: 380 / 459;
+    margin-top: -160px;
+  }
+
+  .name {
+    order: 3;
+    margin-top: 28px;
+  }
+
+  .nameEn {
+    display: block;
+    font-size: clamp(3.25rem, 13.5vw, 4.75rem);
+    font-weight: 500;
+    line-height: 0.86;
+  }
+
+  .nameEn2 {
+    display: block;
+    margin-left: 0.5em;
+  }
+
+  .nameJa {
+    display: block;
+    margin-top: 20px;
+    margin-left: 1.05em;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+  }
+
+  .role {
+    order: 3;
+    margin-top: 10px;
+    margin-left: calc(1.05 * 18px);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    color: var(--ink-soft);
+  }
+
+  .dash {
+    display: block;
+    height: 1px;
+    background: currentColor;
+  }
+
+  .roleDash {
+    order: 3;
+    width: 28px;
+    margin: 22px 0 0 calc(1.05 * 18px);
+    color: #555b66;
+  }
+
+  .letter {
+    order: 4;
+    margin-top: 64px;
+  }
+
+  .label {
+    font-size: 10px;
+    letter-spacing: 0.42em;
+    color: var(--label);
+  }
+
+  .say {
+    margin-top: 22px;
+    font-size: clamp(1.5rem, 6vw, 2.125rem);
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  .body {
+    margin-top: 26px;
+    font-size: 15px;
+    line-height: 2;
+    word-break: auto-phrase;
+    letter-spacing: 0.03em;
+    color: var(--ink-soft);
+  }
+
+  .body p + p {
+    margin-top: 20px;
+  }
+
+  .sign {
+    margin-top: 28px;
+    text-align: right;
+    font-size: 15px;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+  }
+
+  /* 下：スカイラインと英字、その下に富士山の帯を画面の端から端まで */
+  .skyline {
+    order: 5;
+    position: relative;
+    width: 72%;
+    max-width: 460px;
+    aspect-ratio: 620 / 374;
+    margin: 56px 0 0 -20px;
+  }
+
+  .people {
+    order: 5;
+    position: relative;
+    align-self: flex-end;
+    margin-top: -112px;
+    margin-bottom: 64px;
+    font-size: 9.5px;
+    line-height: 2;
+    letter-spacing: 0.38em;
+    color: var(--label);
+  }
+
+  .peopleDash {
+    display: none;
+  }
+
+  .fuji {
+    order: 6;
+    position: relative;
+    margin-inline: -20px;
+    aspect-ratio: 1004 / 214;
+    min-height: 150px;
+  }
+
+  .fujiText {
+    order: 6;
+    position: relative;
+    z-index: 1;
+    align-self: flex-end;
+    margin-top: -64px;
+    margin-bottom: 26px;
+    font-size: 9px;
+    line-height: 1.9;
+    letter-spacing: 0.36em;
+    color: #3d4654;
+  }
+
+  .fujiLine {
+    display: none;
+  }
+}
+
+/* 動きは開いた瞬間の一度だけ。紺の面が左から開き、写真と名前、手紙があとに続く */
+@media (prefers-reduced-motion: no-preference) {
+  .unveil {
+    animation: unveil 1.1s cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+  .settle img {
+    animation: settle 1.6s cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+  .rise {
+    animation: rise 0.9s cubic-bezier(0.23, 1, 0.32, 1) both;
+    animation-delay: var(--delay, 0ms);
+  }
+}
+
+@keyframes unveil {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes settle {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

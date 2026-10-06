@@ -13,8 +13,9 @@ export function Navigation() {
   const pathname = usePathname()
   const router = useRouter()
   const isTop = pathname === "/"
-  // 会社概要とサービスの各ページは背景が暗い。白いすりガラスや紺のアイコンだと浮く・見えないので暗い配色にする
-  const isDark = pathname === "/about" || pathname.startsWith("/services/")
+  // サービスの各ページは背景が暗い。白いすりガラスや紺のアイコンだと浮く・見えないので暗い配色にする
+  // （代表プロフィール /about は 2026-10-01 に明るい面へ作り直したので、トップと同じ配色）
+  const isDark = pathname.startsWith("/services/")
 
   useEffect(() => {
     const handleScroll = () => {

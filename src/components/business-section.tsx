@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useRef, useState } from "react"
+import { Fragment, useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 
@@ -10,7 +10,10 @@ type Slide = {
   /** 和文は語中で折れるので、意味の切れ目で分けて折り返し位置を固定する。
       スマホは1要素＝1行、PCは横に並んで1行になる（読み上げ用に join して使う） */
   title: string[]
+  /** 見出しのすぐ下に添える一行と、その英語の正式名。持たないカードもある */
+  note?: { text: string; gloss: string }
   /** 和文は語中で折れるので、文節ごとに分けて折り返し位置を固定する */
+  /** 1要素＝1行。「|」は 360px 未満の狭いスマホだけで折り返す位置 */
   statement: string[]
   /** 着手順。この順でしか進まないので、間の矢印が意味を持つ。持たないカードもある */
   steps?: string[]
@@ -34,7 +37,10 @@ const slides: Slide[] = [
     num: "01",
     label: "SYSTEMIZE",
     title: ["AI仕組み化"],
-    statement: ["毎日の事務作業を、", "AIが下書きします。"],
+    // 2026-10-06 ユーザー指示「AI仕組み化にFDE（Forward Deployed Engineer）もいれて」
+    note: { text: "FDEにも対応", gloss: "Forward Deployed Engineer" },
+    // 2026-10-06 ユーザー指定の文に差し替え（旧「毎日の事務作業を、AIが下書きします。」）
+    statement: ["現場で考え、", "現場で使える|AIの仕組みを作ります。"],
     steps: ["業務設計", "AI構築", "標準化"],
     price: "1業務 ¥50,000〜（税別・1ヶ月サポート付き）",
     cta: "業務ごとの料金を見る",
@@ -114,8 +120,9 @@ function sizeFor(w: number) {
   const activeW = Math.min(w * 0.82, w - 2 * (PEEK + gap))
   /* 高さは幅より少しだけ高くする。CREATIVE は見出し2行＋本文4行あり、
      横長（activeW/1.2）だと角丸に最終行が切られていた（iPhone 390px で 15px 不足）。
-     360px 幅でも上下に余白が残るよう 0.9 にしている */
-  const activeH = activeW / 0.9
+     360px 幅でも上下に余白が残るよう 0.9 にしている。
+     360px 未満は AI仕組み化の本文が3行になる（「|」で折り返す）ので、その分だけ縦に伸ばす */
+  const activeH = activeW / (w < 360 ? 0.72 : 0.9)
   return { activeW, activeH, pillW: w * 0.3, pillH: activeH * 0.9, gap }
 }
 
@@ -630,6 +637,20 @@ export function BusinessSection() {
                         <span key={part} className="block md:inline">{part}</span>
                       ))}
                     </span>
+                    {/* 見出しに添える一行。和文の下に英語の正式名を小さく置く。
+                        本文と同じく開いたカードにだけ出し、見出しと本文の間の順で出てくる */}
+                    {slide.note && (
+                      <span
+                        className={`flex flex-col items-center overflow-hidden ${MOVE_BODY} ${isActive ? 'scale-100 delay-[440ms] md:delay-0' : 'scale-[0.82] md:scale-100 delay-0'}`}
+                        style={isActive
+                          ? { opacity: 1, maxHeight: 60, marginTop: 6 }
+                          : { opacity: 0, maxHeight: 0, marginTop: 0 }}
+                        aria-hidden={!isActive}
+                      >
+                        <span className="text-navy/70 text-[13px] md:text-[15px] font-medium tracking-[0.08em]">{slide.note.text}</span>
+                        <span lang="en" className="mt-1 font-display text-navy/45 text-[10px] md:text-[11px] tracking-[0.18em] whitespace-nowrap">{slide.note.gloss}</span>
+                      </span>
+                    )}
                     {/* 待機中も同じ要素を残しておき、高さと濃さだけ動かす。
                         display:none で出し入れすると、移動が始まる前に文字が消える／現れる */}
                     <span
@@ -642,7 +663,14 @@ export function BusinessSection() {
                       aria-hidden={!isActive}
                     >
                       {slide.statement.map((clause) => (
-                        <span key={clause} className="block whitespace-nowrap">{clause}</span>
+                        <span key={clause} className="block whitespace-nowrap">
+                          {clause.split("|").map((part, i) => (
+                            <Fragment key={part}>
+                              {i > 0 && <br className="min-[360px]:hidden" />}
+                              {part}
+                            </Fragment>
+                          ))}
+                        </span>
                       ))}
                     </span>
 

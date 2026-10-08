@@ -10,13 +10,12 @@ type Slide = {
   /** 和文は語中で折れるので、意味の切れ目で分けて折り返し位置を固定する。
       スマホは1要素＝1行、PCは横に並んで1行になる（読み上げ用に join して使う） */
   title: string[]
-  /** 見出しのすぐ下に添える一行と、その英語の正式名。持たないカードもある */
-  note?: { text: string; gloss: string }
+  /** 見出しのすぐ下に添える一行と、その英語の正式名。持たないカードもある。
+      text は1要素ずつ細い斜線で区切って横に並べる */
+  note?: { text: string[]; gloss: string }
   /** 和文は語中で折れるので、文節ごとに分けて折り返し位置を固定する */
   /** 1要素＝1行。「|」は 360px 未満の狭いスマホだけで折り返す位置 */
   statement: string[]
-  /** 着手順。この順でしか進まないので、間の矢印が意味を持つ。持たないカードもある */
-  steps?: string[]
   price: string
   cta: string
   href: string
@@ -35,13 +34,15 @@ type Slide = {
 const slides: Slide[] = [
   {
     num: "01",
-    label: "SYSTEMIZE",
-    title: ["AI仕組み化"],
-    // 2026-10-06 ユーザー指示「AI仕組み化にFDE（Forward Deployed Engineer）もいれて」
-    note: { text: "FDEにも対応", gloss: "Forward Deployed Engineer" },
+    // 2026-10-08 ユーザー指示で、見出しを検索される呼び名「AI導入コンサルティング」にした
+    // （旧 label "SYSTEMIZE"・title ["AI仕組み化"]）
+    label: "CONSULTING",
+    title: ["AI導入", "コンサルティング"],
+    // 2026-10-06「AI仕組み化にFDE（Forward Deployed Engineer）もいれて」。
+    // 2026-10-08「AI仕組み化 ここ消していいよ」「FDEだけにして」で FDE の一語に
+    note: { text: ["FDE"], gloss: "Forward Deployed Engineer" },
     // 2026-10-06 ユーザー指定の文に差し替え（旧「毎日の事務作業を、AIが下書きします。」）
     statement: ["現場で考え、", "現場で使える|AIの仕組みを作ります。"],
-    steps: ["業務設計", "AI構築", "標準化"],
     price: "1業務 ¥50,000〜（税別・1ヶ月サポート付き）",
     cta: "業務ごとの料金を見る",
     href: "/services/ai-consulting",
@@ -121,8 +122,10 @@ function sizeFor(w: number) {
   /* 高さは幅より少しだけ高くする。CREATIVE は見出し2行＋本文4行あり、
      横長（activeW/1.2）だと角丸に最終行が切られていた（iPhone 390px で 15px 不足）。
      360px 幅でも上下に余白が残るよう 0.9 にしている。
-     360px 未満は AI仕組み化の本文が3行になる（「|」で折り返す）ので、その分だけ縦に伸ばす */
-  const activeH = activeW / (w < 360 ? 0.72 : 0.9)
+     360px 未満は AI導入コンサルティングの本文が3行になる（「|」で折り返す）ので 0.72。
+     360px 以上は高さに下限を置く。AI導入コンサルティングは見出しが2行あり、幅から出した
+     高さのままだと 360〜390px 幅で本文の最終行の両端が角丸（縦35%）に掛かる */
+  const activeH = w < 360 ? activeW / 0.72 : Math.max(activeW / 0.9, 316)
   return { activeW, activeH, pillW: w * 0.3, pillH: activeH * 0.9, gap }
 }
 
@@ -604,7 +607,7 @@ export function BusinessSection() {
                   />
 
                   <div
-                    className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center text-center ${MOVE_TEXT} ${isActive ? 'px-6 md:px-20 select-text' : 'px-5 md:px-8'}`}
+                    className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center text-center ${MOVE_TEXT} ${isActive ? 'px-6 md:px-12 lg:px-20 select-text' : 'px-5 lg:px-8'}`}
                     style={{ width: isActive ? size.activeW : size.pillW }}
                   >
                     {/* 文字も箱と同じ速さで大きくなる。クラスを入れ替えるだけだと文字サイズが
@@ -619,7 +622,11 @@ export function BusinessSection() {
                     {/* 折り返しはブラウザ任せにしない。「AIクリエイティブ制作」を
                         スマホ幅に流し込むと「AIクリエイティ／ブ制作」のように語中で切れる。
                         意味の切れ目で1要素ずつ置いて、スマホは1行ずつ・PCは横に並べて1行。
-                        1要素だけの title（AI仕組み化・ホームページ制作）はそのまま1行 */}
+                        1要素だけの title（ホームページ制作）はそのまま1行。
+                        PCで1行に収まらない幅（768〜1000px前後）でも語中では折らず、
+                        要素の切れ目で2行にする（inline-block）。開いたカードの見出しは
+                        768px でも1行に収まるよう、文字を画面幅に合わせて少し縮め、左右の余白も詰める。
+                        「コンサルティング」は 21px だと 360px 未満の幅に入りきらないので 18px に下げる */}
                     {/* スマホでは、横で待っているカードに和文を載せない。小さい丸の中で
                         13px の日本語は読めるほどの大きさが無く、読めない文字が3枚ぶん
                         並ぶと画面がただ混む。番号と英字だけにすると、待機中は「何が何番か」
@@ -630,11 +637,11 @@ export function BusinessSection() {
                         カードも十分な大きさで和文が読めるため */}
                     <span
                       className={`block overflow-hidden text-navy font-bold leading-[1.5] tracking-[0.06em] ${MOVE_TITLE} ${isActive
-                        ? 'text-[21px] md:text-[30px] opacity-100 max-h-[140px] mt-3 scale-100 delay-[380ms] md:delay-0'
+                        ? 'text-[18px] min-[360px]:text-[21px] md:text-[clamp(22px,2.8vw,30px)] opacity-100 max-h-[140px] mt-3 scale-100 delay-[380ms] md:delay-0'
                         : 'text-[13px] md:text-[15px] opacity-0 max-h-0 mt-0 scale-[0.7] md:scale-100 delay-0 md:opacity-100 md:max-h-[140px] md:mt-3'}`}
                     >
                       {slide.title.map((part) => (
-                        <span key={part} className="block md:inline">{part}</span>
+                        <span key={part} className="block md:inline-block">{part}</span>
                       ))}
                     </span>
                     {/* 見出しに添える一行。和文の下に英語の正式名を小さく置く。
@@ -643,11 +650,19 @@ export function BusinessSection() {
                       <span
                         className={`flex flex-col items-center overflow-hidden ${MOVE_BODY} ${isActive ? 'scale-100 delay-[440ms] md:delay-0' : 'scale-[0.82] md:scale-100 delay-0'}`}
                         style={isActive
-                          ? { opacity: 1, maxHeight: 60, marginTop: 6 }
+                          ? { opacity: 1, maxHeight: 80, marginTop: 6 }
                           : { opacity: 0, maxHeight: 0, marginTop: 0 }}
                         aria-hidden={!isActive}
                       >
-                        <span className="text-navy/70 text-[13px] md:text-[15px] font-medium tracking-[0.08em]">{slide.note.text}</span>
+                        <span className="text-navy/70 text-[13px] md:text-[15px] font-medium tracking-[0.08em]">
+                          {slide.note.text.map((part, i) => (
+                            <Fragment key={part}>
+                              {/* 360px 未満は1行に入りきらないので、斜線を消して語ごとに2行に分ける */}
+                              {i > 0 && <span className="hidden min-[360px]:inline mx-2 text-navy/30">／</span>}
+                              <span className="block min-[360px]:inline">{part}</span>
+                            </Fragment>
+                          ))}
+                        </span>
                         <span lang="en" className="mt-1 font-display text-navy/45 text-[10px] md:text-[11px] tracking-[0.18em] whitespace-nowrap">{slide.note.gloss}</span>
                       </span>
                     )}
@@ -673,26 +688,6 @@ export function BusinessSection() {
                         </span>
                       ))}
                     </span>
-
-                    {/* 着手順。本文よりさらに一拍おいて出し、番号→見出し→本文→順番の流れにする。
-                        主役は本文なので、語は navy/55・矢印は navy/30 まで下げて線として敷く。
-                        矢印は読み上げから外す（「→」を読み上げても順番は伝わらない） */}
-                    {slide.steps && (
-                      <span
-                        className={`flex flex-wrap items-center justify-center gap-x-2 overflow-hidden text-navy/55 text-[12px] md:text-[13px] tracking-[0.08em] font-medium ${MOVE_BODY} ${isActive ? 'scale-100 delay-[600ms] md:delay-0' : 'scale-[0.82] md:scale-100 delay-0'}`}
-                        style={isActive
-                          ? { opacity: 1, maxHeight: 60, marginTop: 14 }
-                          : { opacity: 0, maxHeight: 0, marginTop: 0 }}
-                        aria-hidden={!isActive}
-                      >
-                        {slide.steps.map((step, i) => (
-                          <span key={step} className="flex items-center gap-x-2 whitespace-nowrap">
-                            {i > 0 && <span aria-hidden="true" className="text-navy/30">→</span>}
-                            {step}
-                          </span>
-                        ))}
-                      </span>
-                    )}
                   </div>
 
                   {/* 待機中のカードは全面を押せるようにする。文字の上に透明なボタンを重ねるので、

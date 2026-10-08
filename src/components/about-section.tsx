@@ -5,12 +5,13 @@ import Link from "next/link"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 import { InstagramIcon, XIcon } from "@/components/social-icons"
 
-const companyInfo: { label: string; value: string; href?: string }[] = [
+/** value を配列にすると、要素ごとのかたまりでしか折り返さない（語の途中で折れない） */
+const companyInfo: { label: string; value: string | string[]; href?: string }[] = [
   { label: "会社名", value: "Allovv（アロー）" },
   { label: "事業開始", value: "2025年6月" },
   { label: "代表", value: "三沼 春斗", href: "/about" },
   { label: "所在地", value: "神奈川県横浜市" },
-  { label: "事業内容", value: "AI仕組み化、AIクリエイティブ制作、AI研修、起業支援" },
+  { label: "事業内容", value: ["AI導入コンサルティング", "（AI仕組み化）、", "AIクリエイティブ制作、", "AI研修、", "起業支援"] },
 ]
 
 const socialLinks = [
@@ -51,6 +52,8 @@ export function AboutSection() {
                           {item.value}
                           <span className="text-[#4aa898] text-xs underline underline-offset-4">プロフィール</span>
                         </Link>
+                      ) : Array.isArray(item.value) ? (
+                        item.value.map((part) => <span key={part} className="inline-block">{part}</span>)
                       ) : (
                         item.value
                       )}

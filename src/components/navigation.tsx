@@ -80,7 +80,14 @@ export function Navigation() {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-8 pt-[22px] pb-3 flex items-end lg:translate-x-[20px]">
+      {/* ページ先頭（透明）の配置はそのままにして、すりガラスが出たときだけ中身を上へ寄せる。
+          先頭の配置のままだとロゴとお問い合わせの下端がバーの縁に付いてしまう（2026-10-08「トップバーの下の余白がギリギリすぎる」）。
+          バーの高さを増やすと、メニューから飛んだ先の見出しがバーの下に隠れるので高さは変えない */}
+      <div
+        className={`max-w-7xl mx-auto px-8 pt-[22px] pb-3 flex items-end lg:translate-x-[20px] transition-transform duration-300 ease-[var(--ease-strong)] motion-reduce:transition-none ${
+          scrolled || mobileMenuOpen ? "-translate-y-[12px] lg:-translate-y-[14px]" : ""
+        }`}
+      >
         {/* スマホ・タブレット（メニューボタンの出る幅）はロゴを画面の真ん中に置く（2026-10-06「ろごは真なかに」）。
             右のメニューボタンと同じ幅の空きを左に置き、その間でロゴを中央に揃える */}
         <span aria-hidden className="lg:hidden w-10 shrink-0" />

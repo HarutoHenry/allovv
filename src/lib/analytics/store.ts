@@ -38,6 +38,7 @@ async function ensureSchema() {
           device   text        not null default 'desktop',
           country  text        not null default ''
         )`;
+      await q`alter table page_views add column if not exists kind text not null default 'page_view'`;
       await q`create index if not exists page_views_ts_idx on page_views (ts desc)`;
     })().catch((error) => {
       schemaReady = null;
@@ -52,9 +53,9 @@ const postgresStore: Store = {
     await ensureSchema();
     const q = sql();
     await q`
-      insert into page_views (ts, path, ref, visitor, session, entry, device, country)
+      insert into page_views (ts, path, ref, visitor, session, entry, device, country, kind)
       values (${event.ts}, ${event.path}, ${event.ref}, ${event.visitor},
-              ${event.session}, ${event.entry}, ${event.device}, ${event.country})`;
+              ${event.session}, ${event.entry}, ${event.device}, ${event.country}, ${event.kind ?? "page_view"})`;
   },
 
   async since(from) {
@@ -62,7 +63,7 @@ const postgresStore: Store = {
     const q = sql();
     // 30日ぶんを丸ごと取ってJS側で集計する。想定トラフィックでは十分に軽い
     const rows = (await q`
-      select ts, path, ref, visitor, session, entry, device, country
+      select ts, path, ref, visitor, session, entry, device, country, kind
       from page_views
       where ts >= ${from.toISOString()}
       order by ts desc
@@ -76,6 +77,7 @@ const postgresStore: Store = {
       entry: Boolean(row.entry),
       device: row.device as ViewEvent["device"],
       country: String(row.country ?? ""),
+      kind: row.kind as ViewEvent["kind"],
     }));
   },
 

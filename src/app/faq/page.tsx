@@ -31,7 +31,7 @@ const faqs = [
       },
       {
         q: "導入までどのくらいかかりますか？",
-        a: "ご契約・ご入金の確認後、最短2営業日で導入できます。業務フローの整理から進める標準的な進行では、1〜2週間程度が目安です。",
+        a: "対象業務と必要な資料が揃い、ご契約・ご入金の確認後、最短2営業日で導入できます。業務フローの整理から進める標準的な進行では、1〜2週間程度が目安です。連携先や書類の種類が増える場合は、必要な期間を個別に確認します。",
       },
       {
         q: "自社のやり方や書式に合わせられますか？",
@@ -96,8 +96,7 @@ const faqs = [
   },
 ]
 
-// よくある質問の構造化データ。検索結果の開閉表示は今は官公庁・医療系サイトに限られているが、
-// 検索エンジンやAI検索が「どの質問にどう答えているか」を読み取る手がかりになる
+// 本文と同じ質問・回答を表す。GoogleのFAQリッチリザルトは2026年に終了。特別表示や順位効果は前提にしない。
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -120,7 +119,7 @@ export default function FaqPage() {
         ]}
       />
       <Navigation />
-      <main className="min-h-screen bg-white">
+      <main id="main" className="min-h-screen bg-white">
         <div className="pt-36 pb-24 max-w-[720px] mx-auto px-5">
           <p className="font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-5 text-center">
             FAQ

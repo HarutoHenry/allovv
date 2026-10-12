@@ -11,7 +11,8 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 
 const TYPE_LABELS: Record<string, string> = {
   service: "サービスについて",
-  consulting: "AI仕組み化のご相談",
+  consulting: "AI導入・業務改善のご相談",
+  training: "AI研修のご相談",
   creative: "AIクリエイティブ制作",
   partnership: "業務提携について",
   media: "取材・メディア掲載",

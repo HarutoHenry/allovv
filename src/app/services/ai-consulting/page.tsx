@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { ConsultingDetails } from "@/components/services/service-details"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { PricingExampleToggle } from "@/components/services/pricing-example-toggle"
@@ -43,7 +44,7 @@ const plans = [
   },
   {
     id: "efficiency",
-    badge: "人気No.1",
+    badge: "1業務から",
     title: "AIによる業務効率化",
     subtitle: "1業務からご依頼いただけます",
     price: "¥50,000〜",
@@ -275,8 +276,9 @@ export default function AiConsultingPage() {
                   <SlipMark />
                   Systemize
                 </p>
-                <h1 className="svc-h1 text-white mt-4">
-                  <span>AI仕組み化</span>
+                <h1 className="svc-h1 svc-h1--consulting text-white mt-4">
+                  <span>AI導入</span>
+                  <span>コンサルティング</span>
                 </h1>
               </div>
               <p
@@ -287,6 +289,13 @@ export default function AiConsultingPage() {
               </p>
             </div>
 
+            <nav aria-label="このページの内容" className="mt-8 flex flex-wrap gap-x-7 gap-y-3 text-sm text-[#9fe8dc]">
+              <Link href="#pricing" className="underline underline-offset-4">料金と活用例</Link>
+              <Link href="#scope" className="underline underline-offset-4">支援範囲と成果物</Link>
+              <Link href="#consulting-faq" className="underline underline-offset-4">導入前の疑問</Link>
+              <Link href="/#contact" className="underline underline-offset-4">業務について相談する</Link>
+            </nav>
+
             {/* 着手順そのもの。設計 → 構築 → 標準化の順でしか進まないので、矢印が意味を持つ。
                 帯の関門と同じ位置に名前を置き、書類がそこを通るたびに整っていく */}
             <div className="mt-12 md:mt-16 svc-enter-fade" style={{ "--d": "520ms" } as React.CSSProperties}>
@@ -296,7 +305,7 @@ export default function AiConsultingPage() {
         </header>
 
         {/* 料金と導入例の切り替え */}
-        <div className="pt-16 md:pt-24">
+        <div id="pricing" className="pt-16 md:pt-24 scroll-mt-24">
           <PricingExampleToggle
             pricingContent={
               <div className="max-w-[1200px] mx-auto px-5 md:px-10 pt-4 md:pt-8 pb-24 md:pb-32">
@@ -443,7 +452,7 @@ export default function AiConsultingPage() {
               ))}
             </ol>
             <p className="svc-jp mt-16 md:mt-20 pt-8 border-t border-white/10 text-white/80 text-[17px] leading-[1.9] max-w-[62ch] lg:max-w-none">
-              ご契約・ご入金の確認後、<strong className="text-[#9fe8dc] font-bold whitespace-nowrap">最短2営業日</strong>で導入できます。業務フローの整理から進める標準的な進行では、<span className="whitespace-nowrap">1〜2週間程度</span>が目安です。
+              対象業務と必要な資料が揃い、ご契約・ご入金の確認後、<strong className="text-[#9fe8dc] font-bold whitespace-nowrap">最短2営業日</strong>で導入できます。業務フローの整理から進める標準的な進行では、<span className="whitespace-nowrap">1〜2週間程度</span>が目安です。連携先や書類の種類が増える場合は、必要な期間を個別に確認します。
             </p>
           </div>
         </section>
@@ -496,6 +505,8 @@ export default function AiConsultingPage() {
             </div>
           </div>
         </section>
+
+        <ConsultingDetails />
 
         {/* Contact CTA。最後に帯で揃った書類が同じ歩調で流れていき、ページの話を閉じる */}
         <section className="max-w-[1200px] mx-auto px-5 md:px-10 pt-28 md:pt-40 pb-16 md:pb-20">

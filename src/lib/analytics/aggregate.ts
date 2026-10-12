@@ -39,7 +39,15 @@ export type PageRow = {
 
 export type ShareRow = { label: string; visitors: number; views: number };
 
+export type ConversionSummary = {
+  clicks: number;
+  starts: number;
+  successes: number;
+  landings: { path: string; clicks: number; starts: number; successes: number }[];
+};
+
 export type PeriodSummary = {
+  conversions: ConversionSummary;
   days: number;
   views: number;
   visitors: number;
@@ -98,6 +106,7 @@ function summarize(
   days: number,
   now: Date,
   activeDays: number,
+  conversions: ConversionSummary,
 ): PeriodSummary {
   const byDay = new Map<string, ViewEvent[]>();
   for (const key of dayKeys(days, now)) byDay.set(key, []);
@@ -153,6 +162,7 @@ function summarize(
   const visitors = countUnique(events, "visitor");
   return {
     days,
+    conversions,
     views: events.length,
     visitors,
     sessions: countUnique(events, "session"),
@@ -171,6 +181,32 @@ export function buildReport(
   firstSeen: string | null,
   now = new Date(),
 ): Report {
+  const pageEvents = events.filter(event => !event.kind || event.kind === "page_view");
+  const actions = events.filter(event => event.kind && event.kind !== "page_view");
+  const entries = new Map<string, ViewEvent>();
+  for (const event of pageEvents) {
+    if (!event.entry) continue;
+    const previous = entries.get(event.session);
+    if (!previous || event.ts < previous.ts) entries.set(event.session, event);
+  }
+  function conversions(since: Date): ConversionSummary {
+    const rows = new Map<string, ConversionSummary["landings"][number]>();
+    const result: ConversionSummary = { clicks: 0, starts: 0, successes: 0, landings: [] };
+    for (const action of actions) {
+      if (new Date(action.ts) < since || new Date(action.ts) > now) continue;
+      const key = action.kind === "contact_click" ? "clicks" : action.kind === "contact_start" ? "starts" : action.kind === "contact_success" ? "successes" : null;
+      if (!key) continue;
+      const entry = entries.get(action.session);
+      const path = entry && entry.ts <= action.ts ? entry.path : "（入口不明）";
+      const row = rows.get(path) ?? { path, clicks: 0, starts: 0, successes: 0 };
+      row[key] += 1;
+      result[key] += 1;
+      rows.set(path, row);
+    }
+    result.landings = [...rows.values()].sort((a, b) => b.successes - a.successes || b.starts - a.starts || b.clicks - a.clicks);
+    return result;
+  }
+  events = pageEvents;
   const monthStart = jstDayStart(29, now);
   const weekStart = jstDayStart(6, now);
   const todayKey = new Date(jstDayStart(0, now).getTime() + JST_OFFSET_MS)
@@ -221,8 +257,8 @@ export function buildReport(
       visitors: countUnique(today, "visitor"),
       hourly,
     },
-    week: summarize(week, 7, now, elapsedDays(7)),
-    month: summarize(month, 30, now, elapsedDays(30)),
+    week: summarize(week, 7, now, elapsedDays(7), conversions(weekStart)),
+    month: summarize(month, 30, now, elapsedDays(30), conversions(monthStart)),
     grid: [...gridMap].map(([date, hours]) => {
       const dayEvents = month.filter((event) => jstParts(event.ts).date === date);
       const paths = new Map<string, number>();

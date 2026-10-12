@@ -17,7 +17,7 @@ export default function NewsPage() {
     <>
       <JsonLd data={breadcrumbJsonLd([{ name: "TOP", path: "/" }, { name: "お知らせ", path: "/news" }])} />
       <Navigation />
-      <main className="min-h-screen bg-white pt-32 pb-24">
+      <main id="main" className="min-h-screen bg-white pt-32 pb-24">
         <div className="max-w-[900px] mx-auto px-5">
           <p className="font-display font-light text-xs tracking-[0.2em] uppercase text-accent-purple mb-6">
             NEWS

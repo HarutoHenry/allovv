@@ -67,7 +67,7 @@ export default async function NewsDetailPage({ params }: Props) {
     <>
       <JsonLd data={jsonLd} />
       <Navigation />
-      <main className="min-h-screen bg-white pt-32 pb-24">
+      <main id="main" className="min-h-screen bg-white pt-32 pb-24">
         <div className="max-w-[720px] mx-auto px-5">
           {/* Breadcrumb */}
           <div className="flex items-center gap-2 text-xs text-navy/40 mb-12">

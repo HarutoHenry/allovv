@@ -40,8 +40,8 @@ export function HeroSection() {
         </h1>
 
         <p className="animate-fade-in-up-delay-2 text-navy/70 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto mb-10 px-2 md:px-0">
-          Allovvは、人工知能の力を<br className="md:hidden" />事業の推進力に変えるAI企業です。<br />
-          AIを通じて、あらゆる挑戦の障壁を取り除きます。
+          Allovvは、AI導入コンサルティングと<br className="md:hidden" />AIクリエイティブ制作を手がけるAI企業です。<br />
+          業務を洗い出し、現場で使えるAIの仕組みを作ります。
         </p>
 
         <div className="animate-fade-in-up-delay-3 flex flex-col sm:flex-row gap-4 justify-center mb-12 md:mb-16">

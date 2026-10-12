@@ -1,5 +1,6 @@
 "use client"
 
+import { trackEvent } from "@/lib/analytics/client"
 import { useState, useEffect, type MouseEvent } from "react"
 import Link from "next/link"
 import Image from "next/image"
@@ -54,6 +55,7 @@ export function Navigation() {
   const handleNav = (id: string) => {
     setMobileMenuOpen(false)
     const anchor = id.replace("#", "")
+    if (anchor === "contact") trackEvent("contact_click")
     if (isTop) {
       // メニューが閉じてレイアウトが落ち着いてから測り始める
       setTimeout(() => {

@@ -5,7 +5,7 @@ import { useId, useRef, useState } from "react"
 type TabKey = "pricing" | "examples"
 
 const tabs: { key: TabKey; label: string }[] = [
-  { key: "examples", label: "導入例" },
+  { key: "examples", label: "活用の検討例" },
   { key: "pricing", label: "料金システム" },
 ]
 
@@ -54,7 +54,7 @@ export function PricingExampleToggle({
       <div className="max-w-[1200px] mx-auto px-5 md:px-10">
         <div
           role="tablist"
-          aria-label="料金と導入例"
+          aria-label="料金と活用の検討例"
           data-instant={instant ? "" : undefined}
           className="flex gap-9 md:gap-14 border-b border-white/10"
         >

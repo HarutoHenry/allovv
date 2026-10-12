@@ -69,7 +69,7 @@ export default function AboutPage() {
     <>
       <JsonLd data={jsonLd} />
       <Navigation />
-      <main className={`${s.page} ${mincho.variable} ${serif.variable} min-h-screen`}>
+      <main id="main" className={`${s.page} ${mincho.variable} ${serif.variable} min-h-screen`}>
         {/* 1024px からは参考画像と同じ舞台。左に紺の面・写真・名前・東京、右に手紙・富士山。
             位置は profile.module.css にまとめてある（参考画像の座標そのまま）。
             一番上にページの題（2026-10-05「一番上も代表挨拶みたいなタイトルほしい」）、その下の .board が参考画像の範囲 */}

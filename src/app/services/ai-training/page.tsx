@@ -1,3 +1,4 @@
+import { TrainingDetails } from "@/components/services/service-details"
 import { Fragment } from "react"
 import Link from "next/link"
 import { Navigation } from "@/components/navigation"
@@ -11,9 +12,9 @@ import { PhraseWrap } from "@/components/phrase-wrap"
 import { ORG_ID, SITE_URL, breadcrumbJsonLd, pageMetadata } from "@/lib/seo"
 
 export const metadata = pageMetadata({
-  title: "社員向けAI研修（AI活用研修）の内容と料金",
+  title: "法人・社員向けAI研修｜内容・費用・業務での活用",
   description:
-    "Allovvの社員向けAI活用研修です。生成AIの基礎とやってはいけないこと、指示文（プロンプト）の書き方と社内の型づくり、バックオフィス・営業・会議でのAI活用を、貴社の実際の業務・書類を教材に学びます。全10〜12時間・1社5名まで・¥150,000〜（税別）。オンライン・訪問どちらにも対応し、受講後に社内マニュアルをお渡しします。",
+    "法人・社員向けのAI活用研修。貴社の業務・書類で生成AIの基礎、プロンプト、営業・事務・会議での活用を学びます。全10〜12時間・1社5名まで・15万円〜（税別）。オンライン・訪問対応、社内マニュアル付き。",
   path: "/services/ai-training",
 })
 
@@ -410,6 +411,8 @@ export default function AiTrainingPage() {
             </div>
           </div>
         </section>
+
+        <TrainingDetails />
 
         {/* Contact CTA。最後に、綴じ終えたマニュアルが同じ歩調で流れていき、話を閉じる */}
         <section className="border-t border-white/10">

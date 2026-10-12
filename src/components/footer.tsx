@@ -12,6 +12,7 @@ const serviceLinks = [
   { href: "/services/web", label: "ホームページ制作" },
   { href: "/services/ai-consulting", label: "AI導入コンサル・料金" },
   { href: "/services/ai-training", label: "AI活用研修" },
+  { href: "/guides", label: "AI導入・業務改善ガイド" },
   { href: "/faq", label: "よくあるご質問" },
 ]
 

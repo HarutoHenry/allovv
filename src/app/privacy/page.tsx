@@ -54,7 +54,7 @@ const sections = [
   {
     heading: "6. アクセス状況の記録",
     body: [
-      "本サービスでは、どのページがどれだけ閲覧されているかを把握するため、当方が自ら運用する仕組みでアクセス状況を記録しています。記録するのは、閲覧されたページのアドレス、日時、参照元のサイト、端末の種類（スマートフォン・タブレット・パソコン）、アクセス元の国、およびブラウザに保存される無作為な識別子です。氏名・メールアドレス等の個人を特定できる情報およびIPアドレスは記録せず、広告配信や外部事業者への提供にも利用しません。追跡目的のCookieは使用しておらず、ブラウザの保存データを消去すれば識別子も消去されます。",
+      "本サービスでは、ページの閲覧とお問い合わせ導線の利用状況を把握するため、当方が自ら運用する仕組みでアクセス状況を記録しています。記録するのは、閲覧されたページのアドレス、相談リンクのクリック・フォーム入力開始・送信完了という操作の種類、日時、参照元のサイト、端末の種類（スマートフォン・タブレット・パソコン）、アクセス元の国、およびブラウザに保存される無作為な識別子です。このアクセス記録にはフォームの入力内容、氏名・メールアドレスおよびIPアドレスは保存せず、広告配信や外部事業者への提供にも利用しません。追跡目的のCookieは使用しておらず、ブラウザの保存データを消去すれば識別子も消去されます。",
     ],
   },
   {
@@ -85,7 +85,7 @@ export default function PrivacyPage() {
   return (
     <>
       <Navigation />
-      <main className="min-h-screen bg-white">
+      <main id="main" className="min-h-screen bg-white">
         <div className="pt-36 pb-24 max-w-[720px] mx-auto px-5">
           <p className="font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-5 text-center">
             Privacy Policy
@@ -94,7 +94,7 @@ export default function PrivacyPage() {
             プライバシーポリシー
           </h1>
           <p className="text-navy/40 text-xs text-center mb-16">
-            制定日：2026年7月10日／最終改定日：2026年9月24日
+            制定日：2026年7月10日／最終改定日：2026年10月12日
           </p>
 
           <div className="space-y-12">

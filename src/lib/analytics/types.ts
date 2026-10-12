@@ -1,5 +1,9 @@
-/** 1件の閲覧イベント。収集はページ単位で、個人を特定する値は保存しない */
+export type EventKind = "page_view" | "contact_click" | "contact_start" | "contact_success";
+
+/** 1件の閲覧・問い合わせ操作イベント。収集はページ単位で、個人を特定する値は保存しない */
 export type ViewEvent = {
+  /** 既存の記録にkindがない場合はページ閲覧として扱う */
+  kind?: EventKind;
   /** 発生時刻（UTCのISO文字列） */
   ts: string;
   /** クエリと末尾スラッシュを落としたパス。例 "/services/web" */

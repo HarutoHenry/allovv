@@ -176,6 +176,16 @@ export function Dashboard({
         </div>
       </section>
 
+      <section className="dash-section">
+        <h2 className="dash-title" style={{ fontSize: "1.2rem" }}>相談につながる行動（直近30日）</h2>
+        <p className="dash-stat-note">クリック {report.month.conversions.clicks} 回 ／ 入力開始 {report.month.conversions.starts} 回 ／ 送信完了 {report.month.conversions.successes} 回</p>
+        <p className="dash-stat-note">操作の回数です。送信完了はブラウザ側の成功表示を計測し、商談・受注を表すものではありません。入口は同じタブの最初の閲覧に紐づけます。記録期間外や保存制限で紐づかない場合は入口不明になります。</p>
+        {report.month.conversions.landings.length > 0 && <div style={{ overflowX: "auto" }}><table className="dash-table">
+          <thead><tr><th>入口ページ</th><th className="n">クリック</th><th className="n">入力開始</th><th className="n">送信完了</th></tr></thead>
+          <tbody>{report.month.conversions.landings.map(row => <tr key={row.path}><td>{row.path}</td><td className="n num">{row.clicks}</td><td className="n num">{row.starts}</td><td className="n num">{row.successes}</td></tr>)}</tbody>
+        </table></div>}
+      </section>
+
       {!hasAnyData ? (
         <div className="dash-empty">
           <p>まだ記録がありません。</p>

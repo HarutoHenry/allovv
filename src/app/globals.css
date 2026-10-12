@@ -882,3 +882,28 @@
     transition: opacity var(--p-dur) ease;
   }
 }
+
+/* AI導入ガイド。本文はサーバー描画し、操作やアニメーションを待たずに読める。 */
+.guide-copy { font-size: 16px; line-height: 1.95; color: #334d4a; }
+.guide-copy section { margin-top: 4rem; scroll-margin-top: 7rem; }
+.guide-copy h2 { color: #1a2e35; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; line-height: 1.5; text-wrap: balance; margin-bottom: 1.5rem; }
+.guide-copy h3 { color: #1a2e35; font-size: 1.2rem; font-weight: 700; margin-top: 2rem; }
+.guide-copy p, .guide-copy ul, .guide-copy ol { margin-top: 1.25rem; }
+.guide-copy ul, .guide-copy ol { padding-left: 1.5rem; }
+.guide-copy ul { list-style: disc; }
+.guide-copy ol { list-style: decimal; }
+.guide-copy li + li { margin-top: .8rem; }
+.guide-copy a { color: #286d5e; text-decoration: underline; text-underline-offset: .22em; }
+.guide-copy a:hover { color: #163e35; }
+.guide-copy .guide-source { font-size: 13px; color: #526965; }
+.guide-table { margin-top: 1.75rem; overflow-x: auto; border: 1px solid #cbded8; border-radius: .7rem; }
+.guide-table table { border-collapse: collapse; min-width: 610px; width: 100%; font-size: 14px; line-height: 1.8; }
+.guide-table caption { text-align: left; padding: 1rem 1.25rem; color: #1a2e35; font-weight: 700; background: #e3eee9; }
+.guide-table th, .guide-table td { padding: 1rem 1.25rem; text-align: left; vertical-align: top; border-top: 1px solid #cbded8; }
+.guide-table thead { background: #e3eee9; }
+.guide-table tbody th { min-width: 150px; color: #1a2e35; }
+.guide-table th span { font-size: 12px; font-weight: 400; }
+
+.svc-h1--consulting { font-size: clamp(2rem, 9.4vw, 3.875rem); line-height: 1.22; }
+.svc-h1--consulting > span { display: block; }
+@media (min-width: 768px) { .svc-h1--consulting { font-size: clamp(2rem, 4.2vw, 3.875rem); } }

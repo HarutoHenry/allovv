@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useRef, useState } from "react"
+import { trackEvent } from "@/lib/analytics/client"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 import { checkEmail, normalizeEmail, suggestEmail } from "@/lib/contact/email"
 
@@ -11,6 +12,7 @@ const EMPTY_FORM = { name: "", company: "", email: "", type: "", message: "", we
 
 export function ContactSection() {
   const { ref, isVisible } = useScrollAnimation()
+  const startedRef = useRef(false)
   const [formData, setFormData] = useState(EMPTY_FORM)
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [status, setStatus] = useState<"idle" | "sending" | "done" | "error">("idle")
@@ -87,6 +89,8 @@ export function ContactSection() {
         ;({ res, data } = await send())
       }
       if (res.ok) {
+        trackEvent("contact_success")
+        startedRef.current = false
         setStatus("done")
         setFormData(EMPTY_FORM)
         setSuggestion(null)
@@ -112,6 +116,10 @@ export function ContactSection() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target
+    if (name !== "website" && value && !startedRef.current) {
+      startedRef.current = true
+      trackEvent("contact_start")
+    }
     setFormData(prev => ({ ...prev, [name]: value }))
     if (errors[name]) setErrors(prev => ({ ...prev, [name]: "" }))
     if (name === "email") {
@@ -149,9 +157,15 @@ export function ContactSection() {
         </p>
 
         {/* Heading */}
-        <h2 className={`text-navy text-2xl md:text-4xl font-bold leading-snug mb-14 text-center transition-all duration-600 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+        <h2 className={`text-navy text-2xl md:text-4xl font-bold leading-snug mb-6 text-center transition-all duration-600 delay-100 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           お問い合わせ
         </h2>
+
+        <p className="text-navy/70 text-sm leading-[1.9] text-center mb-10">
+          改善したい業務と、いま使っている資料・ツールをお聞かせください。<br />
+          内容が決まっていない場合は、業務の洗い出しからご相談いただけます。<br />
+          初回は機密情報・個人情報を含まない範囲でお書きください。
+        </p>
 
         {/* Form */}
         <form
@@ -278,7 +292,8 @@ export function ContactSection() {
             >
               <option value="">選択してください</option>
               <option value="service">サービスについて</option>
-              <option value="consulting">AI仕組み化のご相談</option>
+              <option value="consulting">AI導入・業務改善のご相談</option>
+              <option value="training">AI研修のご相談</option>
               <option value="creative">AIクリエイティブ制作</option>
               <option value="partnership">業務提携について</option>
               <option value="media">取材・メディア掲載</option>

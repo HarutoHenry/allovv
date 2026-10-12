@@ -98,7 +98,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ja" className={`${zenKaku.variable} ${jost.variable} scroll-smooth`}>
+    <html lang="ja" data-scroll-behavior="smooth" className={`${zenKaku.variable} ${jost.variable} scroll-smooth`}>
       <body className="font-sans antialiased bg-white text-navy">
         <a href="#main" className="skip-link">
           本文へスキップ

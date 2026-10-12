@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { store } from "@/lib/analytics/store";
+import { parseEventKind } from "@/lib/analytics/events";
 import type { ViewEvent } from "@/lib/analytics/types";
 
 export const runtime = "nodejs";
@@ -41,6 +42,10 @@ function safeId(raw: unknown) {
 }
 
 export async function POST(request: Request) {
+  // ローカル・Vercelプレビューを公開サイトの計測に混ぜない。
+  if (!["www.allovv.com", "allovv.com"].includes(new URL(request.url).hostname)) {
+    return new NextResponse(null, { status: 204 });
+  }
   const ua = request.headers.get("user-agent") ?? "";
   if (!ua || BOT.test(ua)) return new NextResponse(null, { status: 204 });
 
@@ -51,18 +56,22 @@ export async function POST(request: Request) {
     return new NextResponse(null, { status: 204 });
   }
 
+  if (!body || typeof body !== "object" || Array.isArray(body)) return new NextResponse(null, { status: 204 });
+  const kind = parseEventKind(body.kind);
+  if (!kind) return new NextResponse(null, { status: 204 });
   const visitor = safeId(body.visitor);
   const session = safeId(body.session);
   if (!visitor || !session) return new NextResponse(null, { status: 204 });
 
   const host = new URL(request.url).hostname.replace(/^www\./, "");
   const event: ViewEvent = {
+    kind,
     ts: new Date().toISOString(),
     path: normalizePath(String(body.path ?? "/")),
     ref: normalizeRef(String(body.ref ?? ""), host),
     visitor,
     session,
-    entry: body.entry === true,
+    entry: kind === "page_view" && body.entry === true,
     device: deviceFrom(ua),
     country: (request.headers.get("x-vercel-ip-country") ?? "").slice(0, 4),
   };

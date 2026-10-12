@@ -61,7 +61,7 @@ export default function LegalPage() {
   return (
     <>
       <Navigation />
-      <main className="min-h-screen bg-white">
+      <main id="main" className="min-h-screen bg-white">
         <div className="pt-36 pb-24 max-w-[720px] mx-auto px-5">
           <p className="font-display font-light text-xs tracking-[0.2em] uppercase text-[#7dd8ca] mb-5 text-center">
             Legal

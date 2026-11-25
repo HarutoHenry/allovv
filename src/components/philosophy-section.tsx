@@ -226,7 +226,7 @@ function Orbits({ front, svgRef }: { front?: boolean; svgRef: Ref<SVGSVGElement>
 }
 
 export function PhilosophySection() {
-  const videoRef = useVideoAutoplay()
+  const { videoRef, imageRef } = useVideoAutoplay()
   const sectionRef = useRef<HTMLElement>(null)
   const backRef = useRef<SVGSVGElement>(null)
   const frontRef = useRef<SVGSVGElement>(null)
@@ -279,6 +279,8 @@ export function PhilosophySection() {
           className="bg-video"
           src="/videos/philosophy-bg.mp4"
         />
+        {/* 自動再生を断られた時（低電力モードの Safari）だけ、同じ mp4 をここで画像として流す */}
+        <img ref={imageRef} alt="" hidden />
       </div>
       <div aria-hidden className={s.veil} />
 

@@ -3,6 +3,7 @@
 import { Fragment, useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
+import { isAutoplayRefused } from "@/lib/video-as-image"
 
 type Slide = {
   num: string
@@ -147,6 +148,9 @@ function CardVideo({ slide, playing }: { slide: Slide; playing: boolean }) {
   const [motion, setMotion] = useState<boolean | null>(null)
   /** 動画が実際に流れ始めたか。それまでは下に敷いた静止画を見せ、動画は透明にしておく */
   const [live, setLive] = useState(false)
+  /** 自動再生を断られたので、同じ mp4 を画像として流しているか（低電力モードの Safari）。
+      null は「画像としても読めなかった」で、動画のまま指で触れるのを待つ */
+  const [asImage, setAsImage] = useState<boolean | null>(false)
 
   useEffect(() => {
     const wide = window.matchMedia("(min-width: 768px)")
@@ -174,13 +178,19 @@ function CardVideo({ slide, playing }: { slide: Slide; playing: boolean }) {
        本当に端末が断っている時（低電力モード等）に延々と叩き続けないため */
     const sync = () => {
       clearTimeout(timer)
-      if (!playing || document.visibilityState === "hidden") {
+      if (asImage || !playing || document.visibilityState === "hidden") {
         el.pause()
         return
       }
       el.play().then(
         () => { tries = 0 },
-        () => {
+        (error) => {
+          /* 低電力モードの Safari は何度掛け直しても断る。同じ mp4 を画像として流す
+             （src/lib/video-as-image.ts）。画像として読めなかったブラウザ（null）は従来どおり */
+          if (asImage === false && isAutoplayRefused(error)) {
+            setAsImage(true)
+            return
+          }
           if (tries >= 6) return
           tries += 1
           if (el.readyState === 0) el.load()
@@ -210,7 +220,7 @@ function CardVideo({ slide, playing }: { slide: Slide; playing: boolean }) {
       document.removeEventListener("visibilitychange", sync)
       document.removeEventListener("pointerdown", sync)
     }
-  }, [playing, slide.rate, motion])
+  }, [playing, slide.rate, motion, asImage])
 
   if (motion === null) return null
   if (!motion) {
@@ -260,6 +270,16 @@ function CardVideo({ slide, playing }: { slide: Slide; playing: boolean }) {
         className="bg-video absolute inset-0 w-full h-full object-cover"
         style={{ ...blend, opacity: live ? 1 : 0 }}
       />
+      {/* 低電力モードの Safari 用。流れているカードの間だけ置く（外すと静止画に戻る） */}
+      {asImage && playing && (
+        <img
+          src={slide.video}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+          style={blend}
+          onError={() => setAsImage(null)}
+        />
+      )}
     </>
   )
 }

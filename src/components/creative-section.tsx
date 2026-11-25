@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
 import { useVideoAutoplay } from "@/hooks/use-video-autoplay"
+import { isAutoplayRefused, loadVideoAsImage } from "@/lib/video-as-image"
 import { ParticleHeading } from "@/components/particle-heading"
 
 /** 見出しと中身の間隔。他セクションの mb-16 に合わせる */
@@ -38,7 +39,7 @@ const works = [
 
 export function CreativeSection() {
   const { ref: headRef, isVisible } = useScrollAnimation(0.2)
-  const bgRef = useVideoAutoplay()
+  const { videoRef: bgRef, imageRef: bgImageRef } = useVideoAutoplay()
 
   const sectionRef = useRef<HTMLElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
@@ -46,6 +47,8 @@ export function CreativeSection() {
   const viewportRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
+  /** 自動再生を断られた時（低電力モードの Safari）に、同じ mp4 を画像として流す受け皿 */
+  const imageRefs = useRef<(HTMLImageElement | null)[]>([])
   // 再生状態を今の見え方に合わせ直す関数。横スワイプ版のスクロールは window まで
   // 上がってこないので、そちらからも呼べるよう ref 越しに公開しておく。
   const syncPlaybackRef = useRef<() => void>(() => {})
@@ -157,6 +160,31 @@ export function CreativeSection() {
     const retries = new WeakMap<HTMLVideoElement, number>()
     const timers = new Set<number>()
     let frame = 0
+    /** 動画の代わりに流す画像。見えている（hidden が外れている）ものは画像に切り替え済みで、
+        再生も停止もしない（画面の外の画像は Safari が自分で止める） */
+    const imageOf = (video: HTMLVideoElement) => imageRefs.current[videoRefs.current.indexOf(video)]
+    const loading = new WeakSet<HTMLVideoElement>()
+    const imageLoads: (() => void)[] = []
+    const toImage = (video: HTMLVideoElement) => {
+      const img = imageOf(video)
+      if (!img || loading.has(video) || img.dataset.noMotion) return
+      loading.add(video)
+      imageLoads.push(
+        loadVideoAsImage(
+          img,
+          video.currentSrc || video.src,
+          () => {
+            // 読み込みを待つあいだに動き出したなら、動画のままにする
+            if (!video.paused) return
+            wanted.delete(video)
+            img.hidden = false
+            video.style.visibility = "hidden"
+          },
+          // 画像として読めないブラウザ。二度と試さない
+          () => { img.dataset.noMotion = "1" }
+        )
+      )
+    }
 
     // 「見えているか」は毎回その場で測る。IntersectionObserver の通知待ちにすると、
     // 通知が来ないまま（タブが凍っている等）ポスターで固まることがあるため。
@@ -170,6 +198,7 @@ export function CreativeSection() {
       const near = area.bottom > -margin && area.top < window.innerHeight + margin
 
       for (const video of videos) {
+        if (imageOf(video)?.hidden === false) continue
         const rect = video.getBoundingClientRect()
         const overlap =
           Math.min(rect.right, box.right) - Math.max(rect.left, box.left)
@@ -178,7 +207,11 @@ export function CreativeSection() {
 
         if (near && !document.hidden && enough) {
           wanted.add(video)
-          if (video.paused) video.play().catch(() => {})
+          if (video.paused) {
+            video.play().catch((error) => {
+              if (isAutoplayRefused(error)) toImage(video)
+            })
+          }
         } else {
           wanted.delete(video)
           if (!video.paused) video.pause()
@@ -244,6 +277,7 @@ export function CreativeSection() {
 
     return () => {
       syncPlaybackRef.current = () => {}
+      imageLoads.forEach((cancel) => cancel())
       for (const video of videos) {
         video.removeEventListener("canplay", sync)
         video.removeEventListener("loadeddata", sync)
@@ -288,6 +322,13 @@ export function CreativeSection() {
             muted
             playsInline
             preload="metadata"
+          />
+          {/* 自動再生を断られた時（低電力モードの Safari）だけ、同じ mp4 をここで画像として流す */}
+          <img
+            ref={bgImageRef}
+            alt=""
+            hidden
+            className="absolute inset-0 w-full h-full object-cover"
           />
           {/* 素材自体が淡いので白は薄めに。上下だけ強めて、見出しと CTA の文字を読ませる */}
           <div
@@ -360,6 +401,14 @@ export function CreativeSection() {
                       playsInline
                       preload={index === 0 ? "auto" : "metadata"}
                       aria-label={`${work.en}の制作事例`}
+                    />
+                    <img
+                      ref={(el) => {
+                        imageRefs.current[index] = el
+                      }}
+                      alt=""
+                      hidden
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
                   </div>
 

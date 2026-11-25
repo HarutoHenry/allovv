@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { isAutoplayRefused, loadVideoAsImage } from "@/lib/video-as-image"
 
 const VERT = `
   attribute vec2 a_pos;
@@ -227,11 +228,16 @@ export function HeroVideoGL({ src, poster, mobileSrc, mobilePoster }: Props) {
     let idle: number | undefined
     let timer: ReturnType<typeof setTimeout> | undefined
     let scheduled = false
+    /** PC で自動再生を断られ、mp4 を画像として読ませ始めたか（低電力モードの Safari） */
+    let cancelImage: (() => void) | undefined
 
     // SafariはMP4画像を初期HTMLから再生する。対応しないAndroidも、同じく
     // 初期HTMLにあるvideoを再生するので、Reactの起動まで取得を待たない。
     const selectImagePlayback = () => {
       if (imagePlayback || !touch || !/\.mp4(\?|$)/.test(img.currentSrc) || !img.complete || img.naturalWidth === 0) return
+      showImage()
+    }
+    const showImage = () => {
       imagePlayback = true
       img.style.visibility = "visible"
       video.pause()
@@ -252,10 +258,28 @@ export function HeroVideoGL({ src, poster, mobileSrc, mobilePoster }: Props) {
       video.load()
       tryPlay()
     }
+    // PC は初期HTMLでは mp4 を画像にしない（Chrome は読めない）。低電力モードの Safari は
+    // 無音でも自動再生を断るので、断られた時だけ同じ mp4 を画像として読ませて流す。
+    // カーソルの揺らぎは動画が流れないと起きないので、その場合は付かない。
+    const fallBackToImage = () => {
+      if (touch || cancelImage) return
+      cancelImage = loadVideoAsImage(
+        img,
+        src,
+        () => {
+          // 読み込みを待つあいだにクリックで動き出したなら、動画と揺らぎのままにする
+          if (disposed || !video.paused) return
+          showImage()
+        },
+        () => { img.src = BLANK },
+      )
+    }
     const tryPlay = () => {
       if (!disposed && !imagePlayback && !document.hidden) {
         video.muted = true
-        void video.play().catch(() => {})
+        video.play().catch((error) => {
+          if (isAutoplayRefused(error)) fallBackToImage()
+        })
       }
     }
     const afterPlaying = () => {
@@ -282,6 +306,7 @@ export function HeroVideoGL({ src, poster, mobileSrc, mobilePoster }: Props) {
     if (!video.paused && video.readyState >= 2) afterPlaying()
     return () => {
       disposed = true
+      cancelImage?.()
       if (idle !== undefined) window.cancelIdleCallback(idle)
       if (timer !== undefined) clearTimeout(timer)
       video.removeEventListener("playing", afterPlaying)
@@ -329,7 +354,8 @@ export function HeroVideoGL({ src, poster, mobileSrc, mobilePoster }: Props) {
         className="absolute inset-0 w-full h-full pointer-events-none"
       />
 
-      {/* スマホ：Safari はここで mp4 を選んで流す。それ以外は透明な1pxのまま */}
+      {/* スマホ：Safari はここで mp4 を選んで流す。それ以外は透明な1pxのまま。
+          PC でも、低電力モードの Safari に自動再生を断られた時だけ、ここに mp4 を入れて流す */}
       <picture>
         <source media={TALL} type="video/mp4" srcSet={mobileSrc} />
         <source media={TOUCH} type="video/mp4" srcSet={src} />

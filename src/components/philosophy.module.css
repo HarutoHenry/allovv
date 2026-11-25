@@ -33,6 +33,15 @@
   object-fit: cover;
 }
 
+/* 低電力モードの Safari で、動画の代わりに同じ mp4 を流す画像。動画にぴったり重ねる */
+.media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 /* 動画の上の白い幕。下端は次の News の薄紫に寄せて、境目を作らない */
 .veil {
   position: absolute;
